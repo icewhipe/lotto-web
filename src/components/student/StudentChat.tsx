@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send, Smile, Paperclip, User } from 'lucide-react'
+import { Send, Smile, Paperclip } from 'lucide-react'
 
 const mockMessages = [
   {

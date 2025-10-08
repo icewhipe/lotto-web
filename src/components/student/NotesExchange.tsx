@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Upload, Download, BookOpen, Star, Search, Filter } from 'lucide-react'
+import { Upload, Download, BookOpen, Star, Search } from 'lucide-react'
 
 const mockNotes = [
   {

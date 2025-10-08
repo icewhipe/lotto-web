@@ -3,6 +3,20 @@ import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
 import { Calendar, Clock, MapPin, Users, X, CheckCircle } from 'lucide-react'
 
+interface Event {
+  date: string
+  month: string
+  year: string
+  title: string
+  time: string
+  location: string
+  attendees: string
+  description: string
+  fullDescription?: string
+  program?: string[]
+  gradient: string
+}
+
 const upcomingEvents = [
   {
     date: '15',
@@ -77,6 +91,7 @@ const upcomingEvents = [
 export default function Events() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.05 })
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
   return (
     <section id="events" className="section-padding" ref={ref}>

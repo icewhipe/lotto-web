@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { TrendingUp, Award, Target, Calendar } from 'lucide-react'
+import { TrendingUp, Award, Target } from 'lucide-react'
 import { Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
