@@ -5,6 +5,7 @@ import Hero from './components/Hero'
 import LoadingSpinner from './components/LoadingSpinner'
 import LoginPage from './components/LoginPage'
 import Dashboard from './components/Dashboard'
+import PageLoader from './components/PageLoader'
 
 // Lazy load non-critical components
 const History = lazy(() => import('./components/History'))
@@ -12,6 +13,7 @@ const About = lazy(() => import('./components/About'))
 const Advantages = lazy(() => import('./components/Advantages'))
 const Programs = lazy(() => import('./components/Programs'))
 const Gallery = lazy(() => import('./components/Gallery'))
+const ParallaxGallery = lazy(() => import('./components/ParallaxGallery'))
 const Achievements = lazy(() => import('./components/Achievements'))
 const Staff = lazy(() => import('./components/Staff'))
 const Reviews = lazy(() => import('./components/Reviews'))
@@ -67,10 +69,12 @@ function App() {
 
   // Show main website
   return (
-    <div className="min-h-screen overflow-x-hidden">
-      <Navbar isDark={isDark} toggleTheme={toggleTheme} onLoginClick={() => setShowLogin(true)} />
-      <Hero />
-      <Suspense fallback={<LoadingSpinner />}>
+    <>
+      <PageLoader />
+      <div className="min-h-screen overflow-x-hidden">
+        <Navbar isDark={isDark} toggleTheme={toggleTheme} onLoginClick={() => setShowLogin(true)} />
+        <Hero />
+        <Suspense fallback={<LoadingSpinner />}>
         <History />
         <About />
         <Advantages />
@@ -92,7 +96,8 @@ function App() {
         <BackToTop />
         <ChatBot />
       </Suspense>
-    </div>
+      </div>
+    </>
   )
 }
 

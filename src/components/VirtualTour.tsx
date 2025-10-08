@@ -51,6 +51,7 @@ const tourSpots = [
 export default function VirtualTour() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.1 })
+  const [isVideoOpen, setIsVideoOpen] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
   const [selectedSpot, setSelectedSpot] = useState(tourSpots[0])

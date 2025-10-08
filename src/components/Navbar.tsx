@@ -278,7 +278,8 @@ export default function Navbar({ isDark, toggleTheme, onLoginClick }: NavbarProp
               initial={{ opacity: 0, scale: 0.95, y: -20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-[70]"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-[70]"
+              style={{ transform: 'translate(-50%, -50%)' }}
             >
               <div className="glass-effect rounded-3xl shadow-2xl overflow-hidden mx-4">
                 <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700">

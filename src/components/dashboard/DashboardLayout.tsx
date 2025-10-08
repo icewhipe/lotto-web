@@ -8,7 +8,8 @@ import {
   FileText, 
   Settings, 
   LogOut,
-  Home
+  Home,
+  ArrowLeft
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -72,10 +73,20 @@ export default function DashboardLayout({ children, activeTab, onTabChange }: Da
       >
         <div className="container-custom">
           <div className="flex items-center justify-between h-16">
-            <a href="/" className="flex items-center gap-3">
-              <Home className="w-5 h-5" />
-              <span className="text-xl font-black gradient-text">ЛПТТ</span>
-            </a>
+            <div className="flex items-center gap-4">
+              <a 
+                href="/" 
+                className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors group"
+              >
+                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <span className="font-semibold">На главную</span>
+              </a>
+              <div className="h-8 w-px bg-gray-300 dark:bg-gray-600" />
+              <div className="flex items-center gap-3">
+                <Home className="w-5 h-5" />
+                <span className="text-xl font-black gradient-text">ЛПТТ</span>
+              </div>
+            </div>
             
             <div className="flex items-center gap-4">
               <div className="text-right">
