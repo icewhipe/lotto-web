@@ -3,16 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   User, 
   Mail, 
-  Phone, 
   FileText, 
   Upload, 
   CheckCircle, 
   ArrowRight, 
   ArrowLeft,
   X,
-  Home,
   GraduationCap,
-  Calendar,
   FileCheck
 } from 'lucide-react'
 

@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
-import { Camera, Building2, Users, GraduationCap, Trophy, BookOpen } from 'lucide-react'
+import { Camera, Building2, Users, GraduationCap, Trophy, BookOpen, X, ArrowLeft, ArrowRight } from 'lucide-react'
 
 const galleryCategories = [
   { id: 'all', name: 'Все фото', icon: Camera },
@@ -264,7 +264,10 @@ export default function Gallery() {
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <galleryItems[selectedImage].icon className="w-32 h-32 text-white/90" />
+                  {(() => {
+                    const Icon = galleryItems[selectedImage].icon
+                    return <Icon className="w-32 h-32 text-white/90" />
+                  })()}
                 </motion.div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">

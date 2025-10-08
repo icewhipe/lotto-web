@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
+import { LogIn, Mail, Lock, AlertCircle, ArrowLeft, CheckCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function LoginPage() {

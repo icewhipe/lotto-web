@@ -66,6 +66,7 @@ const programs = [
 export default function Programs() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.05 })
+  const [selectedProgram, setSelectedProgram] = useState<typeof programs[0] | null>(null)
 
   return (
     <section id="programs" className="section-padding" ref={ref}>

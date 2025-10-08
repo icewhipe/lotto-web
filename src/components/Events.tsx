@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { useRef } from 'react'
 import { useInView } from '../hooks/useInView'
-import { Calendar, Clock, MapPin, Users, X, ArrowRight } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users } from 'lucide-react'
 
 const upcomingEvents = [
   {
@@ -77,7 +77,6 @@ const upcomingEvents = [
 export default function Events() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.05 })
-  const [selectedEvent, setSelectedEvent] = useState<typeof upcomingEvents[0] | null>(null)
 
   return (
     <section id="events" className="section-padding" ref={ref}>
