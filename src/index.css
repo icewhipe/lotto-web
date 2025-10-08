@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased;
+    @apply bg-white dark:bg-gray-950;
+    @apply text-gray-900 dark:text-gray-50;
+    @apply transition-colors duration-300;
+  }
+
+  ::selection {
+    @apply bg-gradient-to-r from-primary-500 to-purple-600 text-white;
+  }
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-white/25 dark:bg-gray-900/25;
+    @apply backdrop-blur-xl backdrop-saturate-150;
+    @apply border border-white/20 dark:border-gray-700/30;
+    @apply shadow-xl shadow-black/10 dark:shadow-black/50;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-500 to-purple-600;
+    @apply bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full;
+    @apply bg-gradient-to-r from-primary-500 to-purple-600;
+    @apply text-white font-semibold;
+    @apply shadow-lg shadow-primary-500/40;
+    @apply hover:shadow-xl hover:shadow-primary-500/50;
+    @apply hover:-translate-y-0.5;
+    @apply transition-all duration-300;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full;
+    @apply glass-effect;
+    @apply text-gray-900 dark:text-gray-50 font-semibold;
+    @apply hover:-translate-y-0.5;
+    @apply transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300;
+    @apply hover:-translate-y-2 hover:shadow-2xl;
+  }
+
+  .section-padding {
+    @apply py-20 md:py-32;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-b from-primary-500 to-purple-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply from-primary-600 to-purple-700;
+}
+
+/* Smooth animations for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
