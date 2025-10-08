@@ -102,6 +102,7 @@ export default function News() {
                 </p>
 
                 <motion.button
+                  onClick={() => setSelectedNews(item)}
                   className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-semibold group/btn"
                   whileHover={{ x: 5 }}
                 >

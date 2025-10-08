@@ -159,6 +159,7 @@ export default function Gallery() {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
               whileHover={{ y: -8, scale: 1.02 }}
+              onClick={() => setSelectedImage(galleryItems.findIndex(i => i.id === item.id))}
               className="glass-effect rounded-3xl overflow-hidden cursor-pointer group"
             >
               {/* Image Placeholder */}

@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
-import { Calendar, Clock, MapPin, Users } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, X, CheckCircle } from 'lucide-react'
 
 const upcomingEvents = [
   {
@@ -108,6 +108,7 @@ export default function Events() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: index * 0.1, duration: 0.5 }}
               whileHover={{ y: -8, scale: 1.02 }}
+              onClick={() => setSelectedEvent(event)}
               className="glass-effect rounded-3xl overflow-hidden group cursor-pointer"
             >
               {/* Date Badge */}
@@ -176,6 +177,137 @@ export default function Events() {
           </div>
         </motion.div>
       </div>
+
+      {/* Event Modal */}
+      <AnimatePresence>
+        {selectedEvent && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedEvent(null)}
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 50 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl shadow-2xl"
+            >
+              {/* Header */}
+              <div className={`relative bg-gradient-to-br ${selectedEvent.gradient} p-8 text-white`}>
+                <button
+                  onClick={() => setSelectedEvent(null)}
+                  className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-full backdrop-blur-sm transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.2, type: 'spring' }}
+                  className="flex items-center gap-6 mb-4"
+                >
+                  <div className="text-center">
+                    <div className="text-6xl font-black">{selectedEvent.date}</div>
+                    <div className="text-2xl font-bold uppercase">{selectedEvent.month}</div>
+                    <div className="text-sm opacity-90">{selectedEvent.year}</div>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <h2 className="text-3xl font-black mb-4">{selectedEvent.title}</h2>
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-5 h-5" />
+                        <span className="font-semibold">{selectedEvent.time}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-5 h-5" />
+                        <span className="font-semibold">{selectedEvent.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-5 h-5" />
+                        <span className="font-semibold">{selectedEvent.attendees}</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Content */}
+              <div className="p-8">
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6"
+                >
+                  {selectedEvent.description}
+                </motion.p>
+
+                {selectedEvent.fullDescription && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="prose prose-lg dark:prose-invert max-w-none"
+                  >
+                    {selectedEvent.fullDescription.split('\n\n').map((paragraph, index) => (
+                      <p key={index} className="mb-4">{paragraph}</p>
+                    ))}
+                  </motion.div>
+                )}
+
+                {selectedEvent.program && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="mt-6"
+                  >
+                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                      <Calendar className="w-5 h-5" />
+                      Программа мероприятия
+                    </h3>
+                    <div className="space-y-2">
+                      {selectedEvent.program.map((item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.6 + index * 0.1 }}
+                          className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors"
+                        >
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                          <span>{item}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700"
+                >
+                  <button
+                    onClick={() => setSelectedEvent(null)}
+                    className="w-full btn-primary justify-center"
+                  >
+                    Закрыть
+                  </button>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
