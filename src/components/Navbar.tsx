@@ -342,8 +342,7 @@ export default function Navbar({ isDark, toggleTheme, onLoginClick }: NavbarProp
                   </span>
                 </div>
               </div>
-              </motion.div>
-            </div>
+            </motion.div>
           </>
         )}
       </AnimatePresence>
