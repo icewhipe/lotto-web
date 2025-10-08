@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -95,16 +95,24 @@ export default function Reviews() {
         </motion.div>
 
         {/* Reviews Carousel */}
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <div className="grid md:grid-cols-3 gap-6">
-            {visibleReviews.map((review, index) => (
-              <motion.div
-                key={`${currentIndex}-${index}`}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="glass-effect rounded-3xl p-8 relative"
-              >
+            <AnimatePresence mode="popLayout">
+              {visibleReviews.map((review, index) => (
+                <motion.div
+                  key={`${currentIndex}-${index}`}
+                  layout
+                  initial={{ opacity: 0, x: 300, scale: 0.8 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: -300, scale: 0.8 }}
+                  transition={{ 
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    ease: [0.4, 0, 0.2, 1]
+                  }}
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  className="glass-effect rounded-3xl p-8 relative"
+                >
                 {/* Quote Icon */}
                 <Quote className="absolute top-6 right-6 w-12 h-12 text-primary-200 dark:text-primary-900/30" />
 
@@ -139,7 +147,8 @@ export default function Reviews() {
                   "{review.text}"
                 </p>
               </motion.div>
-            ))}
+              ))}
+            </AnimatePresence>
           </div>
 
           {/* Navigation Buttons */}

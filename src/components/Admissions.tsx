@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
-import { FileText, Send, ClipboardCheck, UserCheck, Phone, Mail, Clock } from 'lucide-react'
+import { FileText, Send, ClipboardCheck, UserCheck, Phone, Mail, Clock, Sparkles, ArrowRight } from 'lucide-react'
+import ApplicationWizard from './ApplicationWizard'
 
 const steps = [
   {
@@ -51,6 +52,7 @@ const contactInfo = [
 export default function Admissions() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.05 })
+  const [isWizardOpen, setIsWizardOpen] = useState(false)
 
   return (
     <section id="admissions" className="section-padding" ref={ref}>
@@ -145,8 +147,33 @@ export default function Admissions() {
               </motion.div>
             ))}
           </div>
+
+          {/* CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.7 }}
+            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <motion.button
+              onClick={() => setIsWizardOpen(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary group"
+            >
+              <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              <span>Подать документы онлайн</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
+          </motion.div>
         </motion.div>
       </div>
+
+      {/* Application Wizard */}
+      <ApplicationWizard 
+        isOpen={isWizardOpen}
+        onClose={() => setIsWizardOpen(false)}
+      />
     </section>
   )
 }

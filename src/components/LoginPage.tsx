@@ -34,6 +34,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary-50 to-purple-100 dark:from-gray-950 dark:to-gray-900">
+      {/* Back Button */}
+      <motion.a
+        href="/"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 glass-effect rounded-full hover:shadow-lg transition-all group"
+      >
+        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+        <span className="font-semibold">На главную</span>
+      </motion.a>
+
       {/* Background Pattern */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-500/30 to-purple-600/30 rounded-full blur-3xl" />
@@ -59,30 +70,37 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Возможности системы:</h2>
-            <ul className="space-y-3">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold gradient-text">Возможности системы</h2>
+            <div className="space-y-4">
               {[
-                '📚 Электронный дневник и оценки',
-                '📅 Расписание занятий',
-                '📊 Учет посещаемости',
-                '👥 Доступ для студентов, родителей и преподавателей',
-                '📄 Электронные документы',
+                { icon: '📚', title: 'Электронный дневник', desc: 'Оценки по всем предметам в реальном времени', color: 'from-blue-500 to-cyan-600' },
+                { icon: '📅', title: 'Расписание занятий', desc: 'Индивидуальное расписание для каждой группы', color: 'from-green-500 to-emerald-600' },
+                { icon: '📊', title: 'Учет посещаемости', desc: 'Автоматический учет без бумажных рапортов', color: 'from-purple-500 to-pink-600' },
+                { icon: '👥', title: 'Для всех', desc: 'Студенты, родители, преподаватели, абитуриенты', color: 'from-orange-500 to-red-600' },
+                { icon: '📄', title: 'Электронные документы', desc: 'Все документы в одном месте', color: 'from-indigo-500 to-purple-600' },
               ].map((feature, index) => (
-                <motion.li
+                <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * index }}
-                  className="flex items-center gap-3 text-lg"
+                  transition={{ delay: 0.1 * index + 0.3 }}
+                  whileHover={{ x: 10, scale: 1.02 }}
+                  className="flex items-start gap-4 p-4 rounded-2xl glass-effect hover:shadow-lg transition-all cursor-pointer group"
                 >
-                  <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                    {feature.charAt(0)}
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                    {feature.icon}
                   </div>
-                  <span>{feature.substring(2)}</span>
-                </motion.li>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-lg mb-1 flex items-center gap-2">
+                      {feature.title}
+                      <CheckCircle className="w-4 h-4 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{feature.desc}</p>
+                  </div>
+                </motion.div>
               ))}
-            </ul>
+            </div>
           </div>
         </motion.div>
 

@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
-import { Calendar, Clock, MapPin, Users } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, X, ArrowRight } from 'lucide-react'
 
 const upcomingEvents = [
   {
@@ -13,6 +13,8 @@ const upcomingEvents = [
     location: 'Главный корпус',
     attendees: 'Для всех желающих',
     description: 'Познакомьтесь с техникумом, преподавателями и студентами. Экскурсии по учебным корпусам и мастерским.',
+    fullDescription: 'Приглашаем всех желающих на День открытых дверей ЛПТТ!\n\nПрограмма мероприятия:\n• 10:00 - Регистрация участников\n• 10:30 - Презентация техникума в актовом зале\n• 11:30 - Экскурсии по учебным корпусам\n• 12:30 - Посещение лабораторий и мастерских\n• 13:30 - Встреча с преподавателями\n• 14:00 - Знакомство с условиями поступления\n• 14:30 - Ответы на вопросы\n\nВы сможете:\n✓ Познакомиться с преподавателями\n✓ Увидеть учебные аудитории и оборудование\n✓ Пообщаться со студентами\n✓ Получить консультацию по поступлению\n✓ Задать все интересующие вопросы\n\nПриходите всей семьей! Ждем вас!',
+    program: ['Регистрация', 'Презентация', 'Экскурсия', 'Встреча с преподавателями', 'Консультации'],
     gradient: 'from-primary-500 to-purple-600',
   },
   {
@@ -75,6 +77,7 @@ const upcomingEvents = [
 export default function Events() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.05 })
+  const [selectedEvent, setSelectedEvent] = useState<typeof upcomingEvents[0] | null>(null)
 
   return (
     <section id="events" className="section-padding" ref={ref}>

@@ -81,10 +81,23 @@ export default function Gallery() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.05 })
   const [activeCategory, setActiveCategory] = useState('all')
+  const [selectedImage, setSelectedImage] = useState<number | null>(null)
 
   const filteredItems = activeCategory === 'all' 
     ? galleryItems 
     : galleryItems.filter(item => item.category === activeCategory)
+
+  const handlePrevImage = () => {
+    if (selectedImage !== null && selectedImage > 0) {
+      setSelectedImage(selectedImage - 1)
+    }
+  }
+
+  const handleNextImage = () => {
+    if (selectedImage !== null && selectedImage < galleryItems.length - 1) {
+      setSelectedImage(selectedImage + 1)
+    }
+  }
 
   return (
     <section id="gallery" className="section-padding bg-gray-50 dark:bg-gray-900/50" ref={ref}>
@@ -194,6 +207,79 @@ export default function Gallery() {
           </p>
         </motion.div>
       </div>
+
+      {/* Full-screen Image Modal */}
+      <AnimatePresence>
+        {selectedImage !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center"
+          >
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-10"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+
+            {selectedImage > 0 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handlePrevImage()
+                }}
+                className="absolute left-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-10"
+              >
+                <ArrowLeft className="w-6 h-6 text-white" />
+              </button>
+            )}
+
+            {selectedImage < galleryItems.length - 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleNextImage()
+                }}
+                className="absolute right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-10"
+              >
+                <ArrowRight className="w-6 h-6 text-white" />
+              </button>
+            )}
+
+            <motion.div
+              key={selectedImage}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-6xl w-full p-4"
+            >
+              <div className={`aspect-video rounded-3xl bg-gradient-to-br ${galleryItems[selectedImage].gradient} flex items-center justify-center overflow-hidden relative`}>
+                <motion.div
+                  initial={{ scale: 1.2 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <galleryItems[selectedImage].icon className="w-32 h-32 text-white/90" />
+                </motion.div>
+
+                <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
+                  <h3 className="text-3xl font-bold text-white mb-2">
+                    {galleryItems[selectedImage].title}
+                  </h3>
+                  <p className="text-white/80 text-sm">
+                    {selectedImage + 1} / {galleryItems.length}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

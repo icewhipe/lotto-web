@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
 import { Train, Car, Code, Zap, Construction, Wrench, ArrowRight } from 'lucide-react'
+import ProgramModal from './ProgramModal'
 
 const programs = [
   {
@@ -140,18 +141,26 @@ export default function Programs() {
               </ul>
 
               {/* CTA Button */}
-              <motion.a
-                href="#admissions"
+              <motion.button
+                onClick={() => setSelectedProgram(program)}
                 className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-semibold bg-gradient-to-r ${program.gradient} shadow-lg group/btn`}
                 whileHover={{ x: 5 }}
               >
                 <span>Подробнее</span>
                 <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-              </motion.a>
+              </motion.button>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Modal */}
+      {selectedProgram && (
+        <ProgramModal
+          program={selectedProgram}
+          onClose={() => setSelectedProgram(null)}
+        />
+      )}
     </section>
   )
 }
