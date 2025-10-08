@@ -16,35 +16,11 @@ const floatingCards = [
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Animated Background Orbs */}
+      {/* Optimized Background Orbs - Using CSS animations instead of JS */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-primary-500/30 to-purple-600/30 rounded-full blur-3xl"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-secondary-500/30 to-pink-600/30 rounded-full blur-3xl"
-          animate={{
-            x: [0, -30, 0],
-            y: [0, 30, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full blur-3xl"
-          animate={{
-            x: [0, 20, 0],
-            y: [0, -20, 0],
-            scale: [1, 0.9, 1],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-        />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-primary-500/30 to-purple-600/30 rounded-full blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-secondary-500/30 to-pink-600/30 rounded-full blur-3xl animate-pulse-slow animation-delay-200" />
+        <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full blur-3xl animate-pulse-slow animation-delay-400" />
       </div>
 
       <div className="container-custom">

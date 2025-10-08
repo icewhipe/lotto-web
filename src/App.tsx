@@ -1,31 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
+import { useAuth } from './contexts/AuthContext'
 import Navbar from './components/Navbar'
-import SearchBar from './components/SearchBar'
 import Hero from './components/Hero'
-import History from './components/History'
-import About from './components/About'
-import Advantages from './components/Advantages'
-import Programs from './components/Programs'
-import Gallery from './components/Gallery'
-import Achievements from './components/Achievements'
-import Staff from './components/Staff'
-import Reviews from './components/Reviews'
-import News from './components/News'
-import Events from './components/Events'
-import VirtualTour from './components/VirtualTour'
-import Partners from './components/Partners'
-import FAQ from './components/FAQ'
-import Admissions from './components/Admissions'
-import Documents from './components/Documents'
-import FeedbackForm from './components/FeedbackForm'
-import Contacts from './components/Contacts'
-import Footer from './components/Footer'
-import BackToTop from './components/BackToTop'
-import ThemeToggle from './components/ThemeToggle'
-import ChatBot from './components/ChatBot'
+import LoadingSpinner from './components/LoadingSpinner'
+import LoginPage from './components/LoginPage'
+import Dashboard from './components/Dashboard'
+
+// Lazy load non-critical components
+const History = lazy(() => import('./components/History'))
+const About = lazy(() => import('./components/About'))
+const Advantages = lazy(() => import('./components/Advantages'))
+const Programs = lazy(() => import('./components/Programs'))
+const Gallery = lazy(() => import('./components/Gallery'))
+const Achievements = lazy(() => import('./components/Achievements'))
+const Staff = lazy(() => import('./components/Staff'))
+const Reviews = lazy(() => import('./components/Reviews'))
+const News = lazy(() => import('./components/News'))
+const Events = lazy(() => import('./components/Events'))
+const VirtualTour = lazy(() => import('./components/VirtualTour'))
+const Partners = lazy(() => import('./components/Partners'))
+const FAQ = lazy(() => import('./components/FAQ'))
+const Admissions = lazy(() => import('./components/Admissions'))
+const Documents = lazy(() => import('./components/Documents'))
+const FeedbackForm = lazy(() => import('./components/FeedbackForm'))
+const Contacts = lazy(() => import('./components/Contacts'))
+const Footer = lazy(() => import('./components/Footer'))
+const BackToTop = lazy(() => import('./components/BackToTop'))
+const ChatBot = lazy(() => import('./components/ChatBot'))
 
 function App() {
   const [isDark, setIsDark] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
     // Check for saved theme preference or default to light mode
@@ -49,32 +55,43 @@ function App() {
     }
   }
 
+  // Show Dashboard if authenticated
+  if (isAuthenticated) {
+    return <Dashboard />
+  }
+
+  // Show Login Page if login button clicked
+  if (showLogin) {
+    return <LoginPage />
+  }
+
+  // Show main website
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
-      <SearchBar />
-      <Navbar />
+      <Navbar isDark={isDark} toggleTheme={toggleTheme} onLoginClick={() => setShowLogin(true)} />
       <Hero />
-      <History />
-      <About />
-      <Advantages />
-      <Programs />
-      <Gallery />
-      <VirtualTour />
-      <Achievements />
-      <Staff />
-      <Reviews />
-      <News />
-      <Events />
-      <Partners />
-      <FAQ />
-      <Admissions />
-      <Documents />
-      <FeedbackForm />
-      <Contacts />
-      <Footer />
-      <BackToTop />
-      <ChatBot />
+      <Suspense fallback={<LoadingSpinner />}>
+        <History />
+        <About />
+        <Advantages />
+        <Programs />
+        <Gallery />
+        <VirtualTour />
+        <Achievements />
+        <Staff />
+        <Reviews />
+        <News />
+        <Events />
+        <Partners />
+        <FAQ />
+        <Admissions />
+        <Documents />
+        <FeedbackForm />
+        <Contacts />
+        <Footer />
+        <BackToTop />
+        <ChatBot />
+      </Suspense>
     </div>
   )
 }
