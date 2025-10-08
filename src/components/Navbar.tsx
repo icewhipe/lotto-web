@@ -273,18 +273,23 @@ export default function Navbar({ isDark, toggleTheme, onLoginClick }: NavbarProp
               onClick={() => setIsSearchOpen(false)}
             />
             
-            <motion.div
-              ref={searchRef}
-              initial={{ opacity: 0, scale: 0.95, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              className="fixed w-full max-w-2xl z-[70]"
+            <div 
+              className="fixed z-[70]"
               style={{ 
                 top: '50%', 
                 left: '50%', 
-                transform: 'translate(-50%, -50%)' 
+                transform: 'translate(-50%, -50%)',
+                width: '100%',
+                maxWidth: '40rem',
+                padding: '0 1rem'
               }}
             >
+              <motion.div
+                ref={searchRef}
+                initial={{ opacity: 0, scale: 0.95, y: -20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              >
               <div className="glass-effect rounded-3xl shadow-2xl overflow-hidden mx-4">
                 <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
                   <Search className="w-5 h-5 text-gray-400" />
@@ -345,8 +350,9 @@ export default function Navbar({ isDark, toggleTheme, onLoginClick }: NavbarProp
                     закрыть
                   </span>
                 </div>
-              </div>
-            </motion.div>
+                </div>
+              </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>

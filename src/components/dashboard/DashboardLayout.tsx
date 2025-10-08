@@ -9,7 +9,9 @@ import {
   Settings, 
   LogOut,
   Home,
-  ArrowLeft
+  ArrowLeft,
+  TrendingUp,
+  MessageCircle
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -25,6 +27,9 @@ const menuItems = {
     { id: 'schedule', name: 'Расписание', icon: Calendar },
     { id: 'grades', name: 'Оценки', icon: BookOpen },
     { id: 'attendance', name: 'Посещаемость', icon: Users },
+    { id: 'notes', name: 'Конспекты', icon: FileText },
+    { id: 'progress', name: 'Прогресс', icon: TrendingUp },
+    { id: 'chat', name: 'Чат', icon: MessageCircle },
     { id: 'documents', name: 'Документы', icon: FileText },
   ],
   teacher: [

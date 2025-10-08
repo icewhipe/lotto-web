@@ -5,6 +5,9 @@ import StudentDashboard from './dashboard/StudentDashboard'
 import GradesView from './dashboard/GradesView'
 import ScheduleView from './dashboard/ScheduleView'
 import AttendanceView from './dashboard/AttendanceView'
+import NotesExchange from './student/NotesExchange'
+import ProgressTracker from './student/ProgressTracker'
+import StudentChat from './student/StudentChat'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('dashboard')
@@ -27,6 +30,12 @@ export default function Dashboard() {
           return <GradesView />
         case 'attendance':
           return <AttendanceView />
+        case 'notes':
+          return <NotesExchange />
+        case 'progress':
+          return <ProgressTracker />
+        case 'chat':
+          return <StudentChat />
         case 'documents':
           return (
             <div className="glass-effect rounded-2xl p-8 text-center">

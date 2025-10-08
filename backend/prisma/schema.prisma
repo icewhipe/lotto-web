@@ -1,0 +1,383 @@
+// Prisma Schema для ЛПТТ
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============= ПОЛЬЗОВАТЕЛИ =============
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole
+  isActive  Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  student   Student?
+  teacher   Teacher?
+  parent    Parent?
+  applicant Applicant?
+  
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  PARENT
+  APPLICANT
+  ADMIN
+}
+
+// ============= СТУДЕНТЫ =============
+
+model Student {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id])
+  
+  studentNumber String @unique
+  enrollmentDate DateTime
+  
+  grades    Grade[]
+  attendance Attendance[]
+  notes     Note[]
+  chatMessages ChatMessage[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([groupId])
+  @@index([studentNumber])
+  @@map("students")
+}
+
+// ============= ПРЕПОДАВАТЕЛИ =============
+
+model Teacher {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  position  String
+  department String
+  
+  grades    Grade[]
+  schedules Schedule[]
+  subjects  Subject[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("teachers")
+}
+
+// ============= РОДИТЕЛИ =============
+
+model Parent {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  childrenIds String[]
+  phone     String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("parents")
+}
+
+// ============= АБИТУРИЕНТЫ =============
+
+model Applicant {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  applicationStatus ApplicationStatus @default(PENDING)
+  selectedProgram   String?
+  
+  documents     Document[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("applicants")
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+}
+
+// ============= ГРУППЫ =============
+
+model Group {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  year      Int
+  specialtyId String
+  specialty Specialty @relation(fields: [specialtyId], references: [id])
+  
+  students  Student[]
+  schedules Schedule[]
+  chatRoom  ChatRoom?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([specialtyId])
+  @@map("groups")
+}
+
+// ============= СПЕЦИАЛЬНОСТИ =============
+
+model Specialty {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  code        String   @unique
+  duration    String
+  description String
+  
+  groups    Group[]
+  subjects  Subject[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("specialties")
+}
+
+// ============= ПРЕДМЕТЫ =============
+
+model Subject {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique
+  specialtyId String
+  specialty   Specialty @relation(fields: [specialtyId], references: [id])
+  teacherId   String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id])
+  
+  grades    Grade[]
+  schedules Schedule[]
+  notes     Note[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([specialtyId])
+  @@index([teacherId])
+  @@map("subjects")
+}
+
+// ============= ОЦЕНКИ =============
+
+model Grade {
+  id         String   @id @default(uuid())
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjectId  String
+  subject    Subject  @relation(fields: [subjectId], references: [id])
+  teacherId  String
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  
+  value      Int
+  type       GradeType
+  date       DateTime @default(now())
+  comment    String?
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@index([studentId])
+  @@index([subjectId])
+  @@index([date])
+  @@map("grades")
+}
+
+enum GradeType {
+  EXAM
+  TEST
+  HOMEWORK
+  CLASSWORK
+  QUIZ
+  PROJECT
+}
+
+// ============= РАСПИСАНИЕ =============
+
+model Schedule {
+  id        String   @id @default(uuid())
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  teacherId String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  
+  dayOfWeek Int      // 1-6 (Пн-Сб)
+  startTime String   // "09:00"
+  endTime   String   // "10:30"
+  room      String
+  type      LessonType
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([groupId])
+  @@index([dayOfWeek])
+  @@map("schedules")
+}
+
+enum LessonType {
+  LECTURE
+  PRACTICE
+  LAB
+  SEMINAR
+}
+
+// ============= ПОСЕЩАЕМОСТЬ =============
+
+model Attendance {
+  id        String   @id @default(uuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  date      DateTime
+  status    AttendanceStatus
+  reason    String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([studentId])
+  @@index([date])
+  @@map("attendance")
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+// ============= КОНСПЕКТЫ =============
+
+model Note {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  filePath    String
+  fileSize    Int
+  
+  authorId    String
+  author      Student  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  subjectId   String
+  subject     Subject  @relation(fields: [subjectId], references: [id])
+  
+  rating      Float    @default(0)
+  downloads   Int      @default(0)
+  views       Int      @default(0)
+  
+  isApproved  Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([authorId])
+  @@index([subjectId])
+  @@index([rating])
+  @@map("notes")
+}
+
+// ============= ЧАТ =============
+
+model ChatRoom {
+  id        String   @id @default(uuid())
+  groupId   String   @unique
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  
+  messages  ChatMessage[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("chat_rooms")
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  roomId    String
+  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  
+  senderId  String
+  sender    Student  @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  
+  content   String
+  type      MessageType @default(TEXT)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([roomId])
+  @@index([createdAt])
+  @@map("chat_messages")
+}
+
+enum MessageType {
+  TEXT
+  FILE
+  IMAGE
+}
+
+// ============= ДОКУМЕНТЫ =============
+
+model Document {
+  id          String   @id @default(uuid())
+  applicantId String
+  applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  
+  type        DocumentType
+  fileName    String
+  filePath    String
+  fileSize    Int
+  status      DocumentStatus @default(PENDING)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([applicantId])
+  @@map("documents")
+}
+
+enum DocumentType {
+  PASSPORT
+  CERTIFICATE
+  PHOTOS
+  MEDICAL
+  SNILS
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
