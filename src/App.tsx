@@ -7,6 +7,10 @@ import LoginPage from './components/LoginPage'
 import Dashboard from './components/Dashboard'
 import PageLoader from './components/PageLoader'
 
+// Background effects
+const FloatingOrbs = lazy(() => import('./components/FloatingOrbs'))
+const ParticlesBackground = lazy(() => import('./components/ParticlesBackground'))
+
 // Lazy load non-critical components
 const History = lazy(() => import('./components/History'))
 const About = lazy(() => import('./components/About'))
@@ -72,29 +76,36 @@ function App() {
       <PageLoader />
       <div className="min-h-screen overflow-x-hidden">
         <Navbar isDark={isDark} toggleTheme={toggleTheme} onLoginClick={() => setShowLogin(true)} />
+        
+        {/* Background Effects */}
+        <Suspense fallback={null}>
+          <FloatingOrbs />
+          <ParticlesBackground />
+        </Suspense>
+        
         <Hero />
         <Suspense fallback={<LoadingSpinner />}>
-        <History />
-        <About />
-        <Advantages />
-        <Programs />
-        <Gallery />
-        <VirtualTour />
-        <Achievements />
-        <Staff />
-        <Reviews />
-        <News />
-        <Events />
-        <Partners />
-        <FAQ />
-        <Admissions />
-        <Documents />
-        <FeedbackForm />
-        <Contacts />
-        <Footer />
-        <BackToTop />
-        <ChatBot />
-      </Suspense>
+          <History />
+          <About />
+          <Advantages />
+          <Programs />
+          <Gallery />
+          <VirtualTour />
+          <Achievements />
+          <Staff />
+          <Reviews />
+          <News />
+          <Events />
+          <Partners />
+          <FAQ />
+          <Admissions />
+          <Documents />
+          <FeedbackForm />
+          <Contacts />
+          <Footer />
+          <BackToTop />
+          <ChatBot />
+        </Suspense>
       </div>
     </>
   )

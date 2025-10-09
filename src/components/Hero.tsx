@@ -1,29 +1,69 @@
-import { motion } from 'framer-motion'
-import { ArrowRight, GraduationCap, Briefcase, Award } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowRight, GraduationCap, Briefcase, Award, Sparkles, Rocket } from 'lucide-react'
 
 const stats = [
-  { number: '65+', label: 'лет опыта' },
-  { number: '1000+', label: 'студентов' },
-  { number: '15+', label: 'специальностей' },
+  { number: '65+', label: 'лет опыта', icon: Award },
+  { number: '1000+', label: 'студентов', icon: GraduationCap },
+  { number: '15+', label: 'специальностей', icon: Briefcase },
 ]
 
 const floatingCards = [
-  { icon: GraduationCap, text: 'Качественное образование', delay: 0 },
-  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2 },
-  { icon: Award, text: 'Современное оборудование', delay: 0.4 },
+  { icon: GraduationCap, text: 'Качественное образование', delay: 0, color: 'from-violet-500 to-purple-600' },
+  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2, color: 'from-blue-500 to-cyan-600' },
+  { icon: Award, text: 'Современное оборудование', delay: 0.4, color: 'from-pink-500 to-rose-600' },
 ]
 
 export default function Hero() {
+  const { scrollY } = useScroll()
+  const y1 = useTransform(scrollY, [0, 500], [0, 150])
+  const y2 = useTransform(scrollY, [0, 500], [0, -150])
+  const opacity = useTransform(scrollY, [0, 300], [1, 0])
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Optimized Background Orbs - Using CSS animations instead of JS */}
+      {/* Enhanced Background with Mesh Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-purple-50/30 to-cyan-50/30 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
+      
+      {/* Animated Gradient Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-primary-500/30 to-purple-600/30 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-secondary-500/30 to-pink-600/30 rounded-full blur-3xl animate-pulse-slow animation-delay-200" />
-        <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-gradient-to-br from-cyan-500/20 to-blue-600/20 rounded-full blur-3xl animate-pulse-slow animation-delay-400" />
+        <motion.div 
+          className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full opacity-30"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+            y: y1
+          }}
+        />
+        <motion.div 
+          className="absolute -bottom-48 -left-48 w-[500px] h-[500px] rounded-full opacity-30"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+            y: y2
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-20"
+          style={{ 
+            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: 'easeInOut'
+          }}
+        />
       </div>
 
-      <div className="container-custom">
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03] bg-[size:32px_32px]" />
+
+      <motion.div className="container-custom" style={{ opacity }}>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Hero Content */}
           <motion.div
@@ -32,18 +72,46 @@ export default function Hero() {
             transition={{ duration: 0.6 }}
             className="space-y-8 z-10"
           >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-pink-500/10 border border-violet-500/20 backdrop-blur-sm"
+            >
+              <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+              <span className="text-sm font-semibold bg-gradient-to-r from-violet-600 to-pink-600 dark:from-violet-400 dark:to-pink-400 bg-clip-text text-transparent">
+                Лучший техникум 2024
+              </span>
+            </motion.div>
+
             <motion.h1
-              className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight"
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
               Твоё будущее <br />
-              <span className="gradient-text">начинается здесь</span>
+              <span className="relative inline-block">
+                <span className="relative z-10 bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                  начинается здесь
+                </span>
+                <motion.span
+                  className="absolute -inset-1 bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-pink-600/20 blur-2xl"
+                  animate={{
+                    opacity: [0.5, 0.8, 0.5],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  }}
+                />
+              </span>
             </motion.h1>
 
             <motion.p
-              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl"
+              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -58,18 +126,40 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <a href="#admissions" className="btn-primary group">
-                <span>Поступить в техникум</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
-              <a href="#programs" className="btn-secondary">
-                <span>Наши специальности</span>
-              </a>
+              <motion.a 
+                href="#admissions" 
+                className="group relative px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold rounded-2xl overflow-hidden shadow-lg shadow-violet-500/50 dark:shadow-violet-500/30"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="relative z-10 flex items-center gap-2 justify-center">
+                  Поступить в техникум
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-violet-500 to-purple-500"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.a>
+              
+              <motion.a 
+                href="#programs" 
+                className="group px-8 py-4 glass-effect font-bold rounded-2xl border-2 border-violet-200 dark:border-violet-800 hover:border-violet-400 dark:hover:border-violet-600 transition-colors"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="flex items-center gap-2 justify-center">
+                  Наши специальности
+                  <Rocket className="w-5 h-5 group-hover:translate-y-[-2px] transition-transform" />
+                </span>
+              </motion.a>
             </motion.div>
 
-            {/* Stats */}
+            {/* Enhanced Stats */}
             <motion.div
-              className="flex flex-wrap gap-8 pt-4"
+              className="flex flex-wrap gap-6 pt-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -80,60 +170,148 @@ export default function Hero() {
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 + index * 0.1 }}
-                  className="space-y-1"
+                  className="group relative"
                 >
-                  <div className="text-4xl font-black gradient-text">{stat.number}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
+                  <div className="glass-effect rounded-2xl p-4 border border-violet-200/50 dark:border-violet-800/50 hover:border-violet-400 dark:hover:border-violet-600 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10">
+                        <stat.icon className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+                      </div>
+                      <div>
+                        <div className="text-3xl font-black bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
+                          {stat.number}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
+                      </div>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </motion.div>
           </motion.div>
 
-          {/* Floating Cards */}
-          <div className="relative h-[500px] hidden lg:block">
+          {/* Enhanced 3D Floating Cards */}
+          <div className="relative h-[600px] hidden lg:block">
             {floatingCards.map((card, index) => (
               <motion.div
                 key={card.text}
-                className="absolute glass-effect rounded-2xl p-6 cursor-pointer"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.7 + card.delay, type: 'spring' }}
-                whileHover={{ scale: 1.05, rotate: 2 }}
+                className="absolute group"
+                initial={{ opacity: 0, scale: 0, rotateY: -180 }}
+                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                transition={{ 
+                  delay: 0.7 + card.delay, 
+                  type: 'spring',
+                  stiffness: 100
+                }}
                 style={{
-                  top: `${index * 30 + 10}%`,
-                  left: `${index * 20}%`,
+                  top: `${index * 28 + 15}%`,
+                  left: `${index * 22 + 5}%`,
+                  perspective: '1000px'
                 }}
               >
                 <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
+                  className="glass-effect rounded-3xl p-6 border-2 border-transparent hover:border-violet-400/50 dark:hover:border-violet-600/50 transition-all cursor-pointer"
+                  animate={{ y: [0, -15, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotateY: 5,
+                    rotateX: 5,
+                    z: 50
+                  }}
+                  style={{
+                    transformStyle: 'preserve-3d'
+                  }}
                 >
-                  <card.icon className="w-12 h-12 mb-3 text-primary-600 dark:text-primary-400" />
-                  <p className="text-sm font-semibold max-w-[150px]">{card.text}</p>
+                  {/* Glow effect on hover */}
+                  <motion.div
+                    className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${card.color} opacity-0 group-hover:opacity-20 blur-xl transition-opacity -z-10`}
+                  />
+                  
+                  <div className="relative" style={{ transform: 'translateZ(20px)' }}>
+                    <div className={`w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br ${card.color} p-3 shadow-lg`}>
+                      <card.icon className="w-full h-full text-white" />
+                    </div>
+                    <p className="text-base font-bold max-w-[180px] bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                      {card.text}
+                    </p>
+                  </div>
+                  
+                  {/* Sparkle effect */}
+                  <motion.div
+                    className="absolute -top-1 -right-1"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 180, 360],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      delay: index * 0.3
+                    }}
+                  >
+                    <Sparkles className="w-5 h-5 text-violet-500" />
+                  </motion.div>
                 </motion.div>
               </motion.div>
             ))}
+            
+            {/* Central glow orb */}
+            <motion.div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full"
+              style={{
+                background: 'radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%)',
+                filter: 'blur(40px)',
+              }}
+              animate={{
+                scale: [1, 1.3, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+            />
           </div>
         </div>
-      </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-      >
+        {/* Enhanced Scroll Indicator */}
         <motion.div
-          className="w-6 h-10 border-2 border-gray-400 dark:border-gray-600 rounded-full p-1"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5 }}
         >
           <motion.div
-            className="w-1.5 h-3 bg-gradient-to-b from-primary-500 to-purple-600 rounded-full"
-            animate={{ y: [0, 12, 0] }}
+            className="relative group cursor-pointer"
+            whileHover={{ scale: 1.1 }}
+          >
+            <motion.div
+              className="w-8 h-12 border-2 border-violet-400/50 dark:border-violet-600/50 rounded-full p-1.5 backdrop-blur-sm"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <motion.div
+                className="w-2 h-3 bg-gradient-to-b from-violet-500 to-purple-600 rounded-full mx-auto"
+                animate={{ y: [0, 16, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </motion.div>
+            
+            {/* Glow effect */}
+            <motion.div
+              className="absolute inset-0 rounded-full bg-violet-500/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"
+            />
+          </motion.div>
+          
+          <motion.p
+            className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center font-medium"
+            animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 2, repeat: Infinity }}
-          />
+          >
+            Листай вниз
+          </motion.p>
         </motion.div>
       </motion.div>
     </section>
