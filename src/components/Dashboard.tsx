@@ -8,6 +8,9 @@ import AttendanceView from './dashboard/AttendanceView'
 import NotesExchange from './student/NotesExchange'
 import ProgressTracker from './student/ProgressTracker'
 import StudentChat from './student/StudentChat'
+import TeacherDashboard from './dashboard/TeacherDashboard'
+import DirectorDashboard from './dashboard/DirectorDashboard'
+import AdminPanel from './admin/AdminPanel'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('dashboard')
@@ -54,21 +57,7 @@ export default function Dashboard() {
     if (user.role === 'teacher') {
       switch (activeTab) {
         case 'dashboard':
-          return (
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-3xl font-black mb-2">Панель преподавателя</h1>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Добро пожаловать, {user.name}
-                </p>
-              </div>
-              <div className="glass-effect rounded-2xl p-8 text-center">
-                <p className="text-gray-600 dark:text-gray-400">
-                  Выберите раздел из меню слева
-                </p>
-              </div>
-            </div>
-          )
+          return <TeacherDashboard />
         case 'journal':
           return (
             <div className="glass-effect rounded-2xl p-8 text-center">
@@ -122,26 +111,27 @@ export default function Dashboard() {
 
     // Admin views
     if (user.role === 'admin') {
+      return <AdminPanel />
+    }
+    
+    // Director views (if you add this role)
+    if (user.email === 'director@lptt.ru') {
       return (
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-black mb-2">Панель администратора</h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Управление системой
-            </p>
-          </div>
-          <div className="glass-effect rounded-2xl p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-400">
-              Раздел в разработке
-            </p>
-          </div>
-        </div>
+        <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
+          <DirectorDashboard />
+        </DashboardLayout>
       )
     }
 
     return null
   }
 
+  // Admin gets full AdminPanel
+  if (user.role === 'admin') {
+    return renderContent()
+  }
+
+  // Other roles get DashboardLayout wrapper
   return (
     <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
       {renderContent()}
