@@ -2,8 +2,8 @@ import SwiftUI
 
 extension Color {
     // Primary colors
-    static let primary = Color("Primary", bundle: nil) ?? Color.purple
-    static let secondary = Color("Secondary", bundle: nil) ?? Color.blue
+    static let primary = Color.purple
+    static let secondary = Color.blue
     
     // Semantic colors
     static let success = Color.green
