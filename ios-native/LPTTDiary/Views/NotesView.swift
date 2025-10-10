@@ -393,9 +393,15 @@ struct AddNoteSheet: View {
         let newNote = Note(
             title: title,
             subject: subject,
-            content: content,
+            description: content,
+            author: "Студент",
+            authorId: "current-user",
             date: Date(),
-            pages: pages
+            pages: pages,
+            rating: 0.0,
+            downloads: 0,
+            size: "1 МБ",
+            fileUrl: nil
         )
         notes.insert(newNote, at: 0)
         dismiss()
