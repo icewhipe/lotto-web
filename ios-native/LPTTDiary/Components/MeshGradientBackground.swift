@@ -2,15 +2,11 @@ import SwiftUI
 
 struct MeshGradientBackground: View {
     @Binding var animate: Bool
-    @State private var positions: [CGPoint] = []
-    
-    let colors: [Color] = [
-        .purple, .pink, .blue, .indigo, .cyan, .purple
-    ]
+    let colors: [Color] = [.purple, .pink, .blue]
     
     var body: some View {
         ZStack {
-            // Base gradient
+            // Base gradient (static, no animation)
             LinearGradient(
                 colors: [
                     Color(hex: "#1e1b4b"),
@@ -21,99 +17,100 @@ struct MeshGradientBackground: View {
                 endPoint: .bottomTrailing
             )
             
-            // Animated gradient orbs
-            ForEach(0..<5, id: \.self) { index in
+            // Reduced orbs (3 instead of 5)
+            ForEach(0..<3, id: \.self) { index in
                 Circle()
                     .fill(
                         RadialGradient(
                             colors: [
-                                colors[index].opacity(0.6),
-                                colors[index].opacity(0.3),
+                                colors[index].opacity(0.4),
+                                colors[index].opacity(0.2),
                                 Color.clear
                             ],
                             center: .center,
                             startRadius: 0,
-                            endRadius: 200
+                            endRadius: 150
                         )
                     )
-                    .frame(width: 300, height: 300)
-                    .blur(radius: 60)
+                    .frame(width: 250, height: 250)
+                    .blur(radius: 40)
                     .offset(
-                        x: animate ? CGFloat.random(in: -100...100) : CGFloat.random(in: -200...200),
-                        y: animate ? CGFloat.random(in: -100...100) : CGFloat.random(in: -200...200)
+                        x: animate ? CGFloat.random(in: -80...80) : CGFloat.random(in: -150...150),
+                        y: animate ? CGFloat.random(in: -80...80) : CGFloat.random(in: -150...150)
                     )
                     .animation(
-                        .easeInOut(duration: Double.random(in: 3...6))
+                        .easeInOut(duration: 5)
                             .repeatForever(autoreverses: true)
-                            .delay(Double(index) * 0.2),
+                            .delay(Double(index) * 0.3),
                         value: animate
                     )
             }
         }
         .onAppear {
-            animate = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                animate = true
+            }
         }
     }
 }
 
-// Floating Particles View (как на сайте)
+// Optimized Floating Particles View
 struct FloatingParticlesView: View {
     @State private var particles: [Particle] = []
+    @State private var timer: Timer?
+    let particleCount: Int
+    
+    init(particleCount: Int = 12) {
+        self.particleCount = particleCount
+    }
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 ForEach(particles) { particle in
                     Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    particle.color.opacity(0.8),
-                                    particle.color.opacity(0.4),
-                                    Color.clear
-                                ],
-                                center: .center,
-                                startRadius: 0,
-                                endRadius: particle.size / 2
-                            )
-                        )
+                        .fill(particle.color)
                         .frame(width: particle.size, height: particle.size)
-                        .position(particle.position)
-                        .blur(radius: 2)
+                        .blur(radius: particle.blur)
+                        .opacity(particle.opacity)
+                        .offset(x: particle.x, y: particle.y)
                 }
             }
             .onAppear {
-                createParticles(in: geometry.size)
-                startAnimation()
+                // Delayed particle generation
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    generateParticles(in: geometry.size)
+                    startAnimation()
+                }
+            }
+            .onDisappear {
+                timer?.invalidate()
             }
         }
     }
     
-    private func createParticles(in size: CGSize) {
-        particles = (0..<30).map { _ in
+    private func generateParticles(in size: CGSize) {
+        particles = (0..<particleCount).map { _ in
             Particle(
-                position: CGPoint(
-                    x: CGFloat.random(in: 0...size.width),
-                    y: CGFloat.random(in: 0...size.height)
-                ),
-                size: CGFloat.random(in: 3...8),
-                color: [Color.purple, .pink, .blue, .cyan].randomElement()!
+                x: CGFloat.random(in: 0...size.width),
+                y: CGFloat.random(in: 0...size.height),
+                size: CGFloat.random(in: 2...6),
+                color: [Color.purple, Color.pink, Color.blue].randomElement()!.opacity(0.5),
+                opacity: Double.random(in: 0.2...0.6),
+                blur: CGFloat.random(in: 2...4)
             )
         }
     }
     
     private func startAnimation() {
-        Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-            for i in 0..<particles.count {
-                particles[i].position.x += particles[i].velocity.dx
-                particles[i].position.y += particles[i].velocity.dy
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            for index in particles.indices {
+                particles[index].y -= CGFloat.random(in: 0.3...1)
+                particles[index].x += CGFloat.random(in: -0.5...0.5)
                 
-                // Bounce off edges
-                if particles[i].position.x < 0 || particles[i].position.x > UIScreen.main.bounds.width {
-                    particles[i].velocity.dx *= -1
-                }
-                if particles[i].position.y < 0 || particles[i].position.y > UIScreen.main.bounds.height {
-                    particles[i].velocity.dy *= -1
+                if particles[index].y < -20 {
+                    particles[index].y = UIScreen.main.bounds.height + 20
+                    particles[index].x = CGFloat.random(in: 0...UIScreen.main.bounds.width)
                 }
             }
         }
@@ -122,11 +119,10 @@ struct FloatingParticlesView: View {
 
 struct Particle: Identifiable {
     let id = UUID()
-    var position: CGPoint
+    var x: CGFloat
+    var y: CGFloat
     let size: CGFloat
     let color: Color
-    var velocity = CGVector(
-        dx: CGFloat.random(in: -0.5...0.5),
-        dy: CGFloat.random(in: -0.5...0.5)
-    )
+    let opacity: Double
+    let blur: CGFloat
 }
