@@ -156,7 +156,7 @@ struct NoteCardView: View {
             
             // Footer
             HStack {
-                Label("\(note.pages) стр.", systemImage: "doc.text")
+                Label(note.size, systemImage: "doc.text")
                     .font(AppTypography.caption)
                     .foregroundColor(.textSecondary)
                 
