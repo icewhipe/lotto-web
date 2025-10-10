@@ -6,32 +6,65 @@ struct GradesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 16) {
+                VStack(spacing: 20) {
                     // Overall average header
-                    VStack(spacing: 8) {
-                        Text(String(format: "%.1f", viewModel.overallAverage))
-                            .font(.system(size: 48, weight: .bold))
-                            .foregroundColor(.white)
-                        
-                        Text("Средний балл")
-                            .font(.subheadline)
-                            .foregroundColor(.white.opacity(0.9))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 32)
-                    .gradientBackground(colors: AppColors.primaryGradient)
-                    .cornerRadius(20)
-                    .padding()
+                    overallAverageCard
                     
                     // Subjects list
                     ForEach(viewModel.subjects) { subject in
                         SubjectCard(subject: subject)
                     }
                 }
+                .padding()
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Оценки")
         }
+    }
+    
+    private var overallAverageCard: some View {
+        VStack(spacing: 12) {
+            Text("Общий средний балл")
+                .font(.headline)
+                .foregroundColor(.secondary)
+            
+            Text(String(format: "%.2f", viewModel.overallAverage))
+                .font(.system(size: 48, weight: .bold))
+                .foregroundColor(.primary)
+            
+            HStack(spacing: 16) {
+                VStack {
+                    Text("\(viewModel.subjects.count)")
+                        .font(.title3.bold())
+                    Text("Предметов")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                Divider()
+                    .frame(height: 30)
+                
+                VStack {
+                    Text("\(viewModel.recentGrades.count)")
+                        .font(.title3.bold())
+                    Text("Оценок")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(
+            LinearGradient(
+                colors: [.purple, .pink],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .foregroundColor(.white)
+        .cornerRadius(20)
+        .shadow(color: .purple.opacity(0.3), radius: 10, x: 0, y: 5)
     }
 }
 
@@ -40,7 +73,6 @@ struct SubjectCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Header
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(subject.name)
@@ -57,33 +89,32 @@ struct SubjectCard: View {
                 
                 Spacer()
                 
-                // Average badge
-                VStack(spacing: 2) {
+                VStack(alignment: .trailing, spacing: 4) {
                     Text(String(format: "%.1f", subject.average))
                         .font(.title2.bold())
-                        .foregroundColor(gradeColor(subject.average))
-                    Text("ср.")
-                        .font(.caption2)
+                        .foregroundColor(getAverageColor(subject.average))
+                    Text("средний")
+                        .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                .frame(width: 60, height: 60)
-                .background(gradeColor(subject.average).opacity(0.1))
-                .clipShape(Circle())
             }
             
             // Grades chips
-            FlowLayout(spacing: 8) {
-                ForEach(subject.grades) { grade in
-                    GradeChip(grade: grade)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(subject.grades) { grade in
+                        GradeChip(grade: grade)
+                    }
                 }
             }
         }
         .padding()
-        .cardStyle()
-        .padding(.horizontal)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
     
-    private func gradeColor(_ average: Double) -> Color {
+    private func getAverageColor(_ average: Double) -> Color {
         switch average {
         case 4.5...: return .green
         case 3.5..<4.5: return .blue
@@ -98,55 +129,16 @@ struct GradeChip: View {
     
     var body: some View {
         Text("\(grade.value)")
-            .font(.caption.bold())
+            .font(.callout.bold())
             .foregroundColor(.white)
-            .frame(width: 32, height: 32)
+            .frame(width: 36, height: 36)
             .background(grade.color)
             .clipShape(Circle())
-    }
-}
-
-// Simple flow layout for chips
-struct FlowLayout: Layout {
-    var spacing: CGFloat = 8
-    
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let result = FlowResult(in: proposal.replacingUnspecifiedDimensions().width, subviews: subviews, spacing: spacing)
-        return result.size
-    }
-    
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let result = FlowResult(in: bounds.width, subviews: subviews, spacing: spacing)
-        for (index, subview) in subviews.enumerated() {
-            subview.place(at: CGPoint(x: bounds.minX + result.positions[index].x, y: bounds.minY + result.positions[index].y), proposal: .unspecified)
-        }
-    }
-    
-    struct FlowResult {
-        var size: CGSize = .zero
-        var positions: [CGPoint] = []
-        
-        init(in maxWidth: CGFloat, subviews: Subviews, spacing: CGFloat) {
-            var x: CGFloat = 0
-            var y: CGFloat = 0
-            var lineHeight: CGFloat = 0
-            
-            for subview in subviews {
-                let size = subview.sizeThatFits(.unspecified)
-                
-                if x + size.width > maxWidth {
-                    x = 0
-                    y += lineHeight + spacing
-                    lineHeight = 0
-                }
-                
-                positions.append(CGPoint(x: x, y: y))
-                lineHeight = max(lineHeight, size.height)
-                x += size.width + spacing
-            }
-            
-            self.size = CGSize(width: maxWidth, height: y + lineHeight)
-        }
+            .overlay(
+                Circle()
+                    .stroke(grade.color.opacity(0.3), lineWidth: 2)
+                    .padding(-4)
+            )
     }
 }
 

@@ -1,29 +1,15 @@
 import SwiftUI
 
 struct TeacherDashboard: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    
-    let groups = [
-        ("ИС-21", 28, "Программирование", 4.5, 94),
-        ("ИС-22", 25, "Базы данных", 4.2, 89),
-        ("АТ-21", 30, "Программирование", 4.3, 91),
-    ]
-    
-    let todayLessons = [
-        ("09:00", "ИС-21", "Программирование", "205", true),
-        ("10:45", "ИС-22", "Базы данных", "301", true),
-        ("14:00", "АТ-21", "Программирование", "205", false),
-    ]
-    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
                     // Header
-                    headerView
+                    teacherHeader
                     
                     // Quick stats
-                    statsSection
+                    statsGrid
                     
                     // Today's lessons
                     todayLessonsSection
@@ -32,7 +18,7 @@ struct TeacherDashboard: View {
                     myGroupsSection
                     
                     // Quick actions
-                    quickActionsSection
+                    quickActionsGrid
                 }
                 .padding()
             }
@@ -41,13 +27,13 @@ struct TeacherDashboard: View {
         }
     }
     
-    private var headerView: some View {
+    private var teacherHeader: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Здравствуйте! 👋")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
-            Text(authViewModel.user?.name ?? "Преподаватель")
+            Text("Петров Владимир Викторович")
                 .font(.title2.bold())
             
             Text("Преподаватель информатики")
@@ -56,14 +42,15 @@ struct TeacherDashboard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .cardStyle()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
     }
     
-    private var statsSection: some View {
+    private var statsGrid: some View {
         HStack(spacing: 12) {
-            StatCard(title: "Группы", value: "3", icon: "person.3.fill", color: .blue)
-            StatCard(title: "Студенты", value: "83", icon: "graduationcap.fill", color: .green)
-            StatCard(title: "Пары/нед", value: "18", icon: "calendar", color: .orange)
+            TeacherStatCard(value: "3", label: "Группы", color: .blue)
+            TeacherStatCard(value: "83", label: "Студенты", color: .green)
+            TeacherStatCard(value: "18", label: "Пары/нед", color: .orange)
         }
     }
     
@@ -73,19 +60,34 @@ struct TeacherDashboard: View {
                 .font(.headline)
             
             VStack(spacing: 12) {
-                ForEach(todayLessons, id: \.0) { lesson in
-                    TeacherLessonCard(
-                        time: lesson.0,
-                        group: lesson.1,
-                        subject: lesson.2,
-                        room: lesson.3,
-                        isCompleted: lesson.4
-                    )
-                }
+                TeacherLessonCard(
+                    time: "09:00",
+                    group: "ИС-21",
+                    subject: "Программирование",
+                    room: "205",
+                    status: .completed
+                )
+                
+                TeacherLessonCard(
+                    time: "10:45",
+                    group: "ИС-22",
+                    subject: "Базы данных",
+                    room: "301",
+                    status: .completed
+                )
+                
+                TeacherLessonCard(
+                    time: "14:00",
+                    group: "АТ-21",
+                    subject: "Программирование",
+                    room: "205",
+                    status: .upcoming
+                )
             }
         }
         .padding()
-        .cardStyle()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
     }
     
     private var myGroupsSection: some View {
@@ -100,35 +102,109 @@ struct TeacherDashboard: View {
             }
             
             VStack(spacing: 12) {
-                ForEach(groups, id: \.0) { group in
-                    TeacherGroupCard(
-                        name: group.0,
-                        students: group.1,
-                        subject: group.2,
-                        avgGrade: group.3,
-                        attendance: group.4
-                    )
-                }
+                GroupCard(
+                    name: "ИС-21",
+                    students: 28,
+                    subject: "Программирование",
+                    avgGrade: 4.5,
+                    attendance: 94
+                )
+                
+                GroupCard(
+                    name: "ИС-22",
+                    students: 25,
+                    subject: "Базы данных",
+                    avgGrade: 4.2,
+                    attendance: 89
+                )
+                
+                GroupCard(
+                    name: "АТ-21",
+                    students: 30,
+                    subject: "Программирование",
+                    avgGrade: 4.3,
+                    attendance: 91
+                )
             }
         }
         .padding()
-        .cardStyle()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
     }
     
-    private var quickActionsSection: some View {
+    private var quickActionsGrid: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Быстрые действия")
                 .font(.headline)
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                QuickActionButton(title: "Выставить оценки", icon: "pencil", gradient: [.purple, .pink]) {}
-                QuickActionButton(title: "Создать задание", icon: "doc.badge.plus", gradient: [.blue, .cyan]) {}
-                QuickActionButton(title: "Посещаемость", icon: "checkmark.circle", gradient: [.green, .mint]) {}
-                QuickActionButton(title: "Отчёты", icon: "chart.bar", gradient: [.orange, .yellow]) {}
+                TeacherActionButton(
+                    title: "Выставить оценки",
+                    icon: "pencil.circle.fill",
+                    gradient: [.purple, .pink]
+                ) {}
+                
+                TeacherActionButton(
+                    title: "Создать задание",
+                    icon: "doc.badge.plus",
+                    gradient: [.blue, .cyan]
+                ) {}
+                
+                TeacherActionButton(
+                    title: "Посещаемость",
+                    icon: "checkmark.circle.fill",
+                    gradient: [.green, .mint]
+                ) {}
+                
+                TeacherActionButton(
+                    title: "Отчёты",
+                    icon: "chart.bar.fill",
+                    gradient: [.orange, .yellow]
+                ) {}
             }
         }
         .padding()
-        .cardStyle()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+    }
+}
+
+struct TeacherStatCard: View {
+    let value: String
+    let label: String
+    let color: Color
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(value)
+                .font(.system(size: 32, weight: .bold))
+                .foregroundColor(color)
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+    }
+}
+
+enum LessonStatus {
+    case completed, upcoming
+    
+    var color: Color {
+        switch self {
+        case .completed: return .green
+        case .upcoming: return .purple
+        }
+    }
+    
+    var icon: String {
+        switch self {
+        case .completed: return "checkmark"
+        case .upcoming: return "clock"
+        }
     }
 }
 
@@ -137,23 +213,21 @@ struct TeacherLessonCard: View {
     let group: String
     let subject: String
     let room: String
-    let isCompleted: Bool
+    let status: LessonStatus
     
     var body: some View {
-        HStack {
-            Circle()
-                .fill(isCompleted ? Color.green : Color.purple)
+        HStack(spacing: 12) {
+            Image(systemName: status.icon)
+                .font(.title3)
+                .foregroundColor(.white)
                 .frame(width: 40, height: 40)
-                .overlay(
-                    Image(systemName: isCompleted ? "checkmark" : "clock.fill")
-                        .foregroundColor(.white)
-                        .font(.caption)
-                )
+                .background(status.color)
+                .cornerRadius(10)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(time)
                     .font(.caption.bold())
-                    .foregroundColor(isCompleted ? .green : .purple)
+                    .foregroundColor(.blue)
                 Text("Группа \(group)")
                     .font(.subheadline.bold())
                 Text(subject)
@@ -166,8 +240,10 @@ struct TeacherLessonCard: View {
             
             Spacer()
             
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
+            Button(action: {}) {
+                Image(systemName: "doc.text")
+                    .foregroundColor(.blue)
+            }
         }
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
@@ -175,7 +251,7 @@ struct TeacherLessonCard: View {
     }
 }
 
-struct TeacherGroupCard: View {
+struct GroupCard: View {
     let name: String
     let students: Int
     let subject: String
@@ -183,35 +259,52 @@ struct TeacherGroupCard: View {
     let attendance: Int
     
     var body: some View {
-        HStack {
-            Circle()
-                .fill(LinearGradient(colors: AppColors.blueGradient, startPoint: .topLeading, endPoint: .bottomTrailing))
-                .frame(width: 48, height: 48)
-                .overlay(
-                    Text(name)
-                        .font(.caption.bold())
-                        .foregroundColor(.white)
-                )
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(subject)
-                    .font(.subheadline.bold())
-                Text("\(students) студентов")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(name)
+                    .font(.title3.bold())
+                    .foregroundColor(.white)
+                    .frame(width: 48, height: 48)
+                    .background(
+                        LinearGradient(
+                            colors: [.blue, .cyan],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .cornerRadius(12)
                 
-                HStack(spacing: 16) {
-                    Label("Ср. балл: \(String(format: "%.1f", avgGrade))", systemImage: "star.fill")
-                    Label("Посещ.: \(attendance)%", systemImage: "checkmark.circle.fill")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(subject)
+                        .font(.subheadline.bold())
+                    Text("\(students) студентов")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                .font(.caption2.bold())
-                .foregroundColor(.secondary)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
             }
             
-            Spacer()
-            
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
+            HStack(spacing: 16) {
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill")
+                        .font(.caption)
+                        .foregroundColor(.green)
+                    Text("Ср. балл: \(String(format: "%.1f", avgGrade))")
+                        .font(.caption.bold())
+                }
+                
+                HStack(spacing: 4) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundColor(.blue)
+                    Text("Посещ.: \(attendance)%")
+                        .font(.caption.bold())
+                }
+            }
         }
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
@@ -219,7 +312,37 @@ struct TeacherGroupCard: View {
     }
 }
 
+struct TeacherActionButton: View {
+    let title: String
+    let icon: String
+    let gradient: [Color]
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.title2)
+                Text(title)
+                    .font(.caption.bold())
+                    .multilineTextAlignment(.center)
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 100)
+            .background(
+                LinearGradient(
+                    colors: gradient,
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(16)
+            .shadow(color: gradient[0].opacity(0.3), radius: 8, x: 0, y: 4)
+        }
+    }
+}
+
 #Preview {
     TeacherDashboard()
-        .environmentObject(AuthViewModel())
 }

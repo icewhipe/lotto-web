@@ -6,30 +6,15 @@ struct ScheduleView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Week days tabs
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        ForEach(viewModel.schedule) { day in
-                            WeekDayTab(
-                                day: day,
-                                isSelected: day.dayOfWeek == viewModel.selectedDay
-                            ) {
-                                withAnimation {
-                                    viewModel.selectedDay = day.dayOfWeek
-                                }
-                            }
-                        }
-                    }
-                    .padding()
-                }
-                .background(Color(.systemBackground))
+                // Week days selector
+                weekDaysSelector
                 
-                // Lessons list
+                // Schedule list
                 ScrollView {
                     if viewModel.todayLessons.isEmpty {
-                        EmptyScheduleView()
+                        emptyStateView
                     } else {
-                        LazyVStack(spacing: 12) {
+                        VStack(spacing: 12) {
                             ForEach(viewModel.todayLessons) { lesson in
                                 LessonCard(lesson: lesson)
                             }
@@ -42,54 +27,89 @@ struct ScheduleView: View {
             .navigationTitle("Расписание")
         }
     }
-}
-
-struct WeekDayTab: View {
-    let day: DaySchedule
-    let isSelected: Bool
-    let action: () -> Void
     
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 4) {
-                Text(day.shortDayName)
-                    .font(.caption.bold())
-                
-                Circle()
-                    .frame(width: 6, height: 6)
-                    .opacity(isSelected ? 1 : 0)
+    private var weekDaysSelector: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(0..<6) { day in
+                    DayButton(
+                        dayNumber: day,
+                        isSelected: viewModel.selectedDay == day,
+                        dayName: getDayName(day)
+                    ) {
+                        withAnimation(.spring(response: 0.3)) {
+                            viewModel.selectedDay = day
+                        }
+                    }
+                }
             }
-            .foregroundColor(isSelected ? .white : .primary)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-                isSelected ?
-                LinearGradient(colors: AppColors.primaryGradient, startPoint: .leading, endPoint: .trailing) :
-                    LinearGradient(colors: [Color(.systemGray6), Color(.systemGray6)], startPoint: .leading, endPoint: .trailing)
-            )
-            .cornerRadius(12)
+            .padding()
         }
+        .background(Color(.systemBackground))
     }
-}
-
-struct EmptyScheduleView: View {
-    var body: some View {
+    
+    private var emptyStateView: some View {
         VStack(spacing: 16) {
             Image(systemName: "calendar.badge.exclamationmark")
-                .font(.system(size: 64))
+                .font(.system(size: 60))
                 .foregroundColor(.gray)
             
-            Text("Нет занятий")
+            Text("Занятий нет")
                 .font(.title3.bold())
             
-            Text("На этот день занятия не запланированы")
+            Text("В этот день нет запланированных занятий")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }
-        .padding()
         .frame(maxWidth: .infinity)
-        .frame(minHeight: 400)
+        .padding(.top, 60)
+    }
+    
+    private func getDayName(_ day: Int) -> String {
+        let days = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
+        return day < days.count ? days[day] : ""
+    }
+}
+
+struct DayButton: View {
+    let dayNumber: Int
+    let isSelected: Bool
+    let dayName: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Text(dayName)
+                    .font(.caption.bold())
+                
+                Text("\(dayNumber + 1)")
+                    .font(.title3.bold())
+            }
+            .frame(width: 50, height: 70)
+            .foregroundColor(isSelected ? .white : .primary)
+            .background(
+                isSelected ?
+                LinearGradient(
+                    colors: [.blue, .cyan],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ) :
+                LinearGradient(
+                    colors: [Color(.systemGray6), Color(.systemGray6)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .cornerRadius(12)
+            .shadow(
+                color: isSelected ? .blue.opacity(0.3) : .clear,
+                radius: 8,
+                x: 0,
+                y: 4
+            )
+        }
     }
 }
 
