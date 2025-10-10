@@ -17,7 +17,7 @@ struct StudentDashboard: View {
                 // Floating Particles (reduced count)
                 if showParticles {
                     FloatingParticlesView(particleCount: 8)
-                        .opacity(0.25)
+                        .opacity(0.3)
                         .ignoresSafeArea()
                 }
                 
