@@ -42,7 +42,7 @@ struct LoginView: View {
                                 .blur(radius: 20)
                                 .scaleEffect(animateGradient ? 1.2 : 1.0)
                             
-                            // Logo Icon with rotation and scale
+                            // Logo Icon with scale only (no rotation)
                             Image(systemName: "graduationcap.circle.fill")
                                 .font(.system(size: 80))
                                 .foregroundStyle(
@@ -54,10 +54,6 @@ struct LoginView: View {
                                 )
                                 .shadow(color: .purple.opacity(0.5), radius: 20, x: 0, y: 10)
                                 .scaleEffect(logoScale)
-                                .rotation3DEffect(
-                                    .degrees(logoRotation),
-                                    axis: (x: 1, y: 1, z: 0)
-                                )
                         }
                         
                         // Title with shimmer effect
@@ -100,11 +96,10 @@ struct LoginView: View {
                     }
                     .padding(.bottom, 40)
                     .onAppear {
-                        withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+                        withAnimation(.spring(response: 0.6, dampingFraction: 0.75)) {
                             logoScale = 1.0
-                            logoRotation = 0
                         }
-                        withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                        withAnimation(.easeInOut(duration: 3).repeatForever(autoreverses: true)) {
                             animateGradient = true
                         }
                     }

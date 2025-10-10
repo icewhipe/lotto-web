@@ -38,11 +38,15 @@ struct StudentDashboard: View {
                         // Quick actions
                         quickActionsSection
                     }
-                    .padding()
+                    .padding(AppSpacing.md)
+                    .padding(.bottom, AppSpacing.xl)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Color.appBackground)
             .navigationTitle("Главная")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(Color.appBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
     
