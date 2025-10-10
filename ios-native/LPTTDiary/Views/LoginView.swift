@@ -104,6 +104,9 @@ struct LoginView: View {
                             logoScale = 1.0
                             logoRotation = 0
                         }
+                        withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                            animateGradient = true
+                        }
                     }
                     
                     // Login form
