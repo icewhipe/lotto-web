@@ -10,7 +10,7 @@ struct GradesView: View {
             ZStack {
                 // Floating Particles Background (reduced)
                 FloatingParticlesView(particleCount: 6)
-                    .opacity(0.15)
+                    .opacity(0.2)
                     .ignoresSafeArea()
                 
                 ScrollView {
