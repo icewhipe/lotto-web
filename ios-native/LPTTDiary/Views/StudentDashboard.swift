@@ -312,7 +312,7 @@ struct CompactLessonCard: View {
     var body: some View {
         HStack(spacing: AppSpacing.md) {
             // Time
-            Text(lesson.startTime)
+            Text(lesson.time.components(separatedBy: "-").first ?? lesson.time)
                 .font(AppTypography.labelLarge)
                 .foregroundColor(.textPrimary)
                 .frame(width: 50, alignment: .leading)
@@ -331,7 +331,7 @@ struct CompactLessonCard: View {
             Spacer()
             
             // Type badge
-            Text(lessonType)
+            Text(lessonTypeText)
                 .font(AppTypography.captionBold)
                 .foregroundColor(lessonColor)
                 .padding(.horizontal, AppSpacing.sm)
@@ -346,21 +346,19 @@ struct CompactLessonCard: View {
         .cornerRadius(AppRadius.md)
     }
     
-    private var lessonType: String {
+    private var lessonTypeText: String {
         switch lesson.type {
-        case "Лекция": return "ЛК"
-        case "Практика": return "ПР"
-        case "Лабораторная": return "ЛБ"
-        default: return lesson.type
+        case .lecture: return "ЛК"
+        case .practice: return "ПР"
+        case .lab: return "ЛБ"
         }
     }
     
     private var lessonColor: Color {
         switch lesson.type {
-        case "Лекция": return Color.brandBlue
-        case "Практика": return Color(hex: "#10b981")
-        case "Лабораторная": return Color.brandPurple
-        default: return Color.brandPink
+        case .lecture: return Color.brandBlue
+        case .practice: return Color(hex: "#10b981")
+        case .lab: return Color.brandPurple
         }
     }
 }
