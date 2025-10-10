@@ -6,7 +6,7 @@ struct LPTTDiaryApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreen()
                 .environmentObject(authViewModel)
         }
     }

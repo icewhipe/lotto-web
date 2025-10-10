@@ -14,10 +14,10 @@ struct StudentDashboard: View {
                 Color(.systemGroupedBackground)
                     .ignoresSafeArea()
                 
-                // Floating Particles
+                // Floating Particles (reduced count)
                 if showParticles {
-                    FloatingParticlesView()
-                        .opacity(0.3)
+                    FloatingParticlesView(particleCount: 8)
+                        .opacity(0.25)
                         .ignoresSafeArea()
                 }
                 
