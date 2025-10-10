@@ -147,8 +147,8 @@ struct NoteCardView: View {
                 .foregroundColor(.textPrimary)
             
             // Preview
-            if !note.content.isEmpty {
-                Text(note.content)
+            if !note.description.isEmpty {
+                Text(note.description)
                     .font(AppTypography.body)
                     .foregroundColor(.textSecondary)
                     .lineLimit(2)
