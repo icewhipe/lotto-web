@@ -12,9 +12,9 @@ struct LoginView: View {
     
     var body: some View {
         ZStack {
-            // Gradient background
+            // Simple gradient (no mesh for performance)
             LinearGradient(
-                colors: [Color.purple, Color.pink],
+                colors: [Color(hex: "#8B5CF6"), Color(hex: "#EC4899")],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )

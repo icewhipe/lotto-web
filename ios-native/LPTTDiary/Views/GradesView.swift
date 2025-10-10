@@ -8,13 +8,13 @@ struct GradesView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Floating Particles Background
-                FloatingParticlesView()
-                    .opacity(0.2)
+                // Floating Particles Background (reduced)
+                FloatingParticlesView(particleCount: 6)
+                    .opacity(0.15)
                     .ignoresSafeArea()
                 
                 ScrollView {
-                    VStack(spacing: 20) {
+                    LazyVStack(spacing: 20) {
                         // Overall average header with animation
                         overallAverageCard
                             .animateOnAppear()
