@@ -351,6 +351,7 @@ struct CompactLessonCard: View {
         case .lecture: return "ЛК"
         case .practice: return "ПР"
         case .lab: return "ЛБ"
+        case .seminar: return "СМ"
         }
     }
     
@@ -359,6 +360,7 @@ struct CompactLessonCard: View {
         case .lecture: return Color.brandBlue
         case .practice: return Color(hex: "#10b981")
         case .lab: return Color.brandPurple
+        case .seminar: return Color(hex: "#f59e0b")
         }
     }
 }
