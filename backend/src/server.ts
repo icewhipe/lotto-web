@@ -36,21 +36,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-// API Routes (будут добавлены)
-app.get('/api', (req, res) => {
-  res.json({ 
-    message: 'LPTT Backend API',
-    version: '1.0.0',
-    endpoints: [
-      '/api/auth',
-      '/api/students',
-      '/api/grades',
-      '/api/schedule',
-      '/api/notes',
-      '/api/chat'
-    ]
-  })
-})
+// API Routes
+import routes from './routes'
+
+app.use('/api', routes)
 
 // Socket.IO handlers
 io.on('connection', (socket) => {
