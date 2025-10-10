@@ -25,20 +25,21 @@ struct StudentDashboard: View {
                     VStack(spacing: 24) {
                         // Header with gradient
                         headerView
-                    
-                    // Stats cards
-                    statsSection
-                    
-                    // Today's schedule
-                    todayScheduleSection
-                    
-                    // Recent grades
-                    recentGradesSection
-                    
-                    // Quick actions
-                    quickActionsSection
+                        
+                        // Stats cards
+                        statsSection
+                        
+                        // Today's schedule
+                        todayScheduleSection
+                        
+                        // Recent grades
+                        recentGradesSection
+                        
+                        // Quick actions
+                        quickActionsSection
+                    }
+                    .padding()
                 }
-                .padding()
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Главная")
@@ -91,14 +92,12 @@ struct StudentDashboard: View {
                             .foregroundColor(.white)
                         
                         // Badge counter
-                        if true {
-                            Text("3")
-                                .font(.caption2.bold())
-                                .foregroundColor(.white)
-                                .padding(6)
-                                .background(Circle().fill(Color.red))
-                                .offset(x: 15, y: -15)
-                        }
+                        Text("3")
+                            .font(.caption2.bold())
+                            .foregroundColor(.white)
+                            .padding(6)
+                            .background(Circle().fill(Color.red))
+                            .offset(x: 15, y: -15)
                     }
                 }
             }
@@ -304,6 +303,7 @@ struct QuickActionButton: View {
                 Text(title)
                     .font(.subheadline.bold())
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 100)
@@ -320,7 +320,9 @@ struct QuickActionButton: View {
     }
 }
 
-#Preview {
-    StudentDashboard()
-        .environmentObject(AuthViewModel())
+struct StudentDashboard_Previews: PreviewProvider {
+    static var previews: some View {
+        StudentDashboard()
+            .environmentObject(AuthViewModel())
+    }
 }
