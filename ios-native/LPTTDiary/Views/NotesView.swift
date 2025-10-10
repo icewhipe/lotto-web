@@ -392,16 +392,15 @@ struct AddNoteSheet: View {
     private func saveNote() {
         let newNote = Note(
             title: title,
-            subject: subject,
             description: content,
+            subject: subject,
             author: "Студент",
             authorId: "current-user",
             date: Date(),
-            pages: pages,
             rating: 0.0,
             downloads: 0,
-            size: "1 МБ",
-            fileUrl: nil
+            size: "\(pages) стр.",
+            fileUrl: ""
         )
         notes.insert(newNote, at: 0)
         dismiss()
