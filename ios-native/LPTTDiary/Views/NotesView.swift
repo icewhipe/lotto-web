@@ -396,7 +396,6 @@ struct AddNoteSheet: View {
             subject: subject,
             author: "Студент",
             authorId: "current-user",
-            date: Date(),
             rating: 0.0,
             downloads: 0,
             size: "\(pages) стр.",
