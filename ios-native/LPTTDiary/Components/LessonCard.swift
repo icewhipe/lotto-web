@@ -61,11 +61,13 @@ struct LessonCard: View {
     }
 }
 
-#Preview {
-    VStack {
-        LessonCard(lesson: Lesson.mockLessons[0])
-        LessonCard(lesson: Lesson.mockLessons[1], isCompact: true)
+struct LessonCard_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            LessonCard(lesson: Lesson.mockLessons[0])
+            LessonCard(lesson: Lesson.mockLessons[1], isCompact: true)
+        }
+        .padding()
+        .background(Color(.systemGroupedBackground))
     }
-    .padding()
-    .background(Color(.systemGroupedBackground))
 }

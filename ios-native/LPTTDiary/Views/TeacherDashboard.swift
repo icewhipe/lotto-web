@@ -343,6 +343,8 @@ struct TeacherActionButton: View {
     }
 }
 
-#Preview {
-    TeacherDashboard()
+struct TeacherDashboard_Previews: PreviewProvider {
+    static var previews: some View {
+        TeacherDashboard()
+    }
 }

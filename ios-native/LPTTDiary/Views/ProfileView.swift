@@ -188,7 +188,9 @@ struct SettingsRow: View {
     }
 }
 
-#Preview {
-    ProfileView()
-        .environmentObject(AuthViewModel())
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+            .environmentObject(AuthViewModel())
+    }
 }

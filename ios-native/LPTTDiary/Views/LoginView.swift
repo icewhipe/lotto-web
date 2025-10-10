@@ -245,7 +245,9 @@ struct QuickLoginButton: View {
     }
 }
 
-#Preview {
-    LoginView()
-        .environmentObject(AuthViewModel())
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+            .environmentObject(AuthViewModel())
+    }
 }

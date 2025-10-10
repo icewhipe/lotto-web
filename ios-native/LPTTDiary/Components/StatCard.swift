@@ -28,11 +28,13 @@ struct StatCard: View {
     }
 }
 
-#Preview {
-    HStack {
-        StatCard(title: "Ср. балл", value: "4.5", icon: "star.fill", color: .green)
-        StatCard(title: "Посещ.", value: "92%", icon: "checkmark.circle.fill", color: .blue)
+struct StatCard_Previews: PreviewProvider {
+    static var previews: some View {
+        HStack {
+            StatCard(title: "Ср. балл", value: "4.5", icon: "star.fill", color: .green)
+            StatCard(title: "Посещ.", value: "92%", icon: "checkmark.circle.fill", color: .blue)
+        }
+        .padding()
+        .background(Color(.systemGroupedBackground))
     }
-    .padding()
-    .background(Color(.systemGroupedBackground))
 }

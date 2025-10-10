@@ -40,19 +40,21 @@ struct GradientButton: View {
     }
 }
 
-#Preview {
-    VStack(spacing: 16) {
-        GradientButton(
-            title: "Войти",
-            icon: "arrow.right",
-            gradient: [.blue, .cyan]
-        ) {}
-        
-        GradientButton(
-            title: "Выйти",
-            icon: "rectangle.portrait.and.arrow.right",
-            gradient: [.red, .pink]
-        ) {}
+struct GradientButton_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 16) {
+            GradientButton(
+                title: "Войти",
+                icon: "arrow.right",
+                gradient: [.blue, .cyan]
+            ) {}
+            
+            GradientButton(
+                title: "Выйти",
+                icon: "rectangle.portrait.and.arrow.right",
+                gradient: [.red, .pink]
+            ) {}
+        }
+        .padding()
     }
-    .padding()
 }
