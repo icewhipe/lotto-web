@@ -22,22 +22,86 @@ struct LoginView: View {
                     Spacer()
                         .frame(height: 60)
                     
-                    // Logo
+                    // Animated Logo with 3D Effect
                     VStack(spacing: 16) {
-                        Image(systemName: "graduationcap.circle.fill")
-                            .font(.system(size: 80))
-                            .foregroundColor(.white)
+                        ZStack {
+                            // Glow Effect
+                            Circle()
+                                .fill(
+                                    RadialGradient(
+                                        colors: [Color.purple.opacity(0.8), Color.clear],
+                                        center: .center,
+                                        startRadius: 0,
+                                        endRadius: 60
+                                    )
+                                )
+                                .frame(width: 120, height: 120)
+                                .blur(radius: 20)
+                                .scaleEffect(animateGradient ? 1.2 : 1.0)
+                            
+                            // Logo Icon with rotation and scale
+                            Image(systemName: "graduationcap.circle.fill")
+                                .font(.system(size: 80))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.white, .white.opacity(0.8)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .shadow(color: .purple.opacity(0.5), radius: 20, x: 0, y: 10)
+                                .scaleEffect(logoScale)
+                                .rotation3DEffect(
+                                    .degrees(logoRotation),
+                                    axis: (x: 1, y: 1, z: 0)
+                                )
+                        }
+                        
+                        // Title with shimmer effect
+                        Text("ЛПТТ Дневник")
+                            .font(.system(size: 38, weight: .bold))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.white, .white.opacity(0.9), .white],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
                             .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
                         
-                        Text("ЛПТТ Дневник")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundColor(.white)
-                        
+                        // Subtitle with fade
                         Text("Электронный дневник студента")
                             .font(.subheadline)
-                            .foregroundColor(.white.opacity(0.9))
+                            .foregroundColor(.white.opacity(0.95))
+                            .shadow(color: .black.opacity(0.2), radius: 5)
+                        
+                        // Animated Badge
+                        HStack(spacing: 4) {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                            Text("Лучший техникум 2024")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.2))
+                                .overlay(
+                                    Capsule()
+                                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                                )
+                        )
+                        .foregroundColor(.white)
                     }
                     .padding(.bottom, 40)
+                    .onAppear {
+                        withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+                            logoScale = 1.0
+                            logoRotation = 0
+                        }
+                    }
                     
                     // Login form
                     VStack(spacing: 20) {

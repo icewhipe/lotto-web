@@ -4,13 +4,27 @@ struct StudentDashboard: View {
     @StateObject private var gradesViewModel = GradesViewModel()
     @StateObject private var scheduleViewModel = ScheduleViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
+    @State private var animateCards = false
+    @State private var showParticles = false
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Header
-                    headerView
+            ZStack {
+                // Animated Background
+                Color(.systemGroupedBackground)
+                    .ignoresSafeArea()
+                
+                // Floating Particles
+                if showParticles {
+                    FloatingParticlesView()
+                        .opacity(0.3)
+                        .ignoresSafeArea()
+                }
+                
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // Header with gradient
+                        headerView
                     
                     // Stats cards
                     statsSection
@@ -32,47 +46,104 @@ struct StudentDashboard: View {
     }
     
     private var headerView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Здравствуйте! 👋")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            
-            Text(authViewModel.user?.name ?? "Студент")
-                .font(.title2.bold())
-            
-            Text("Группа: \(authViewModel.user?.group ?? "ИС-21")")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+        AnimatedCard {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 6) {
+                        ShimmerText(text: "Здравствуйте! 👋")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        
+                        Text(authViewModel.user?.name ?? "Студент")
+                            .font(.title2.bold())
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.purple, .pink],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                        
+                        HStack(spacing: 4) {
+                            Image(systemName: "person.3.fill")
+                                .font(.caption)
+                            Text("Группа: \(authViewModel.user?.group ?? "ИС-21")")
+                                .font(.subheadline)
+                        }
+                        .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    // Notification Badge with pulse
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [.purple, .pink],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 50, height: 50)
+                        
+                        Image(systemName: "bell.fill")
+                            .foregroundColor(.white)
+                        
+                        // Badge counter
+                        if true {
+                            Text("3")
+                                .font(.caption2.bold())
+                                .foregroundColor(.white)
+                                .padding(6)
+                                .background(Circle().fill(Color.red))
+                                .offset(x: 15, y: -15)
+                        }
+                    }
+                }
+            }
+            .padding()
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color(.systemBackground))
+                .shadow(color: .purple.opacity(0.2), radius: 15, x: 0, y: 10)
+        )
     }
     
     private var statsSection: some View {
         HStack(spacing: 12) {
-            StatCard(
-                title: "Ср. балл",
-                value: "4.5",
-                icon: "star.fill",
-                color: .green
-            )
+            GlassMorphismCard(gradient: [.green, .mint]) {
+                AnimatedStatCard(
+                    title: "Ср. балл",
+                    value: "4.5",
+                    icon: "star.fill",
+                    color: .green,
+                    delay: 0.1
+                )
+            }
             
-            StatCard(
-                title: "Посещ.",
-                value: "92%",
-                icon: "checkmark.circle.fill",
-                color: .blue
-            )
+            GlassMorphismCard(gradient: [.blue, .cyan]) {
+                AnimatedStatCard(
+                    title: "Посещ.",
+                    value: "92%",
+                    icon: "checkmark.circle.fill",
+                    color: .blue,
+                    delay: 0.2
+                )
+            }
             
-            StatCard(
-                title: "Заданий",
-                value: "3",
-                icon: "doc.text.fill",
-                color: .orange
-            )
+            GlassMorphismCard(gradient: [.orange, .yellow]) {
+                AnimatedStatCard(
+                    title: "Заданий",
+                    value: "3",
+                    icon: "doc.text.fill",
+                    color: .orange,
+                    delay: 0.3
+                )
+            }
         }
+        .padding(.horizontal, 4)
     }
     
     private var todayScheduleSection: some View {
@@ -125,11 +196,24 @@ struct StudentDashboard: View {
     
     private var quickActionsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Быстрые действия")
-                .font(.headline)
+            HStack {
+                ShimmerText(text: "Быстрые действия")
+                    .font(.title3.bold())
+                
+                Spacer()
+                
+                Image(systemName: "sparkles")
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.purple, .pink],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                QuickActionButton(
+                EnhancedQuickActionButton(
                     title: "Конспекты",
                     icon: "doc.text.fill",
                     gradient: [.purple, .pink]
@@ -137,7 +221,7 @@ struct StudentDashboard: View {
                     // Navigate to notes
                 }
                 
-                QuickActionButton(
+                EnhancedQuickActionButton(
                     title: "Чат группы",
                     icon: "message.fill",
                     gradient: [.blue, .cyan]
@@ -145,7 +229,7 @@ struct StudentDashboard: View {
                     // Navigate to chat
                 }
                 
-                QuickActionButton(
+                EnhancedQuickActionButton(
                     title: "Прогресс",
                     icon: "chart.line.uptrend.xyaxis",
                     gradient: [.green, .mint]
@@ -153,7 +237,7 @@ struct StudentDashboard: View {
                     // Navigate to progress
                 }
                 
-                QuickActionButton(
+                EnhancedQuickActionButton(
                     title: "Календарь",
                     icon: "calendar",
                     gradient: [.orange, .yellow]
@@ -163,8 +247,16 @@ struct StudentDashboard: View {
             }
         }
         .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color(.systemBackground))
+                .shadow(color: .purple.opacity(0.1), radius: 15, x: 0, y: 8)
+        )
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.5).delay(0.3)) {
+                showParticles = true
+            }
+        }
     }
 }
 

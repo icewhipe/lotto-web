@@ -2,12 +2,38 @@ import SwiftUI
 
 struct ScheduleView: View {
     @StateObject private var viewModel = ScheduleViewModel()
+    @Namespace private var animation
+    @State private var animateHeader = false
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Week days selector
-                weekDaysSelector
+                // Animated gradient header
+                ZStack {
+                    LinearGradient(
+                        colors: [.blue, .cyan],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .ignoresSafeArea(edges: .top)
+                    
+                    VStack(spacing: 16) {
+                        HStack {
+                            Image(systemName: "calendar")
+                                .font(.title2)
+                            ShimmerText(text: "Расписание")
+                                .font(.title2.bold())
+                        }
+                        .foregroundColor(.white)
+                        
+                        // Week days selector with matched geometry
+                        weekDaysSelector
+                    }
+                    .padding(.top, 50)
+                    .padding(.horizontal)
+                    .padding(.bottom, 16)
+                }
+                .frame(height: 150)
                 
                 // Schedule list
                 ScrollView {
@@ -32,20 +58,21 @@ struct ScheduleView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
                 ForEach(0..<6) { day in
-                    DayButton(
+                    AnimatedDayButton(
                         dayNumber: day,
                         isSelected: viewModel.selectedDay == day,
-                        dayName: getDayName(day)
+                        dayName: getDayName(day),
+                        namespace: animation
                     ) {
-                        withAnimation(.spring(response: 0.3)) {
+                        HapticManager.shared.selection()
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                             viewModel.selectedDay = day
                         }
                     }
                 }
             }
-            .padding()
+            .padding(.horizontal, 4)
         }
-        .background(Color(.systemBackground))
     }
     
     private var emptyStateView: some View {

@@ -2,17 +2,29 @@ import SwiftUI
 
 struct GradesView: View {
     @StateObject private var viewModel = GradesViewModel()
+    @State private var selectedSubject: Subject?
+    @State private var animateCards = false
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Overall average header
-                    overallAverageCard
+            ZStack {
+                // Floating Particles Background
+                FloatingParticlesView()
+                    .opacity(0.2)
+                    .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Overall average header with animation
+                        overallAverageCard
+                            .animateOnAppear()
                     
-                    // Subjects list
-                    ForEach(viewModel.subjects) { subject in
-                        SubjectCard(subject: subject)
+                    // Subjects list with stagger animation
+                    ForEach(Array(viewModel.subjects.enumerated()), id: \.element.id) { index, subject in
+                        InteractiveSubjectCard(subject: subject) {
+                            selectedSubject = subject
+                        }
+                        .animateOnAppear(delay: Double(index) * 0.1)
                     }
                 }
                 .padding()
@@ -115,6 +127,37 @@ struct SubjectCard: View {
     }
     
     private func getAverageColor(_ average: Double) -> Color {
+        switch average {
+        case 4.5...: return .green
+        case 3.5..<4.5: return .blue
+        case 2.5..<3.5: return .orange
+        default: return .red
+        }
+    }
+}
+
+struct GradeChip: View {
+    let grade: Grade
+    
+    var body: some View {
+        Text("\(grade.value)")
+            .font(.callout.bold())
+            .foregroundColor(.white)
+            .frame(width: 36, height: 36)
+            .background(grade.color)
+            .clipShape(Circle())
+            .overlay(
+                Circle()
+                    .stroke(grade.color.opacity(0.3), lineWidth: 2)
+                    .padding(-4)
+            )
+    }
+}
+
+#Preview {
+    GradesView()
+}
+Color {
         switch average {
         case 4.5...: return .green
         case 3.5..<4.5: return .blue
