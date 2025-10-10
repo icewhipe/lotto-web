@@ -128,13 +128,16 @@ struct LessonCardView: View {
             HStack(spacing: AppSpacing.md) {
                 // Time
                 VStack(alignment: .center, spacing: 2) {
-                    Text(lesson.startTime)
+                    let timeParts = lesson.time.components(separatedBy: "-")
+                    Text(timeParts.first?.trimmingCharacters(in: .whitespaces) ?? lesson.time)
                         .font(AppTypography.h4)
                         .foregroundColor(.textPrimary)
                     
-                    Text(lesson.endTime)
-                        .font(AppTypography.caption)
-                        .foregroundColor(.textSecondary)
+                    if timeParts.count > 1 {
+                        Text(timeParts[1].trimmingCharacters(in: .whitespaces))
+                            .font(AppTypography.caption)
+                            .foregroundColor(.textSecondary)
+                    }
                 }
                 .frame(width: 60)
                 
@@ -145,7 +148,7 @@ struct LessonCardView: View {
                 
                 // Lesson details
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(lesson.name)
+                    Text(lesson.subject)
                         .font(AppTypography.h4)
                         .foregroundColor(.textPrimary)
                     
@@ -193,19 +196,19 @@ struct LessonCardView: View {
     
     private var lessonTypeColor: Color {
         switch lesson.type {
-        case "Лекция": return Color.brandBlue
-        case "Практика": return Color(hex: "#10b981")
-        case "Лабораторная": return Color.brandPurple
-        default: return Color.brandPink
+        case .lecture: return Color.brandBlue
+        case .practice: return Color(hex: "#10b981")
+        case .lab: return Color.brandPurple
+        case .seminar: return Color(hex: "#f59e0b")
         }
     }
     
     private var lessonTypeText: String {
         switch lesson.type {
-        case "Лекция": return "ЛК"
-        case "Практика": return "ПР"
-        case "Лабораторная": return "ЛБ"
-        default: return lesson.type
+        case .lecture: return "ЛК"
+        case .practice: return "ПР"
+        case .lab: return "ЛБ"
+        case .seminar: return "СМ"
         }
     }
 }

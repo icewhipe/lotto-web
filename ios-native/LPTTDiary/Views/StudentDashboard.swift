@@ -319,7 +319,7 @@ struct CompactLessonCard: View {
             
             // Info
             VStack(alignment: .leading, spacing: 2) {
-                Text(lesson.name)
+                Text(lesson.subject)
                     .font(AppTypography.body)
                     .foregroundColor(.textPrimary)
                 
