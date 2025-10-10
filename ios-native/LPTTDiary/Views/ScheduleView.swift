@@ -2,140 +2,210 @@ import SwiftUI
 
 struct ScheduleView: View {
     @StateObject private var viewModel = ScheduleViewModel()
+    @State private var selectedDay: String = "ПН"
     @Namespace private var animation
-    @State private var animateHeader = false
+    
+    let weekDays = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                // Animated gradient header
-                ZStack {
-                    LinearGradient(
-                        colors: [.blue, .cyan],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    .ignoresSafeArea(edges: .top)
-                    
-                    VStack(spacing: 16) {
-                        HStack {
-                            Image(systemName: "calendar")
-                                .font(.title2)
-                            ShimmerText(text: "Расписание")
-                                .font(.title2.bold())
-                        }
-                        .foregroundColor(.white)
-                        
-                        // Week days selector with matched geometry
-                        weekDaysSelector
-                    }
-                    .padding(.top, 50)
-                    .padding(.horizontal)
-                    .padding(.bottom, 16)
-                }
-                .frame(height: 150)
+            ZStack {
+                // Dark Background
+                Color.appBackground
+                    .ignoresSafeArea()
                 
-                // Schedule list
-                ScrollView {
-                    if viewModel.todayLessons.isEmpty {
-                        emptyStateView
-                    } else {
-                        VStack(spacing: 12) {
-                            ForEach(viewModel.todayLessons) { lesson in
-                                LessonCard(lesson: lesson)
+                VStack(spacing: 0) {
+                    // Week selector
+                    weekDaysSelector
+                        .padding(.vertical, AppSpacing.md)
+                        .background(Color.cardBackground)
+                    
+                    // Schedule list
+                    ScrollView(.vertical, showsIndicators: false) {
+                        if viewModel.todayLessons.isEmpty {
+                            emptyStateView
+                        } else {
+                            LazyVStack(spacing: AppSpacing.md) {
+                                ForEach(viewModel.todayLessons) { lesson in
+                                    LessonCardView(lesson: lesson)
+                                }
                             }
+                            .padding(AppSpacing.md)
+                            .padding(.bottom, AppSpacing.xl)
                         }
-                        .padding()
                     }
                 }
-                .background(Color(.systemGroupedBackground))
             }
             .navigationTitle("Расписание")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(Color.appBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
     
     private var weekDaysSelector: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
-                ForEach(0..<6) { day in
-                    AnimatedDayButton(
-                        dayNumber: day,
-                        isSelected: viewModel.selectedDay == day,
-                        dayName: getDayName(day),
-                        namespace: animation
-                    ) {
-                        HapticManager.shared.selection()
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                            viewModel.selectedDay = day
-                        }
+        HStack(spacing: AppSpacing.sm) {
+            ForEach(weekDays, id: \.self) { day in
+                DayButton(
+                    day: day,
+                    isSelected: selectedDay == day,
+                    namespace: animation
+                ) {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        selectedDay = day
                     }
                 }
             }
-            .padding(.horizontal, 4)
         }
+        .padding(.horizontal, AppSpacing.md)
     }
     
     private var emptyStateView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "calendar.badge.exclamationmark")
+        VStack(spacing: AppSpacing.lg) {
+            Spacer()
+            
+            Image(systemName: "calendar.badge.clock")
                 .font(.system(size: 60))
-                .foregroundColor(.gray)
+                .foregroundColor(.textSecondary)
             
-            Text("Занятий нет")
-                .font(.title3.bold())
+            Text("Нет занятий")
+                .font(AppTypography.h3)
+                .foregroundColor(.textPrimary)
             
-            Text("В этот день нет запланированных занятий")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            Text("На сегодня занятий не запланировано")
+                .font(AppTypography.body)
+                .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
+            
+            Spacer()
         }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 60)
-    }
-    
-    private func getDayName(_ day: Int) -> String {
-        let days = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
-        return day < days.count ? days[day] : ""
+        .padding()
     }
 }
 
 struct DayButton: View {
-    let dayNumber: Int
+    let day: String
     let isSelected: Bool
-    let dayName: String
+    let namespace: Namespace.ID
     let action: () -> Void
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
-                Text(dayName)
-                    .font(.caption.bold())
+            VStack(spacing: 4) {
+                Text(day)
+                    .font(AppTypography.labelLarge)
+                    .fontWeight(isSelected ? .bold : .medium)
+                    .foregroundColor(isSelected ? .white : .textSecondary)
                 
-                Text("\(dayNumber + 1)")
-                    .font(.title3.bold())
+                if isSelected {
+                    Circle()
+                        .fill(Color.brandPurple)
+                        .frame(width: 4, height: 4)
+                        .matchedGeometryEffect(id: "indicator", in: namespace)
+                } else {
+                    Circle()
+                        .fill(Color.clear)
+                        .frame(width: 4, height: 4)
+                }
             }
-            .frame(width: 50, height: 70)
-            .foregroundColor(isSelected ? .white : .primary)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, AppSpacing.sm)
             .background(
-                isSelected ?
-                LinearGradient(
-                    colors: [.blue, .cyan],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ) :
-                LinearGradient(
-                    colors: [Color(.systemGray6), Color(.systemGray6)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+                RoundedRectangle(cornerRadius: AppRadius.md)
+                    .fill(isSelected ? Color.brandPurple.opacity(0.2) : Color.clear)
             )
-            .cornerRadius(12)
-            .shadow(
-                color: isSelected ? .blue.opacity(0.3) : .clear,
-                radius: 8,
-                x: 0,
-                y: 4
-            )
+        }
+    }
+}
+
+struct LessonCardView: View {
+    let lesson: Lesson
+    @State private var isExpanded = false
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.md) {
+            // Main info
+            HStack(spacing: AppSpacing.md) {
+                // Time
+                VStack(alignment: .center, spacing: 2) {
+                    Text(lesson.startTime)
+                        .font(AppTypography.h4)
+                        .foregroundColor(.textPrimary)
+                    
+                    Text(lesson.endTime)
+                        .font(AppTypography.caption)
+                        .foregroundColor(.textSecondary)
+                }
+                .frame(width: 60)
+                
+                Rectangle()
+                    .fill(lessonTypeColor)
+                    .frame(width: 3)
+                    .cornerRadius(1.5)
+                
+                // Lesson details
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(lesson.name)
+                        .font(AppTypography.h4)
+                        .foregroundColor(.textPrimary)
+                    
+                    HStack(spacing: AppSpacing.xs) {
+                        Image(systemName: "person.fill")
+                            .font(.caption)
+                        Text(lesson.teacher)
+                            .font(AppTypography.caption)
+                    }
+                    .foregroundColor(.textSecondary)
+                    
+                    HStack(spacing: AppSpacing.xs) {
+                        Image(systemName: "location.fill")
+                            .font(.caption)
+                        Text(lesson.room)
+                            .font(AppTypography.caption)
+                    }
+                    .foregroundColor(.textSecondary)
+                }
+                
+                Spacer()
+                
+                // Type badge
+                Text(lessonTypeText)
+                    .font(AppTypography.captionBold)
+                    .foregroundColor(lessonTypeColor)
+                    .padding(.horizontal, AppSpacing.sm)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule()
+                            .fill(lessonTypeColor.opacity(0.2))
+                    )
+            }
+        }
+        .padding(AppSpacing.md)
+        .background(
+            RoundedRectangle(cornerRadius: AppRadius.lg)
+                .fill(Color.cardBackground)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppRadius.lg)
+                .stroke(Color.borderLight, lineWidth: 1)
+        )
+    }
+    
+    private var lessonTypeColor: Color {
+        switch lesson.type {
+        case "Лекция": return Color.brandBlue
+        case "Практика": return Color(hex: "#10b981")
+        case "Лабораторная": return Color.brandPurple
+        default: return Color.brandPink
+        }
+    }
+    
+    private var lessonTypeText: String {
+        switch lesson.type {
+        case "Лекция": return "ЛК"
+        case "Практика": return "ПР"
+        case "Лабораторная": return "ЛБ"
+        default: return lesson.type
         }
     }
 }

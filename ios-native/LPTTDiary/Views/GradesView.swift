@@ -3,156 +3,198 @@ import SwiftUI
 struct GradesView: View {
     @StateObject private var viewModel = GradesViewModel()
     @State private var selectedSubject: Subject?
-    @State private var animateCards = false
     
     var body: some View {
         NavigationStack {
             ZStack {
-                // Floating Particles Background (reduced)
-                FloatingParticlesView(particleCount: 6)
-                    .opacity(0.2)
+                // Dark Background
+                Color.appBackground
                     .ignoresSafeArea()
                 
-                ScrollView {
-                    LazyVStack(spacing: 20) {
-                        // Overall average header with animation
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack(spacing: AppSpacing.lg) {
+                        // Overall average header
                         overallAverageCard
-                            .animateOnAppear()
-                    
-                        // Subjects list with stagger animation
-                        ForEach(Array(viewModel.subjects.enumerated()), id: \.element.id) { index, subject in
-                            InteractiveSubjectCard(subject: subject) {
+                        
+                        // Subjects list
+                        ForEach(viewModel.subjects) { subject in
+                            SubjectGradeCard(subject: subject) {
                                 selectedSubject = subject
                             }
-                            .animateOnAppear(delay: Double(index) * 0.1)
                         }
                     }
-                    .padding()
+                    .padding(AppSpacing.md)
+                    .padding(.bottom, AppSpacing.xl)
                 }
             }
-            .background(Color(.systemGroupedBackground))
             .navigationTitle("Оценки")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(Color.appBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
     
     private var overallAverageCard: some View {
-        ZStack {
-            // Animated gradient background
-            MeshGradientBackground(animate: .constant(true))
-                .cornerRadius(24)
-                .frame(height: 200)
+        VStack(spacing: AppSpacing.md) {
+            // Header
+            HStack {
+                Image(systemName: "chart.bar.fill")
+                    .font(AppTypography.h4)
+                    .foregroundColor(.white)
+                
+                Text("Общий средний балл")
+                    .font(AppTypography.h4)
+                    .foregroundColor(.white)
+                
+                Spacer()
+            }
             
-            // Glass overlay
-            RoundedRectangle(cornerRadius: 24)
-                .fill(Color.white.opacity(0.1))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
-                )
+            // Average Value
+            Text(String(format: "%.2f", viewModel.overallAverage))
+                .font(AppTypography.displayLarge)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
             
-            VStack(spacing: 16) {
-                HStack(spacing: 8) {
-                    Image(systemName: "chart.bar.fill")
-                        .font(.title3)
-                    ShimmerText(text: "Общий средний балл")
-                        .font(.headline)
+            // Stats
+            HStack(spacing: AppSpacing.xl) {
+                VStack(spacing: AppSpacing.xs) {
+                    Text("\(viewModel.subjects.count)")
+                        .font(AppTypography.h3)
+                        .foregroundColor(.white)
+                    Text("Предметов")
+                        .font(AppTypography.caption)
+                        .foregroundColor(.textSecondary)
                 }
-                .foregroundColor(.white.opacity(0.9))
                 
-                // Animated counter
-                AnimatedCounterView(value: viewModel.overallAverage)
-                    .font(.system(size: 56, weight: .bold))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [.white, .white.opacity(0.9)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                Rectangle()
+                    .fill(Color.border)
+                    .frame(width: 1, height: 40)
                 
-                HStack(spacing: 24) {
-                    VStack(spacing: 4) {
-                        Text("\(viewModel.subjects.count)")
-                            .font(.title2.bold())
-                            .foregroundColor(.white)
-                        Text("Предметов")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.8))
-                    }
-                    
-                    Divider()
-                        .background(Color.white.opacity(0.3))
-                        .frame(height: 40)
-                    
-                    VStack(spacing: 4) {
-                        Text("\(viewModel.recentGrades.count)")
-                            .font(.title2.bold())
-                            .foregroundColor(.white)
-                        Text("Оценок")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.8))
-                    }
+                VStack(spacing: AppSpacing.xs) {
+                    Text("\(viewModel.recentGrades.count)")
+                        .font(AppTypography.h3)
+                        .foregroundColor(.white)
+                    Text("Оценок")
+                        .font(AppTypography.caption)
+                        .foregroundColor(.textSecondary)
                 }
             }
-            .padding()
         }
-        .frame(height: 200)
-        .shadow(color: .purple.opacity(0.4), radius: 20, x: 0, y: 10)
+        .padding(AppSpacing.lg)
+        .background(
+            RoundedRectangle(cornerRadius: AppRadius.xl)
+                .fill(Color.cardBackground)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppRadius.xl)
+                .stroke(Color.borderLight, lineWidth: 1)
+        )
     }
 }
 
-struct SubjectCard: View {
+struct SubjectGradeCard: View {
     let subject: Subject
+    let action: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
+        VStack(alignment: .leading, spacing: AppSpacing.md) {
+            // Subject header
+            HStack(spacing: AppSpacing.md) {
+                // Subject icon
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    subjectColor.opacity(0.3),
+                                    subjectColor.opacity(0.1)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 48, height: 48)
+                    
+                    Image(systemName: subjectIcon)
+                        .font(.title3)
+                        .foregroundColor(subjectColor)
+                }
+                
+                // Subject info
                 VStack(alignment: .leading, spacing: 4) {
                     Text(subject.name)
-                        .font(.headline)
+                        .font(AppTypography.h4)
+                        .foregroundColor(.textPrimary)
                     
-                    HStack(spacing: 4) {
-                        Image(systemName: "person.fill")
-                            .font(.caption2)
-                        Text(subject.teacher)
-                            .font(.caption)
-                    }
-                    .foregroundColor(.secondary)
+                    Text(subject.teacher)
+                        .font(AppTypography.caption)
+                        .foregroundColor(.textSecondary)
                 }
                 
                 Spacer()
                 
-                VStack(alignment: .trailing, spacing: 4) {
+                // Average grade
+                VStack(spacing: 2) {
                     Text(String(format: "%.1f", subject.average))
-                        .font(.title2.bold())
-                        .foregroundColor(getAverageColor(subject.average))
+                        .font(AppTypography.stat)
+                        .foregroundColor(Color.averageColor(average: subject.average))
+                    
                     Text("средний")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        .font(AppTypography.captionBold)
+                        .foregroundColor(.textSecondary)
                 }
             }
             
             // Grades chips
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
+                HStack(spacing: AppSpacing.sm) {
                     ForEach(subject.grades) { grade in
                         GradeChip(grade: grade)
                     }
                 }
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+        .padding(AppSpacing.md)
+        .background(
+            RoundedRectangle(cornerRadius: AppRadius.lg)
+                .fill(Color.cardBackground)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppRadius.lg)
+                .stroke(Color.borderLight, lineWidth: 1)
+        )
+        .onTapGesture {
+            action()
+        }
     }
     
-    private func getAverageColor(_ average: Double) -> Color {
-        switch average {
-        case 4.5...: return .green
-        case 3.5..<4.5: return .blue
-        case 2.5..<3.5: return .orange
-        default: return .red
+    private var subjectIcon: String {
+        switch subject.name.lowercased() {
+        case let name where name.contains("математика"):
+            return "function"
+        case let name where name.contains("программирование"):
+            return "chevron.left.forwardslash.chevron.right"
+        case let name where name.contains("базы данных"):
+            return "cylinder.split.1x2"
+        case let name where name.contains("английский"):
+            return "globe"
+        default:
+            return "book.fill"
+        }
+    }
+    
+    private var subjectColor: Color {
+        switch subject.name.lowercased() {
+        case let name where name.contains("математика"):
+            return Color.brandBlue
+        case let name where name.contains("программирование"):
+            return Color.brandPurple
+        case let name where name.contains("базы данных"):
+            return Color(hex: "#10b981")
+        case let name where name.contains("английский"):
+            return Color(hex: "#f59e0b")
+        default:
+            return Color.brandPink
         }
     }
 }
@@ -162,15 +204,18 @@ struct GradeChip: View {
     
     var body: some View {
         Text("\(grade.value)")
-            .font(.callout.bold())
+            .font(AppTypography.labelLarge)
+            .fontWeight(.bold)
             .foregroundColor(.white)
             .frame(width: 36, height: 36)
-            .background(grade.color)
-            .clipShape(Circle())
+            .background(
+                Circle()
+                    .fill(Color.gradeColor(value: grade.value))
+            )
             .overlay(
                 Circle()
-                    .stroke(grade.color.opacity(0.3), lineWidth: 2)
-                    .padding(-4)
+                    .stroke(Color.gradeColor(value: grade.value).opacity(0.3), lineWidth: 2)
+                    .padding(-2)
             )
     }
 }
