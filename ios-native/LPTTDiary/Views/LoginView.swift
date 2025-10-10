@@ -6,6 +6,9 @@ struct LoginView: View {
     @State private var password = ""
     @State private var showPassword = false
     @State private var isLoading = false
+    @State private var animateGradient = false
+    @State private var logoScale: CGFloat = 0.5
+    @State private var logoRotation: Double = 360
     
     var body: some View {
         ZStack {
