@@ -28,7 +28,7 @@ async function seed() {
       email: 'student@lptt.ru',
       password: hashedPassword,
       name: 'Иван Иванов',
-      role: 'student',
+      role: 'STUDENT',
     },
   });
 
@@ -46,7 +46,7 @@ async function seed() {
       email: 'admin@lptt.ru',
       password: hashedPassword,
       name: 'Администратор',
-      role: 'admin',
+      role: 'ADMIN',
     },
   });
 
@@ -174,7 +174,7 @@ async function seed() {
       subjectId: subjectsList[1].id,
       teacherId: teacher.id,
       value: 5,
-      type: 'homework' as const,
+      type: 'HOMEWORK' as const,
       date: new Date(),
       comment: 'Отличная работа!',
     },
