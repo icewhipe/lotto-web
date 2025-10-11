@@ -252,12 +252,12 @@ export default function Gallery() {
 
             <motion.div
               key={selectedImage}
-              initial={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.98, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="max-w-6xl w-full p-4"
+              className="relative max-w-6xl w-full z-10"
             >
               <div className={`aspect-video rounded-3xl bg-gradient-to-br ${galleryItems[selectedImage].gradient} flex items-center justify-center overflow-hidden relative`}>
                 <motion.div
