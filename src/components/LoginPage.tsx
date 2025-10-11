@@ -37,22 +37,23 @@ export default function LoginPage({ onBack }: LoginPageProps) {
   ]
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary-50 to-purple-100 dark:from-gray-950 dark:to-gray-900">
-      {/* Back Button */}
-      <motion.a
-        href="/"
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-violet-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+      {/* Back Button - Fixed Position */}
+      <motion.button
+        onClick={onBack || (() => window.location.href = '/')}
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 glass-effect rounded-full hover:shadow-lg transition-all group"
+        className="fixed top-6 left-6 z-50 flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 border-2 border-violet-300 dark:border-violet-700 rounded-full hover:shadow-xl hover:scale-105 transition-all group"
       >
-        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-        <span className="font-semibold">На главную</span>
-      </motion.a>
+        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform text-violet-600 dark:text-violet-400" />
+        <span className="font-bold text-gray-900 dark:text-white">На главную</span>
+      </motion.button>
 
-      {/* Background Pattern */}
+      {/* Background Pattern - Enhanced */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-500/30 to-purple-600/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-secondary-500/30 to-pink-600/30 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-violet-500/20 to-purple-600/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-pink-500/20 to-rose-600/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-blue-500/10 to-cyan-600/10 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center relative z-10">

@@ -203,7 +203,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Enhanced 3D Floating Cards - All Visible on Load */}
-          <div className="relative h-[650px] hidden lg:block">
+          <div className="relative h-[550px] hidden lg:block">
             {floatingCards.map((card, index) => (
               <motion.div
                 key={card.text}
