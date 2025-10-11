@@ -212,39 +212,43 @@ export default function Gallery() {
       {/* Full-screen Image Modal */}
       <AnimatePresence>
         {selectedImage !== null && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center"
           >
+            {/* Blur backdrop */}
+            <div className="absolute inset-0 backdrop-blur-xl" style={{ backgroundColor: 'rgba(255,255,255,0.4)' }} />
+            <div className="absolute inset-0 backdrop-blur-xl dark:backdrop-blur-2xl" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }} />
+            
+            {/* Close button */}
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-10"
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-20"
             >
               <X className="w-6 h-6 text-white" />
             </button>
 
+            {/* Previous button */}
             {selectedImage > 0 && (
               <button
                 onClick={(e) => {
                   e.stopPropagation()
                   handlePrevImage()
                 }}
-                className="absolute left-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-10"
+                className="absolute left-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-20"
               >
                 <ArrowLeft className="w-6 h-6 text-white" />
               </button>
             )}
 
+            {/* Next button */}
             {selectedImage < galleryItems.length - 1 && (
               <button
                 onClick={(e) => {
                   e.stopPropagation()
                   handleNextImage()
                 }}
-                className="absolute right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-10"
+                className="absolute right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-20"
               >
                 <ArrowRight className="w-6 h-6 text-white" />
               </button>
@@ -281,7 +285,7 @@ export default function Gallery() {
                 </div>
               </div>
             </motion.div>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </section>
