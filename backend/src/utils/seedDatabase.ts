@@ -59,7 +59,6 @@ async function seed() {
       code: '09.02.07',
       description: 'Информационные системы и программирование',
       duration: '3 года',
-      form: 'full-time',
     },
   });
 
