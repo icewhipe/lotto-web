@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { LogIn, Mail, Lock, AlertCircle, ArrowLeft, CheckCircle } from 'lucide-react'
+import { LogIn, Mail, Lock, AlertCircle, ArrowLeft, CheckCircle, Shield, Zap, Users } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
-export default function LoginPage() {
+interface LoginPageProps {
+  onBack?: () => void
+}
+
+export default function LoginPage({ onBack }: LoginPageProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')

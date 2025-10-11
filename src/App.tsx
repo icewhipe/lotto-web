@@ -78,7 +78,7 @@ function App() {
 
   // Show Login Page if login button clicked
   if (showLogin) {
-    return <LoginPage />
+    return <LoginPage onBack={() => setShowLogin(false)} />
   }
 
   // Show main website
