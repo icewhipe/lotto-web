@@ -339,7 +339,7 @@ export default function NewsManager() {
                 </form>
               </div>
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
 
