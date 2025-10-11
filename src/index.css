@@ -75,8 +75,6 @@
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Smooth theme transitions */
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   body {
@@ -84,20 +82,14 @@
     @apply bg-white dark:bg-gray-950;
     @apply text-gray-900 dark:text-gray-50;
     text-rendering: optimizeLegibility;
-    /* Smooth theme transitions */
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
-  /* All elements get smooth theme transitions */
-  * {
-    transition-property: background-color, border-color, color, fill, stroke;
-    transition-duration: 0.3s;
-    transition-timing-function: ease;
-  }
-  
-  /* Exclude animations and transforms from theme transitions */
-  * {
-    transition-property: background-color, border-color, color, fill, stroke;
+  /* OPTIMIZED: Only specific elements get theme transitions */
+  body,
+  .glass-effect,
+  .btn-primary,
+  .btn-secondary {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
   ::selection {
