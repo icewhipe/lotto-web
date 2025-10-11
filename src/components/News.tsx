@@ -115,16 +115,14 @@ export default function News() {
         </div>
       </div>
 
-      {/* News Modal */}
+      {/* News Modal - Beautiful Without Backdrop Darkening */}
       <AnimatePresence>
         {selectedNews && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedNews(null)}
-            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
-          >
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={() => setSelectedNews(null)}>
+            {/* Blur only, no darkening */}
+            <div className="absolute inset-0 backdrop-blur-md" style={{ backgroundColor: 'rgba(255,255,255,0.3)' }} />
+            <div className="absolute inset-0 backdrop-blur-md dark:backdrop-blur-lg" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }} />
+            
             <motion.div
               initial={{ scale: 0.9, opacity: 0, y: 50 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}

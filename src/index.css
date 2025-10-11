@@ -105,11 +105,18 @@
 }
 
 @layer components {
+  /* OPTIMIZED: Fixed colors, no transitions */
   .glass-effect {
-    @apply bg-white/25 dark:bg-gray-900/25;
-    @apply backdrop-blur-xl backdrop-saturate-150;
-    @apply border border-white/20 dark:border-gray-700/30;
-    @apply shadow-xl shadow-black/10 dark:shadow-black/50;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  }
+  
+  .dark .glass-effect {
+    background-color: rgba(17, 24, 39, 0.7);
+    border-color: rgba(75, 85, 99, 0.5);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5);
   }
 
   .gradient-text {
