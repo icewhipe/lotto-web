@@ -29,15 +29,15 @@ export default function ParticlesBackground() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Create particles
-    const particleCount = 50
+    // Create particles - REDUCED for performance
+    const particleCount = 25
     particlesRef.current = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 3 + 1,
-      speedX: (Math.random() - 0.5) * 0.5,
-      speedY: (Math.random() - 0.5) * 0.5,
-      opacity: Math.random() * 0.5 + 0.2,
+      size: Math.random() * 2 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.3,
+      speedY: (Math.random() - 0.5) * 0.3,
+      opacity: Math.random() * 0.3 + 0.1,
     }))
 
     // Animation loop
@@ -55,36 +55,30 @@ export default function ParticlesBackground() {
         if (particle.y < 0) particle.y = canvas.height
         if (particle.y > canvas.height) particle.y = 0
 
-        // Draw particle with glow
-        const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, particle.size * 3
-        )
-        gradient.addColorStop(0, `rgba(139, 92, 246, ${particle.opacity})`)
-        gradient.addColorStop(0.5, `rgba(139, 92, 246, ${particle.opacity * 0.5})`)
-        gradient.addColorStop(1, 'rgba(139, 92, 246, 0)')
-
-        ctx.fillStyle = gradient
+        // Draw particle - simplified for performance
+        ctx.fillStyle = `rgba(139, 92, 246, ${particle.opacity})`
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2)
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fill()
 
-        // Draw connections
-        particlesRef.current.forEach((otherParticle, j) => {
-          if (i === j) return
-          const dx = particle.x - otherParticle.x
-          const dy = particle.y - otherParticle.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
+        // Draw connections - REDUCED distance check for performance
+        if (i % 2 === 0) { // Only draw connections for every other particle
+          particlesRef.current.forEach((otherParticle, j) => {
+            if (i === j || j <= i) return
+            const dx = particle.x - otherParticle.x
+            const dy = particle.y - otherParticle.y
+            const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (distance < 150) {
-            ctx.strokeStyle = `rgba(139, 92, 246, ${0.15 * (1 - distance / 150)})`
-            ctx.lineWidth = 0.5
-            ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(otherParticle.x, otherParticle.y)
-            ctx.stroke()
-          }
-        })
+            if (distance < 100) {
+              ctx.strokeStyle = `rgba(139, 92, 246, ${0.1 * (1 - distance / 100)})`
+              ctx.lineWidth = 0.3
+              ctx.beginPath()
+              ctx.moveTo(particle.x, particle.y)
+              ctx.lineTo(otherParticle.x, otherParticle.y)
+              ctx.stroke()
+            }
+          })
+        }
       })
 
       animationRef.current = requestAnimationFrame(animate)
@@ -103,8 +97,8 @@ export default function ParticlesBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none opacity-40 dark:opacity-60"
-      style={{ zIndex: 0 }}
+      className="fixed inset-0 pointer-events-none opacity-30 dark:opacity-40"
+      style={{ zIndex: 0, willChange: 'transform' }}
     />
   )
 }

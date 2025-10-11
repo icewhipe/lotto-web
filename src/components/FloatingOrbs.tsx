@@ -1,89 +1,40 @@
-import { motion } from 'framer-motion'
-
+// OPTIMIZED - Reduced animations for better performance
 export default function FloatingOrbs() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-      {/* Large purple orb */}
-      <motion.div
-        className="absolute -top-48 -left-48 w-96 h-96 rounded-full opacity-20"
+      {/* Large purple orb - static */}
+      <div
+        className="absolute -top-48 -left-48 w-96 h-96 rounded-full opacity-15"
         style={{
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(139, 92, 246, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0) 70%)',
           filter: 'blur(40px)',
-        }}
-        animate={{
-          x: [0, 50, 0],
-          y: [0, 100, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'easeInOut',
+          willChange: 'transform'
         }}
       />
 
-      {/* Medium blue orb */}
-      <motion.div
-        className="absolute top-1/4 -right-32 w-80 h-80 rounded-full opacity-20"
+      {/* Medium blue orb - static */}
+      <div
+        className="absolute top-1/4 -right-32 w-80 h-80 rounded-full opacity-15"
         style={{
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0) 70%)',
           filter: 'blur(40px)',
-        }}
-        animate={{
-          x: [0, -80, 0],
-          y: [0, 50, 0],
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: 'easeInOut',
         }}
       />
 
-      {/* Small pink orb */}
-      <motion.div
-        className="absolute bottom-1/4 left-1/4 w-64 h-64 rounded-full opacity-20"
+      {/* Small pink orb - static */}
+      <div
+        className="absolute bottom-1/4 left-1/4 w-64 h-64 rounded-full opacity-15"
         style={{
-          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, rgba(236, 72, 153, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, rgba(236, 72, 153, 0) 70%)',
           filter: 'blur(40px)',
-        }}
-        animate={{
-          x: [0, 100, 0],
-          y: [0, -50, 0],
-          scale: [1, 1.4, 1],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-
-      {/* Cyan orb */}
-      <motion.div
-        className="absolute top-1/2 right-1/3 w-72 h-72 rounded-full opacity-20"
-        style={{
-          background: 'radial-gradient(circle, rgba(34, 211, 238, 0.4) 0%, rgba(34, 211, 238, 0) 70%)',
-          filter: 'blur(40px)',
-        }}
-        animate={{
-          x: [0, -60, 0],
-          y: [0, 80, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 22,
-          repeat: Infinity,
-          ease: 'easeInOut',
         }}
       />
 
       {/* Bottom gradient glow */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-96 opacity-30"
+        className="absolute bottom-0 left-0 right-0 h-96 opacity-20"
         style={{
-          background: 'linear-gradient(to top, rgba(139, 92, 246, 0.2), transparent)',
+          background: 'linear-gradient(to top, rgba(139, 92, 246, 0.15), transparent)',
         }}
       />
     </div>

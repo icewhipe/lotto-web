@@ -20,42 +20,25 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-28">
       {/* Enhanced Background with Mesh Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-purple-50/30 to-cyan-50/30 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
       
-      {/* Animated Gradient Orbs */}
+      {/* Simplified Gradient Orbs - Better Performance */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div 
-          className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full opacity-30"
+        <div 
+          className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full opacity-20"
           style={{ 
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-            y: y1
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+            willChange: 'transform'
           }}
         />
-        <motion.div 
-          className="absolute -bottom-48 -left-48 w-[500px] h-[500px] rounded-full opacity-30"
+        <div 
+          className="absolute -bottom-48 -left-48 w-[500px] h-[500px] rounded-full opacity-20"
           style={{ 
-            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-            y: y2
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-20"
-          style={{ 
-            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut'
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
+            filter: 'blur(60px)'
           }}
         />
       </div>
@@ -76,8 +59,8 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-pink-500/10 border border-violet-500/20 backdrop-blur-sm"
+              transition={{ delay: 0.1, duration: 0.3 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-pink-500/10 border border-violet-500/20 backdrop-blur-sm relative z-20"
             >
               <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
               <span className="text-sm font-semibold bg-gradient-to-r from-violet-600 to-pink-600 dark:from-violet-400 dark:to-pink-400 bg-clip-text text-transparent">
@@ -86,10 +69,10 @@ export default function Hero() {
             </motion.div>
 
             <motion.h1
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight"
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight relative z-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
             >
               Твоё будущее <br />
               <span className="relative inline-block">
@@ -111,20 +94,20 @@ export default function Hero() {
             </motion.h1>
 
             <motion.p
-              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed"
+              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed relative z-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
             >
               Современное профессиональное образование в сфере промышленности и транспорта.
               Качественная подготовка специалистов с 1958 года.
             </motion.p>
 
             <motion.div
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-4 relative z-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.4, duration: 0.3 }}
             >
               <motion.a 
                 href="#admissions" 
@@ -159,10 +142,10 @@ export default function Hero() {
 
             {/* Enhanced Stats */}
             <motion.div
-              className="flex flex-wrap gap-6 pt-4"
+              className="flex flex-wrap gap-6 pt-4 relative z-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
             >
               {stats.map((stat, index) => (
                 <motion.div
@@ -172,7 +155,7 @@ export default function Hero() {
                   transition={{ delay: 0.6 + index * 0.1 }}
                   className="group relative"
                 >
-                  <div className="glass-effect rounded-2xl p-4 border border-violet-200/50 dark:border-violet-800/50 hover:border-violet-400 dark:hover:border-violet-600 transition-all">
+                  <div className="glass-effect rounded-2xl p-4 border-2 border-violet-300/60 dark:border-violet-700/60 hover:border-violet-400 dark:hover:border-violet-600 transition-all shadow-lg hover:shadow-xl backdrop-blur-md">
                     <div className="flex items-center gap-3">
                       <div className="p-2 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10">
                         <stat.icon className="w-6 h-6 text-violet-600 dark:text-violet-400" />
