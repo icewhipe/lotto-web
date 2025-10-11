@@ -8,13 +8,13 @@ async function seed() {
   await prisma.grade.deleteMany();
   await prisma.attendance.deleteMany();
   await prisma.schedule.deleteMany();
+  await prisma.subject.deleteMany();
   await prisma.student.deleteMany();
   await prisma.teacher.deleteMany();
   await prisma.parent.deleteMany();
   await prisma.applicant.deleteMany();
   await prisma.group.deleteMany();
   await prisma.specialty.deleteMany();
-  await prisma.subject.deleteMany();
   await prisma.user.deleteMany();
 
   console.log('✅ Cleared existing data');
@@ -70,147 +70,201 @@ async function seed() {
       name: 'ИС-21',
       specialtyId: specialty.id,
       year: 2,
-      studentsCount: 25,
     },
   });
 
   console.log('✅ Created group');
 
-  // Create subjects
-  const subjects = await prisma.subject.createMany({
-    data: [
-      { name: 'Математика', description: 'Высшая математика' },
-      { name: 'Программирование', description: 'Основы программирования' },
-      { name: 'Базы данных', description: 'Базы данных и SQL' },
-      { name: 'Английский язык', description: 'Английский язык' },
-    ],
-  });
-
-  const subjectsList = await prisma.subject.findMany();
-  console.log('✅ Created subjects');
-
-  // Create teacher
+  // Create teacher profile
   const teacher = await prisma.teacher.create({
     data: {
       userId: teacherUser.id,
-      subject: 'Программирование',
-      education: 'МГУ, Прикладная математика',
-      experience: 10,
+      position: 'Преподаватель информатики',
+      department: 'Информационные технологии',
     },
   });
 
   console.log('✅ Created teacher');
 
-  // Create student
+  // Create subjects (требуют specialtyId и teacherId)
+  const mathSubject = await prisma.subject.create({
+    data: {
+      name: 'Математика',
+      code: 'MATH-101',
+      specialtyId: specialty.id,
+      teacherId: teacher.id,
+    },
+  });
+
+  const progSubject = await prisma.subject.create({
+    data: {
+      name: 'Программирование',
+      code: 'PROG-101',
+      specialtyId: specialty.id,
+      teacherId: teacher.id,
+    },
+  });
+
+  const dbSubject = await prisma.subject.create({
+    data: {
+      name: 'Базы данных',
+      code: 'DB-101',
+      specialtyId: specialty.id,
+      teacherId: teacher.id,
+    },
+  });
+
+  const engSubject = await prisma.subject.create({
+    data: {
+      name: 'Английский язык',
+      code: 'ENG-101',
+      specialtyId: specialty.id,
+      teacherId: teacher.id,
+    },
+  });
+
+  console.log('✅ Created subjects');
+
+  // Create student profile
   const student = await prisma.student.create({
     data: {
       userId: studentUser.id,
       groupId: group.id,
+      studentNumber: 'IS-21-001',
       enrollmentDate: new Date('2023-09-01'),
-      studentId: 'IS-21-001',
     },
   });
 
   console.log('✅ Created student');
 
   // Create schedule
-  const scheduleData = [
-    {
+  const schedule1 = await prisma.schedule.create({
+    data: {
       groupId: group.id,
-      subjectId: subjectsList[0].id,
+      subjectId: mathSubject.id,
       teacherId: teacher.id,
       dayOfWeek: 1, // Monday
       startTime: '09:00',
       endTime: '10:30',
       room: '205',
-      type: 'lecture' as const,
+      type: 'LECTURE',
     },
-    {
+  });
+
+  const schedule2 = await prisma.schedule.create({
+    data: {
       groupId: group.id,
-      subjectId: subjectsList[1].id,
+      subjectId: progSubject.id,
       teacherId: teacher.id,
       dayOfWeek: 1,
       startTime: '10:45',
       endTime: '12:15',
       room: '301',
-      type: 'practice' as const,
+      type: 'PRACTICE',
     },
-    {
+  });
+
+  const schedule3 = await prisma.schedule.create({
+    data: {
       groupId: group.id,
-      subjectId: subjectsList[2].id,
+      subjectId: dbSubject.id,
       teacherId: teacher.id,
       dayOfWeek: 1,
       startTime: '12:30',
       endTime: '14:00',
-      room: 'Спортзал',
-      type: 'practice' as const,
+      room: '302',
+      type: 'PRACTICE',
     },
-  ];
+  });
 
-  await prisma.schedule.createMany({ data: scheduleData });
   console.log('✅ Created schedule');
 
   // Create grades
-  const gradesData = [
-    {
+  await prisma.grade.create({
+    data: {
       studentId: student.id,
-      subjectId: subjectsList[0].id,
+      subjectId: mathSubject.id,
       teacherId: teacher.id,
       value: 5,
-      type: 'exam' as const,
+      type: 'EXAM',
       date: new Date(),
     },
-    {
+  });
+
+  await prisma.grade.create({
+    data: {
       studentId: student.id,
-      subjectId: subjectsList[0].id,
+      subjectId: mathSubject.id,
       teacherId: teacher.id,
       value: 4,
-      type: 'test' as const,
+      type: 'TEST',
       date: new Date(Date.now() - 86400000),
     },
-    {
+  });
+
+  await prisma.grade.create({
+    data: {
       studentId: student.id,
-      subjectId: subjectsList[1].id,
+      subjectId: progSubject.id,
       teacherId: teacher.id,
       value: 5,
-      type: 'homework' as const,
+      type: 'HOMEWORK',
       date: new Date(),
       comment: 'Отличная работа!',
     },
-    {
+  });
+
+  await prisma.grade.create({
+    data: {
       studentId: student.id,
-      subjectId: subjectsList[1].id,
+      subjectId: progSubject.id,
       teacherId: teacher.id,
       value: 5,
-      type: 'exam' as const,
+      type: 'EXAM',
       date: new Date(Date.now() - 86400000),
     },
-    {
+  });
+
+  await prisma.grade.create({
+    data: {
       studentId: student.id,
-      subjectId: subjectsList[2].id,
+      subjectId: dbSubject.id,
       teacherId: teacher.id,
       value: 4,
-      type: 'test' as const,
+      type: 'TEST',
       date: new Date(Date.now() - 172800000),
     },
-  ];
+  });
 
-  await prisma.grade.createMany({ data: gradesData });
   console.log('✅ Created grades');
 
   // Create attendance records
-  const scheduleRecords = await prisma.schedule.findMany();
-  
-  for (const scheduleItem of scheduleRecords) {
-    await prisma.attendance.create({
-      data: {
-        studentId: student.id,
-        scheduleId: scheduleItem.id,
-        date: new Date(),
-        status: 'PRESENT',
-      },
-    });
-  }
+  await prisma.attendance.create({
+    data: {
+      studentId: student.id,
+      scheduleId: schedule1.id,
+      date: new Date(),
+      status: 'PRESENT',
+    },
+  });
+
+  await prisma.attendance.create({
+    data: {
+      studentId: student.id,
+      scheduleId: schedule2.id,
+      date: new Date(),
+      status: 'PRESENT',
+    },
+  });
+
+  await prisma.attendance.create({
+    data: {
+      studentId: student.id,
+      scheduleId: schedule3.id,
+      date: new Date(),
+      status: 'PRESENT',
+    },
+  });
 
   console.log('✅ Created attendance records');
 
