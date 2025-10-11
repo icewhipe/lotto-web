@@ -3,6 +3,7 @@
 /**
  * 🔧 Kill processes on specific ports
  * Usage: npm run kill:ports
+ * CommonJS format (.cjs) for compatibility
  */
 
 const { execSync } = require('child_process');

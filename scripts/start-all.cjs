@@ -3,6 +3,7 @@
 /**
  * 🚀 ЛПТТ Project Launcher
  * Starts Backend + Frontend with proper checks
+ * CommonJS format (.cjs) for compatibility
  */
 
 const { spawn, execSync } = require('child_process');
