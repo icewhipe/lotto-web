@@ -38,7 +38,7 @@ export default function LoginPage({ onBack }: LoginPageProps) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-violet-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
-      {/* Back Button - Fixed Position */}
+      {/* Back Button - Fixed Position, Won't Overlap */}
       <motion.button
         onClick={onBack || (() => window.location.href = '/')}
         initial={{ opacity: 0, x: -20 }}
@@ -49,59 +49,72 @@ export default function LoginPage({ onBack }: LoginPageProps) {
         <span className="font-bold text-gray-900 dark:text-white">На главную</span>
       </motion.button>
 
-      {/* Background Pattern - Enhanced */}
+      {/* Beautiful Background Pattern */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-violet-500/20 to-purple-600/20 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-pink-500/20 to-rose-600/20 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-blue-500/10 to-cyan-600/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
-        {/* Left Side - Welcome */}
+      <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        {/* Left Side - Welcome & Features */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-center lg:text-left space-y-6"
+          transition={{ duration: 0.6 }}
+          className="text-center lg:text-left space-y-10"
         >
-          <div>
-            <h1 className="text-5xl md:text-6xl font-black mb-4">
-              <span className="gradient-text">ЛПТТ</span>
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
-              Электронный дневник
-            </p>
-            <p className="text-lg text-gray-500 dark:text-gray-400 mt-2">
-              Лискинский промышленно-транспортный техникум
-            </p>
+          {/* Logo Section */}
+          <div className="space-y-4">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-3">
+                <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                  ЛПТТ
+                </span>
+              </h1>
+            </motion.div>
+            <div>
+              <p className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-200">
+                Электронный дневник
+              </p>
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mt-2">
+                Лискинский промышленно-транспортный техникум
+              </p>
+            </div>
           </div>
 
+          {/* Key Features - Redesigned */}
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold gradient-text">Возможности системы</h2>
+            <h2 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
+              Возможности системы
+            </h2>
             <div className="space-y-4">
               {[
-                { icon: '📚', title: 'Электронный дневник', desc: 'Оценки по всем предметам в реальном времени', color: 'from-blue-500 to-cyan-600' },
-                { icon: '📅', title: 'Расписание занятий', desc: 'Индивидуальное расписание для каждой группы', color: 'from-green-500 to-emerald-600' },
-                { icon: '📊', title: 'Учет посещаемости', desc: 'Автоматический учет без бумажных рапортов', color: 'from-purple-500 to-pink-600' },
-                { icon: '👥', title: 'Для всех', desc: 'Студенты, родители, преподаватели, абитуриенты', color: 'from-orange-500 to-red-600' },
-                { icon: '📄', title: 'Электронные документы', desc: 'Все документы в одном месте', color: 'from-indigo-500 to-purple-600' },
+                { icon: Shield, title: 'Безопасность данных', desc: 'Защищенное хранение персональной информации', color: 'from-violet-500 to-purple-600' },
+                { icon: Zap, title: 'Быстрый доступ 24/7', desc: 'Оценки и расписание всегда под рукой', color: 'from-blue-500 to-cyan-600' },
+                { icon: Users, title: 'Для всех ролей', desc: 'Студенты, преподаватели, родители, администрация', color: 'from-pink-500 to-rose-600' },
               ].map((feature, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * index + 0.3 }}
-                  whileHover={{ x: 10, scale: 1.02 }}
-                  className="flex items-start gap-4 p-4 rounded-2xl glass-effect hover:shadow-lg transition-all cursor-pointer group"
+                  transition={{ delay: 0.15 * index + 0.5, duration: 0.5 }}
+                  whileHover={{ x: 10, scale: 1.03 }}
+                  className="flex items-center gap-4 p-5 rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border-2 border-violet-200/60 dark:border-violet-800/60 hover:border-violet-400 dark:hover:border-violet-600 shadow-lg hover:shadow-2xl transition-all cursor-pointer group"
                 >
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-2xl flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                    {feature.icon}
+                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center flex-shrink-0 shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                    <feature.icon className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-lg mb-1 flex items-center gap-2">
+                    <h3 className="font-bold text-lg mb-1.5 flex items-center gap-2 text-gray-900 dark:text-white">
                       {feature.title}
-                      <CheckCircle className="w-4 h-4 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <CheckCircle className="w-5 h-5 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{feature.desc}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{feature.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -109,113 +122,10 @@ export default function LoginPage({ onBack }: LoginPageProps) {
           </div>
         </motion.div>
 
-        {/* Right Side - Login Form */}
+        {/* Right Side - Login Form - REDESIGNED */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
           className="bg-white dark:bg-gray-800 rounded-3xl p-10 shadow-2xl border-2 border-violet-200/50 dark:border-violet-800/50"
         >
-          <div className="text-center mb-10">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-xl"
-            >
-              <LogIn className="w-10 h-10 text-white" />
-            </motion.div>
-            <h2 className="text-4xl font-black bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent mb-3">
-              Вход в систему
-            </h2>
-            <p className="text-base text-gray-600 dark:text-gray-400">
-              Введите свои учетные данные для доступа
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="p-4 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center gap-2"
-              >
-                <AlertCircle className="w-5 h-5" />
-                <span>{error}</span>
-              </motion.div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold mb-2">Email</label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="example@lptt.ru"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl glass-effect outline-none focus:ring-2 focus:ring-primary-500"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2">Пароль</label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl glass-effect outline-none focus:ring-2 focus:ring-primary-500"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-primary-500 to-purple-600 text-white font-semibold hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              <LogIn className="w-5 h-5" />
-              <span>{loading ? 'Вход...' : 'Войти'}</span>
-            </button>
-          </form>
-
-          {/* Demo Accounts */}
-          <div className="mt-8">
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Демо-аккаунты (пароль: 123456):
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {demoAccounts.map((account) => (
-                <button
-                  key={account.email}
-                  onClick={() => {
-                    setEmail(account.email)
-                    setPassword('123456')
-                  }}
-                  className="p-3 rounded-xl glass-effect hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors text-left"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">{account.icon}</span>
-                    <div>
-                      <p className="text-xs font-semibold">{account.role}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {account.email}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  )
-}
