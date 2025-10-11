@@ -80,8 +80,12 @@
   body {
     @apply font-sans antialiased;
     @apply bg-white dark:bg-gray-950;
-    @apply text-gray-900 dark:text-gray-50;
+    color: #1e293b;
     text-rendering: optimizeLegibility;
+  }
+  
+  .dark body {
+    color: #f1f5f9;
   }
   
   /* NO TRANSITIONS - Instant theme switch for maximum performance */

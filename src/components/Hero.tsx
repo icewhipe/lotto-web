@@ -190,7 +190,7 @@ export default function Hero() {
                         <div className="text-4xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
                           {stat.number}
                         </div>
-                        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">{stat.label}</div>
+                        <div className="text-sm font-semibold" style={{ color: '#475569' }}>{stat.label}</div>
                       </div>
                     </div>
                   </div>
@@ -241,7 +241,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Enhanced 3D Floating Cards - All Visible on Load */}
-          <div className="relative h-[550px] hidden lg:block">
+          <div className="relative h-[500px] hidden lg:block" style={{ zIndex: 50 }}>
             {floatingCards.map((card, index) => (
               <motion.div
                 key={card.text}
