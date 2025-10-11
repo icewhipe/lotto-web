@@ -242,7 +242,6 @@ async function seed() {
   await prisma.attendance.create({
     data: {
       studentId: student.id,
-      scheduleId: schedule1.id,
       date: new Date(),
       status: 'PRESENT',
     },
@@ -251,8 +250,7 @@ async function seed() {
   await prisma.attendance.create({
     data: {
       studentId: student.id,
-      scheduleId: schedule2.id,
-      date: new Date(),
+      date: new Date(Date.now() - 86400000),
       status: 'PRESENT',
     },
   });
@@ -260,8 +258,7 @@ async function seed() {
   await prisma.attendance.create({
     data: {
       studentId: student.id,
-      scheduleId: schedule3.id,
-      date: new Date(),
+      date: new Date(Date.now() - 172800000),
       status: 'PRESENT',
     },
   });
