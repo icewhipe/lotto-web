@@ -46,14 +46,14 @@ export default function Hero() {
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03] bg-[size:32px_32px]" />
 
-      <motion.div className="container-custom" style={{ opacity }}>
+      <motion.div className="container-custom relative z-10" style={{ opacity }}>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Hero Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-8 z-10"
+            className="space-y-6 relative z-30"
           >
             {/* Badges - Multiple Beautiful Badges */}
             <div className="flex flex-wrap gap-3 relative z-20">
