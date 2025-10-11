@@ -47,8 +47,15 @@ export default function History() {
   const isInView = useInView(ref, { threshold: 0.1 })
 
   return (
-    <section id="history" className="section-padding bg-gray-50 dark:bg-gray-900/50" ref={ref}>
-      <div className="container-custom">
+    <section id="history" className="section-padding relative overflow-hidden" ref={ref}>
+      {/* Beautiful gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-50/30 to-transparent dark:via-violet-950/20" />
+      
+      {/* Decorative elements */}
+      <div className="absolute top-20 right-10 w-72 h-72 bg-violet-500/10 dark:bg-violet-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl" />
+      
+      <div className="container-custom relative z-10">
         {/* Section Header */}
         <motion.div
           className="text-center mb-16 space-y-4"
