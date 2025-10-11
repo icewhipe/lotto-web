@@ -382,7 +382,8 @@ enum DocumentStatus {
   APPROVED
   REJECTED
 }
- КАРТЫ =============
+
+// ============= RFID КАРТЫ =============
 
 model RFIDCard {
   id          String   @id @default(uuid())
