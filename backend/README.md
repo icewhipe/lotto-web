@@ -1,409 +1,408 @@
-# 🚀 Backend Структура для ЛПТТ
+# 🔧 Backend - ЛПТТ Электронный Дневник
 
-## 📋 Обзор
+Backend API на Node.js + Express + PostgreSQL + Prisma.
 
-Backend для сайта Лискинского промышленно-транспортного техникума будет построен на современном стеке технологий для обеспечения масштабируемости, безопасности и производительности.
+---
 
-## 🛠️ Технологический стек
+## 🚀 Быстрый старт
 
-### Основные технологии:
-- **Node.js** (v20+) - Runtime environment
-- **TypeScript** - Type safety
-- **Express.js** - Web framework
-- **PostgreSQL** - Основная база данных
-- **Redis** - Кэширование и сессии
-- **Socket.IO** - Real-time для чата
-- **Prisma** - ORM
+### 1. Установка зависимостей
 
-### Дополнительные инструменты:
-- **JWT** - Аутентификация
-- **Bcrypt** - Хеширование паролей
-- **Multer** - Загрузка файлов
-- **Nodemailer** - Email уведомления
-- **PM2** - Process manager
-- **Nginx** - Reverse proxy
+```bash
+npm install
+```
 
-## 📁 Структура проекта
+### 2. Настройка окружения
+
+```bash
+cp .env.example .env
+```
+
+Отредактируйте `.env`:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/lptt_db"
+JWT_SECRET="your-secret-key"
+REDIS_URL="redis://localhost:6379"
+```
+
+### 3. База данных
+
+```bash
+# Создать БД
+npx prisma migrate dev
+
+# Заполнить тестовыми данными
+npm run seed
+```
+
+### 4. Запуск
+
+```bash
+# Development
+npm run dev
+
+# Production
+npm run build
+npm start
+```
+
+**Сервер запущен:** http://localhost:3000
+
+---
+
+## 📚 Документация
+
+- [API Reference](../docs/backend/API.md) — Все endpoints
+- [Database Schema](../docs/backend/DATABASE.md) — Prisma схема
+- [WebSockets](../docs/backend/WEBSOCKETS.md) — Real-time
+
+---
+
+## 🏗️ Архитектура
 
 ```
 backend/
 ├── src/
 │   ├── config/           # Конфигурации
-│   │   ├── database.ts
-│   │   ├── redis.ts
-│   │   └── auth.ts
+│   │   ├── database.ts   # Prisma client
+│   │   ├── jwt.ts        # JWT helpers
+│   │   ├── websocket.ts  # Socket.IO
+│   │   ├── multer.ts     # File upload
+│   │   ├── email.ts      # Nodemailer
+│   │   └── redis.ts      # Redis cache
 │   │
-│   ├── models/           # Prisma models
-│   │   ├── user.ts
-│   │   ├── student.ts
-│   │   ├── grade.ts
-│   │   ├── schedule.ts
-│   │   └── note.ts
-│   │
-│   ├── controllers/      # Route handlers
+│   ├── controllers/      # Контроллеры
 │   │   ├── auth.controller.ts
-│   │   ├── student.controller.ts
+│   │   ├── rfid.controller.ts
+│   │   ├── turnstile.controller.ts
 │   │   ├── grades.controller.ts
-│   │   ├── schedule.controller.ts
-│   │   ├── notes.controller.ts
-│   │   └── chat.controller.ts
+│   │   └── schedule.controller.ts
 │   │
-│   ├── services/         # Business logic
-│   │   ├── auth.service.ts
-│   │   ├── student.service.ts
-│   │   ├── grades.service.ts
-│   │   └── notes.service.ts
+│   ├── middleware/       # Middleware
+│   │   ├── authMiddleware.ts
+│   │   └── validation.ts
 │   │
-│   ├── middleware/       # Middlewares
-│   │   ├── auth.middleware.ts
-│   │   ├── validation.middleware.ts
-│   │   ├── error.middleware.ts
-│   │   └── upload.middleware.ts
-│   │
-│   ├── routes/           # API routes
+│   ├── routes/           # Routes
 │   │   ├── auth.routes.ts
-│   │   ├── student.routes.ts
+│   │   ├── rfid.routes.ts
+│   │   ├── turnstile.routes.ts
 │   │   ├── grades.routes.ts
-│   │   ├── schedule.routes.ts
-│   │   ├── notes.routes.ts
-│   │   └── chat.routes.ts
-│   │
-│   ├── utils/            # Utilities
-│   │   ├── jwt.ts
-│   │   ├── validators.ts
-│   │   └── helpers.ts
+│   │   └── schedule.routes.ts
 │   │
 │   ├── types/            # TypeScript types
 │   │   └── index.ts
 │   │
-│   ├── sockets/          # Socket.IO handlers
-│   │   └── chat.socket.ts
-│   │
-│   └── app.ts            # Express app
-│   └── server.ts         # Server entry point
+│   └── server.ts         # Entry point
 │
 ├── prisma/
-│   ├── schema.prisma     # Database schema
-│   ├── migrations/       # DB migrations
-│   └── seed.ts          # Seed data
+│   └── schema.prisma     # Database schema
 │
-├── uploads/              # Uploaded files
-│   ├── notes/
-│   ├── documents/
-│   └── avatars/
-│
-├── tests/                # Tests
-│   ├── unit/
-│   └── integration/
-│
-├── .env.example          # Environment variables example
-├── .gitignore
-├── package.json
-├── tsconfig.json
-└── README.md
+└── uploads/              # File storage
+    ├── notes/
+    ├── images/
+    └── documents/
 ```
-
-## 🗄️ Database Schema (Prisma)
-
-### User Model
-```prisma
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String
-  role      UserRole
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  student   Student?
-  teacher   Teacher?
-  parent    Parent?
-}
-
-enum UserRole {
-  STUDENT
-  TEACHER
-  PARENT
-  APPLICANT
-  ADMIN
-}
-```
-
-### Student Model
-```prisma
-model Student {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
-  groupId   String
-  group     Group    @relation(fields: [groupId], references: [id])
-  
-  grades    Grade[]
-  attendance Attendance[]
-  notes     Note[]
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-```
-
-### Grade Model
-```prisma
-model Grade {
-  id         String   @id @default(uuid())
-  studentId  String
-  student    Student  @relation(fields: [studentId], references: [id])
-  subjectId  String
-  subject    Subject  @relation(fields: [subjectId], references: [id])
-  teacherId  String
-  teacher    Teacher  @relation(fields: [teacherId], references: [id])
-  
-  value      Int
-  type       GradeType
-  date       DateTime
-  comment    String?
-  
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
-enum GradeType {
-  EXAM
-  TEST
-  HOMEWORK
-  CLASSWORK
-  QUIZ
-}
-```
-
-### Schedule Model
-```prisma
-model Schedule {
-  id        String   @id @default(uuid())
-  groupId   String
-  group     Group    @relation(fields: [groupId], references: [id])
-  subjectId String
-  subject   Subject  @relation(fields: [subjectId], references: [id])
-  teacherId String
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
-  
-  dayOfWeek Int      // 1-6 (Пн-Сб)
-  startTime String   // "09:00"
-  endTime   String   // "10:30"
-  room      String
-  type      LessonType
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-enum LessonType {
-  LECTURE
-  PRACTICE
-  LAB
-  SEMINAR
-}
-```
-
-### Note Model (Конспекты)
-```prisma
-model Note {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  filePath    String
-  authorId    String
-  author      Student  @relation(fields: [authorId], references: [id])
-  subjectId   String
-  subject     Subject  @relation(fields: [subjectId], references: [id])
-  
-  rating      Float    @default(0)
-  downloads   Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-```
-
-## 🔌 API Endpoints
-
-### Authentication
-```
-POST   /api/auth/register    - Регистрация
-POST   /api/auth/login       - Вход
-POST   /api/auth/logout      - Выход
-POST   /api/auth/refresh     - Обновить токен
-GET    /api/auth/me          - Текущий пользователь
-```
-
-### Students
-```
-GET    /api/students         - Список студентов
-GET    /api/students/:id     - Студент по ID
-PUT    /api/students/:id     - Обновить студента
-DELETE /api/students/:id     - Удалить студента
-```
-
-### Grades (Оценки)
-```
-GET    /api/grades/student/:id        - Оценки студента
-POST   /api/grades                    - Добавить оценку
-PUT    /api/grades/:id                - Обновить оценку
-DELETE /api/grades/:id                - Удалить оценку
-GET    /api/grades/subject/:subjectId - Оценки по предмету
-GET    /api/grades/stats/:studentId   - Статистика оценок
-```
-
-### Schedule (Расписание)
-```
-GET    /api/schedule/group/:groupId   - Расписание группы
-GET    /api/schedule/teacher/:id      - Расписание преподавателя
-POST   /api/schedule                  - Создать занятие
-PUT    /api/schedule/:id              - Обновить занятие
-DELETE /api/schedule/:id              - Удалить занятие
-```
-
-### Notes (Конспекты)
-```
-GET    /api/notes                     - Список конспектов
-GET    /api/notes/:id                 - Конспект по ID
-POST   /api/notes                     - Загрузить конспект
-PUT    /api/notes/:id                 - Обновить конспект
-DELETE /api/notes/:id                 - Удалить конспект
-POST   /api/notes/:id/download        - Скачать конспект
-POST   /api/notes/:id/rate            - Оценить конспект
-GET    /api/notes/search              - Поиск конспектов
-```
-
-### Attendance (Посещаемость)
-```
-GET    /api/attendance/student/:id    - Посещаемость студента
-POST   /api/attendance                - Отметить посещаемость
-PUT    /api/attendance/:id            - Обновить запись
-GET    /api/attendance/stats/:id      - Статистика посещаемости
-```
-
-### Chat (Чат)
-```
-GET    /api/chat/messages/:groupId    - Сообщения группы
-POST   /api/chat/messages             - Отправить сообщение
-WS     /socket/chat                   - WebSocket для чата
-```
-
-### Progress Tracker
-```
-GET    /api/progress/student/:id      - Прогресс студента
-GET    /api/progress/stats/:id        - Статистика прогресса
-GET    /api/progress/chart/:id        - Данные для графика
-```
-
-## 🔐 Аутентификация
-
-### JWT Token Structure
-```typescript
-interface JWTPayload {
-  userId: string
-  role: UserRole
-  email: string
-  iat: number
-  exp: number
-}
-```
-
-### Token Flow
-1. User логинится → получает Access Token (15 мин) и Refresh Token (7 дней)
-2. Access Token в Authorization header для запросов
-3. Refresh Token для обновления Access Token
-4. Tokens хранятся в httpOnly cookies
-
-## 📡 Real-time (Socket.IO)
-
-### Chat Events
-```typescript
-// Client → Server
-socket.emit('join_room', { groupId: string })
-socket.emit('send_message', { groupId: string, message: string })
-socket.emit('typing', { groupId: string, userId: string })
-
-// Server → Client
-socket.on('new_message', { message: Message })
-socket.on('user_typing', { userId: string, userName: string })
-socket.on('user_online', { userId: string })
-socket.on('user_offline', { userId: string })
-```
-
-## 🔒 Безопасность
-
-### Middleware Stack
-1. **Helmet** - Security headers
-2. **CORS** - Cross-origin control
-3. **Rate Limiting** - DDoS protection
-4. **Input Validation** - Joi/Zod
-5. **SQL Injection** - Prisma параметризация
-6. **XSS Protection** - Sanitization
-
-### Environment Variables
-```env
-NODE_ENV=production
-PORT=5000
-DATABASE_URL=postgresql://user:pass@localhost:5432/lptt
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your-secret-key
-JWT_EXPIRES_IN=15m
-REFRESH_TOKEN_EXPIRES_IN=7d
-FRONTEND_URL=https://lptt.ru
-```
-
-## 📊 Мониторинг и логирование
-
-### Tools
-- **Winston** - Logging
-- **Morgan** - HTTP logging
-- **PM2** - Process monitoring
-- **Sentry** - Error tracking (опционально)
-
-## 🚀 Деплой
-
-### Production Stack
-```
-[Nginx] → [PM2] → [Node.js App]
-                     ↓
-                [PostgreSQL]
-                     ↓
-                  [Redis]
-```
-
-### Commands
-```bash
-# Development
-npm run dev
-
-# Build
-npm run build
-
-# Production
-npm run start
-
-# Tests
-npm run test
-
-# Migrations
-npm run migrate
-npm run seed
-```
-
-## 📝 Следующие шаги
-
-1. ✅ Создать structure папок
-2. ⏳ Настроить Prisma schema
-3. ⏳ Реализовать auth endpoints
-4. ⏳ Добавить API endpoints
-5. ⏳ Настроить Socket.IO для чата
-6. ⏳ Добавить файловую систему для конспектов
-7. ⏳ Настроить деплой
 
 ---
 
-**Дата создания:** 8 октября 2025  
-**Статус:** 📋 План готов, начинаем реализацию
+## 🔌 API Endpoints
+
+### Аутентификация
+- `POST /api/auth/register` — Регистрация
+- `POST /api/auth/login` — Вход
+- `GET /api/auth/me` — Текущий пользователь
+
+### RFID Система
+- `POST /api/rfid/cards` — Создать карту
+- `GET /api/rfid/cards` — Все карты
+- `POST /api/rfid/scan` — Обработать сканирование
+
+### Турникеты
+- `POST /api/turnstiles` — Создать турникет
+- `GET /api/turnstiles` — Все турникеты
+- `GET /api/turnstiles/:id/stats` — Статистика
+
+### Оценки
+- `POST /api/grades` — Создать оценку
+- `GET /api/grades/student/:id` — Оценки студента
+
+### Расписание
+- `POST /api/schedule` — Создать расписание
+- `GET /api/schedule/group/:id` — Расписание группы
+
+[Полная документация →](../docs/backend/API.md)
+
+---
+
+## 🛠️ Технологии
+
+### Backend
+- **Node.js** 20.x — JavaScript runtime
+- **Express.js** 4.18 — Web framework
+- **TypeScript** 5.3 — Type safety
+- **Prisma** 5.7 — ORM
+
+### Database
+- **PostgreSQL** 16 — Relational DB
+- **Redis** 7 — Caching
+
+### Real-time
+- **Socket.IO** 4.6 — WebSockets
+
+### File Upload
+- **Multer** 1.4 — Multipart/form-data
+
+### Email
+- **Nodemailer** 6.9 — Email sending
+
+### Security
+- **JWT** — Authentication
+- **Bcrypt** — Password hashing
+- **Helmet** — Security headers
+- **express-rate-limit** — Rate limiting
+
+---
+
+## 📊 База данных
+
+### Модели (15+)
+
+- **User** — Пользователи
+- **Student** — Студенты
+- **Teacher** — Преподаватели
+- **Grade** — Оценки
+- **Schedule** — Расписание
+- **Attendance** — Посещаемость
+- **RFIDCard** — RFID карты
+- **Turnstile** — Турникеты
+- **AccessLog** — Логи доступа
+- **Note** — Конспекты
+- **ChatRoom** — Чаты
+- **Event** — События
+- **GalleryImage** — Галерея
+
+[Схема БД →](../docs/backend/DATABASE.md)
+
+---
+
+## 🔐 Безопасность
+
+- **JWT** токены с истечением 7 дней
+- **Bcrypt** хеширование паролей (10 rounds)
+- **CORS** настроен для фронтенда
+- **Helmet.js** для security headers
+- **Rate limiting** 100 запросов / 15 минут
+- **Input validation** на всех endpoints
+
+---
+
+## 🧪 Тестирование
+
+```bash
+# Run tests
+npm run test
+
+# Coverage
+npm run test:coverage
+```
+
+---
+
+## 📦 Команды
+
+```bash
+# Development
+npm run dev                # Start dev server with hot reload
+
+# Production
+npm run build              # Build TypeScript
+npm start                  # Start production server
+
+# Database
+npx prisma generate        # Generate Prisma client
+npx prisma migrate dev     # Run migrations
+npx prisma migrate deploy  # Deploy migrations
+npx prisma studio          # Open Prisma Studio (DB UI)
+npm run seed               # Seed database
+
+# Testing
+npm run test               # Run tests
+npm run test:watch         # Watch mode
+```
+
+---
+
+## 🌐 RFID + Турникеты
+
+### Как это работает:
+
+1. **Студент прикладывает RFID карту** к считывателю турникета
+2. **Турникет отправляет запрос** на `POST /api/rfid/scan`
+3. **Backend проверяет карту:**
+   - Активна ли карта?
+   - Не истёк ли срок действия?
+4. **При успехе:**
+   - Открывает турникет (response: `GRANTED`)
+   - Создаёт лог доступа
+   - **Автоматически создаёт посещаемость** если вход
+   - Отправляет WebSocket событие `rfid-scan-update`
+5. **При отказе:**
+   - Турникет не открывается (response: `DENIED`)
+   - Создаёт лог с причиной отказа
+
+### Пример запроса от турникета:
+
+```bash
+curl -X POST http://localhost:3000/api/rfid/scan \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cardNumber": "1234567890",
+    "turnstileId": "turnstile-uuid",
+    "direction": "IN"
+  }'
+```
+
+---
+
+## 📡 WebSocket Events
+
+### Real-time уведомления:
+
+```javascript
+// RFID scan
+socket.on('rfid-scan-update', (data) => {
+  // Новое сканирование в реальном времени
+});
+
+// Turnstile status
+socket.on('turnstile-status-update', (data) => {
+  // Обновление статуса турникета
+});
+
+// Chat messages
+socket.on('chat-message-received', (msg) => {
+  // Новое сообщение в чате
+});
+```
+
+[WebSocket документация →](../docs/backend/WEBSOCKETS.md)
+
+---
+
+## 🔄 Redis Caching
+
+```typescript
+import { cacheService } from './config/redis';
+
+// Get from cache
+const data = await cacheService.get('key');
+
+// Set with TTL
+await cacheService.set('key', JSON.stringify(data), 3600);
+
+// Cache middleware
+router.get('/endpoint', cacheMiddleware(300), handler);
+```
+
+---
+
+## 📧 Email Notifications
+
+```typescript
+import { sendGradeNotification } from './config/email';
+
+// Отправить уведомление о новой оценке
+await sendGradeNotification(
+  'student@lptt.ru',
+  'Иван Иванов',
+  'Математика',
+  5
+);
+```
+
+---
+
+## 📝 Environment Variables
+
+```env
+# Database
+DATABASE_URL="postgresql://..."
+
+# JWT
+JWT_SECRET="secret-key"
+JWT_EXPIRES_IN="7d"
+
+# Redis
+REDIS_URL="redis://localhost:6379"
+
+# Server
+PORT=3000
+NODE_ENV=development
+
+# CORS
+CORS_ORIGIN="http://localhost:5173"
+
+# File Upload
+MAX_FILE_SIZE=10485760
+UPLOAD_DIR=./uploads
+
+# Email
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+
+# RFID
+RFID_API_URL="http://rfid-controller.local"
+RFID_API_KEY="api-key"
+
+# Turnstile
+TURNSTILE_WEBSOCKET_PORT=3001
+TURNSTILE_SECRET="secret"
+```
+
+---
+
+## 🐳 Docker (Planned)
+
+```bash
+docker-compose up -d
+```
+
+---
+
+## 📈 Roadmap
+
+- [x] Authentication (JWT)
+- [x] RFID System
+- [x] Turnstiles
+- [x] Access Logs
+- [x] Grades
+- [x] Schedule
+- [x] WebSocket
+- [x] File Upload
+- [x] Email
+- [x] Redis Caching
+- [ ] Notes
+- [ ] Chat
+- [ ] Events
+- [ ] Gallery
+- [ ] Tests
+- [ ] Docker
+- [ ] CI/CD
+
+---
+
+## 🤝 Contributing
+
+См. [CONTRIBUTING.md](../CONTRIBUTING.md)
+
+---
+
+## 📄 License
+
+MIT
+
+---
+
+**Created with 🔥 for ЛПТТ**
