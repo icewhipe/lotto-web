@@ -26,6 +26,7 @@ model User {
   teacher   Teacher?
   parent    Parent?
   applicant Applicant?
+  rfidCard  RFIDCard?
   
   @@index([email])
   @@index([role])
@@ -380,4 +381,152 @@ enum DocumentStatus {
   PENDING
   APPROVED
   REJECTED
+}
+ КАРТЫ =============
+
+model RFIDCard {
+  id          String   @id @default(uuid())
+  cardNumber  String   @unique
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  isActive    Boolean  @default(true)
+  issuedDate  DateTime @default(now())
+  expiryDate  DateTime?
+  
+  accessLogs  AccessLog[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([cardNumber])
+  @@index([userId])
+  @@map("rfid_cards")
+}
+
+// ============= ТУРНИКЕТЫ =============
+
+model Turnstile {
+  id          String   @id @default(uuid())
+  name        String
+  location    String
+  deviceId    String   @unique
+  ipAddress   String?
+  
+  isActive    Boolean  @default(true)
+  direction   TurnstileDirection
+  
+  accessLogs  AccessLog[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([deviceId])
+  @@map("turnstiles")
+}
+
+enum TurnstileDirection {
+  ENTRY
+  EXIT
+  BOTH
+}
+
+// ============= ЛОГИ ДОСТУПА =============
+
+model AccessLog {
+  id           String   @id @default(uuid())
+  rfidCardId   String
+  rfidCard     RFIDCard @relation(fields: [rfidCardId], references: [id])
+  turnstileId  String
+  turnstile    Turnstile @relation(fields: [turnstileId], references: [id])
+  
+  timestamp    DateTime @default(now())
+  direction    AccessDirection
+  status       AccessStatus
+  reason       String?
+  
+  // Связь с посещаемостью
+  attendanceId String?
+  
+  createdAt    DateTime @default(now())
+  
+  @@index([rfidCardId])
+  @@index([turnstileId])
+  @@index([timestamp])
+  @@map("access_logs")
+}
+
+enum AccessDirection {
+  IN
+  OUT
+}
+
+enum AccessStatus {
+  GRANTED
+  DENIED
+  ERROR
+}
+
+// ============= СОБЫТИЯ (НОВОСТИ) =============
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  date        DateTime
+  location    String?
+  imageUrl    String?
+  category    EventCategory @default(NEWS)
+  
+  isPublished Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([date])
+  @@index([category])
+  @@map("events")
+}
+
+enum EventCategory {
+  NEWS
+  ANNOUNCEMENT
+  HOLIDAY
+  COMPETITION
+  CONFERENCE
+  OTHER
+}
+
+// ============= ГАЛЕРЕЯ =============
+
+model GalleryImage {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  imageUrl    String
+  albumId     String?
+  album       Album?   @relation(fields: [albumId], references: [id])
+  
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([albumId])
+  @@map("gallery_images")
+}
+
+model Album {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  coverImage  String?
+  
+  images      GalleryImage[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("albums")
 }
