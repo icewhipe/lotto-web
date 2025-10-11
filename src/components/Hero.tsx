@@ -8,9 +8,9 @@ const stats = [
 ]
 
 const floatingCards = [
-  { icon: GraduationCap, text: 'Качественное образование', delay: 0, color: 'from-violet-500 to-purple-600', top: '10%', left: '5%' },
-  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2, color: 'from-blue-500 to-cyan-600', top: '35%', left: '25%' },
-  { icon: Award, text: 'Современное оборудование', delay: 0.4, color: 'from-pink-500 to-rose-600', top: '60%', left: '10%' },
+  { icon: GraduationCap, text: 'Качественное образование', delay: 0, color: 'from-violet-500 to-purple-600', top: '5%', left: '5%' },
+  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2, color: 'from-blue-500 to-cyan-600', top: '30%', left: '25%' },
+  { icon: Award, text: 'Современное оборудование', delay: 0.4, color: 'from-pink-500 to-rose-600', top: '55%', left: '8%' },
 ]
 
 export default function Hero() {
