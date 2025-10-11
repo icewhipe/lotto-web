@@ -124,12 +124,12 @@ export default function News() {
             <div className="absolute inset-0 backdrop-blur-md dark:backdrop-blur-lg" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }} />
             
             <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 50 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl shadow-2xl"
+              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-3xl shadow-2xl z-10"
             >
               {/* Header */}
               <div className={`relative bg-gradient-to-br ${selectedNews.gradient} p-8 text-white`}>
@@ -198,7 +198,7 @@ export default function News() {
                 </motion.div>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>
