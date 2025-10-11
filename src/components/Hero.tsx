@@ -200,6 +200,44 @@ export default function Hero() {
                 </motion.div>
               ))}
             </motion.div>
+
+            {/* Buttons AFTER Stats */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 relative z-20"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.3 }}
+            >
+              <motion.a 
+                href="#admissions" 
+                className="group relative px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold rounded-2xl overflow-hidden shadow-lg shadow-violet-500/50 dark:shadow-violet-500/30"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="relative z-10 flex items-center gap-2 justify-center">
+                  Поступить в техникум
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-violet-500 to-purple-500"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.a>
+              
+              <motion.a 
+                href="#programs" 
+                className="group px-8 py-4 glass-effect font-bold rounded-2xl border-2 border-violet-200 dark:border-violet-800 hover:border-violet-400 dark:hover:border-violet-600 transition-colors"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="flex items-center gap-2 justify-center">
+                  Наши специальности
+                  <Rocket className="w-5 h-5 group-hover:translate-y-[-2px] transition-transform" />
+                </span>
+              </motion.a>
+            </motion.div>
           </motion.div>
 
           {/* Enhanced 3D Floating Cards - All Visible on Load */}
