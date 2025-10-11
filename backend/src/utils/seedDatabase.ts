@@ -58,7 +58,7 @@ async function seed() {
       name: 'Информационные системы',
       code: '09.02.07',
       description: 'Информационные системы и программирование',
-      duration: 3,
+      duration: '3 года',
       form: 'full-time',
     },
   });
