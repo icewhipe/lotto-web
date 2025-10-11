@@ -21,8 +21,8 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-28">
-      {/* Enhanced Background with Mesh Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-purple-50/30 to-cyan-50/30 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
+      {/* Enhanced Background - Improved Light Theme */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white via-violet-50/20 to-purple-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
       
       {/* Simplified Gradient Orbs - Better Performance */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

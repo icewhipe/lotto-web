@@ -75,14 +75,29 @@
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Smooth theme transitions */
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   body {
     @apply font-sans antialiased;
     @apply bg-white dark:bg-gray-950;
     @apply text-gray-900 dark:text-gray-50;
-    @apply transition-colors duration-300;
     text-rendering: optimizeLegibility;
+    /* Smooth theme transitions */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* All elements get smooth theme transitions */
+  * {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+  }
+  
+  /* Exclude animations and transforms from theme transitions */
+  * {
+    transition-property: background-color, border-color, color, fill, stroke;
   }
 
   ::selection {

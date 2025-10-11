@@ -50,14 +50,25 @@ function App() {
   }, [])
 
   const toggleTheme = () => {
+    // Optimized theme toggle - smooth transition
+    const html = document.documentElement
+    
+    // Add transition class
+    html.style.setProperty('transition', 'background-color 0.3s ease, color 0.3s ease')
+    
     setIsDark(!isDark)
     if (!isDark) {
-      document.documentElement.classList.add('dark')
+      html.classList.add('dark')
       localStorage.setItem('theme', 'dark')
     } else {
-      document.documentElement.classList.remove('dark')
+      html.classList.remove('dark')
       localStorage.setItem('theme', 'light')
     }
+    
+    // Remove transition after animation completes
+    setTimeout(() => {
+      html.style.removeProperty('transition')
+    }, 300)
   }
 
   // Show Dashboard if authenticated
