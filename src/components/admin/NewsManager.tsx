@@ -227,12 +227,12 @@ export default function NewsManager() {
       {/* Create/Edit Modal */}
       <AnimatePresence>
         {(isCreating || editingNews) && (
-          <>
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
               onClick={() => {
                 setIsCreating(false)
                 setEditingNews(null)
@@ -240,10 +240,10 @@ export default function NewsManager() {
             />
             
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-50 max-h-[90vh] overflow-y-auto"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto z-10"
             >
               <div className="glass-effect rounded-3xl p-6 border border-gray-200/50 dark:border-gray-700/50 m-4">
                 <div className="flex items-center justify-between mb-6">
