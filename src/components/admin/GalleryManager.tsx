@@ -335,7 +335,7 @@ export default function GalleryManager() {
               exit={{ opacity: 0, scale: 0.9 }}
               className="relative w-full max-w-2xl z-10"
             >
-              <div className="glass-effect rounded-3xl p-6 border border-gray-200/50 dark:border-gray-700/50 m-4">
+              <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 border-2 border-gray-200 dark:border-gray-700 shadow-2xl">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-2xl font-black">Загрузить фотографии</h2>
                   <button
@@ -363,7 +363,7 @@ export default function GalleryManager() {
                 <div className="mt-6 space-y-4">
                   <div>
                     <label className="block text-sm font-semibold mb-2">Категория</label>
-                    <select className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    <select className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all">
                       {categories.filter(c => c !== 'Все').map(cat => (
                         <option key={cat} value={cat}>{cat}</option>
                       ))}
