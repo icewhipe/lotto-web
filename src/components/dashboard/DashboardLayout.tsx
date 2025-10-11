@@ -94,19 +94,29 @@ export default function DashboardLayout({ children, activeTab, onTabChange }: Da
             </div>
             
             <div className="flex items-center gap-4">
+              {/* Enhanced Profile Info */}
               <div className="text-right">
-                <p className="text-sm font-semibold">{user.name}</p>
-                <p className="text-xs text-gray-500">
-                  {user.role === 'student' && 'Студент'}
-                  {user.role === 'teacher' && 'Преподаватель'}
-                  {user.role === 'parent' && 'Родитель'}
-                  {user.role === 'applicant' && 'Абитуриент'}
-                  {user.role === 'admin' && 'Администратор'}
+                <p className="text-base font-bold text-gray-900 dark:text-white">{user.name}</p>
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  {user.role === 'student' && '👨‍🎓 Студент'}
+                  {user.role === 'teacher' && '👩‍🏫 Преподаватель'}
+                  {user.role === 'parent' && '👨‍👩‍👦 Родитель'}
+                  {user.role === 'applicant' && '🎓 Абитуриент'}
+                  {user.role === 'admin' && '⚙️ Администратор'}
                 </p>
+                {user.groupId && (
+                  <p className="text-xs text-violet-600 dark:text-violet-400 font-semibold mt-0.5">
+                    Группа {user.groupId}
+                  </p>
+                )}
               </div>
               
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                {user.avatar || '👤'}
+              {/* Enhanced Avatar */}
+              <div className="relative">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg ring-2 ring-violet-200 dark:ring-violet-800">
+                  {user.avatar || '👤'}
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-800" />
               </div>
               
               <button
