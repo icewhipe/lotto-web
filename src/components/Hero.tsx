@@ -8,9 +8,9 @@ const stats = [
 ]
 
 const floatingCards = [
-  { icon: GraduationCap, text: 'Качественное образование', delay: 0, color: 'from-violet-500 to-purple-600' },
-  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2, color: 'from-blue-500 to-cyan-600' },
-  { icon: Award, text: 'Современное оборудование', delay: 0.4, color: 'from-pink-500 to-rose-600' },
+  { icon: GraduationCap, text: 'Качественное образование', delay: 0, color: 'from-violet-500 to-purple-600', top: '10%', left: '5%' },
+  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2, color: 'from-blue-500 to-cyan-600', top: '35%', left: '25%' },
+  { icon: Award, text: 'Современное оборудование', delay: 0.4, color: 'from-pink-500 to-rose-600', top: '60%', left: '10%' },
 ]
 
 export default function Hero() {
@@ -173,8 +173,8 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Enhanced 3D Floating Cards */}
-          <div className="relative h-[600px] hidden lg:block">
+          {/* Enhanced 3D Floating Cards - Positioned Higher */}
+          <div className="relative h-[700px] hidden lg:block">
             {floatingCards.map((card, index) => (
               <motion.div
                 key={card.text}
@@ -187,8 +187,8 @@ export default function Hero() {
                   stiffness: 100
                 }}
                 style={{
-                  top: `${index * 28 + 15}%`,
-                  left: `${index * 22 + 5}%`,
+                  top: card.top,
+                  left: card.left,
                   perspective: '1000px'
                 }}
               >
