@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut
 } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
 import AdminDashboard from './AdminDashboard'
 import NewsManager from './NewsManager'
 import GalleryManager from './GalleryManager'
@@ -24,6 +25,7 @@ const menuItems = [
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('dashboard')
+  const { logout } = useAuth()
 
   const renderContent = () => {
     switch (activeTab) {
@@ -96,6 +98,10 @@ export default function AdminPanel() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              logout()
+              window.location.href = '/'
+            }}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 transition-colors"
           >
             <LogOut className="w-5 h-5" />
