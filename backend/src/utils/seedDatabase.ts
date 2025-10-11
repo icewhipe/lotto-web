@@ -37,7 +37,7 @@ async function seed() {
       email: 'teacher@lptt.ru',
       password: hashedPassword,
       name: 'Петров Владимир Викторович',
-      role: 'teacher',
+      role: 'TEACHER',
     },
   });
 
@@ -174,7 +174,7 @@ async function seed() {
       subjectId: subjectsList[1].id,
       teacherId: teacher.id,
       value: 5,
-      type: 'HOMEWORK' as const,
+      type: 'homework' as const,
       date: new Date(),
       comment: 'Отличная работа!',
     },
@@ -208,7 +208,7 @@ async function seed() {
         studentId: student.id,
         scheduleId: scheduleItem.id,
         date: new Date(),
-        status: 'present',
+        status: 'PRESENT',
       },
     });
   }
