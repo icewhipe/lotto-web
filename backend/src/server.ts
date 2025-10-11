@@ -108,7 +108,7 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 // Start server
 const startServer = async () => {
   try {
-    // Connect to Redis
+    // Try to connect to Redis (optional)
     await connectRedis();
 
     // Start HTTP server
@@ -117,13 +117,13 @@ const startServer = async () => {
 ╔════════════════════════════════════════════╗
 ║   🎓 ЛПТТ Электронный Дневник API        ║
 ║                                            ║
-║   ✅ Server running on port ${PORT}         ║
-║   🌐 http://localhost:${PORT}               ║
-║   📡 WebSocket ready                       ║
-║   📦 Redis connected                       ║
+║   ✅ Server:   http://localhost:${PORT}     ║
+║   📡 WebSocket: Connected                  ║
+║   💾 Database:  PostgreSQL                 ║
+║   📦 Redis:     Optional (for cache)       ║
 ║                                            ║
-║   📚 API Docs: /api                        ║
-║   ❤️  Health: /api/health                  ║
+║   📚 API Docs:  /api                       ║
+║   ❤️  Health:   /api/health                ║
 ╚════════════════════════════════════════════╝
       `);
     });

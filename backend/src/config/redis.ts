@@ -12,14 +12,22 @@ redisClient.on('connect', () => {
   console.log('✅ Redis connected');
 });
 
-// Connect to Redis
+// Connect to Redis (optional)
+let isRedisConnected = false;
+
 export const connectRedis = async () => {
   try {
     await redisClient.connect();
+    isRedisConnected = true;
+    console.log('✅ Redis connected successfully');
   } catch (error) {
-    console.error('❌ Redis connection error:', error);
+    console.warn('⚠️  Redis unavailable - running without cache');
+    console.warn('   To enable Redis: brew services start redis');
+    isRedisConnected = false;
   }
 };
+
+export const isRedisAvailable = () => isRedisConnected;
 
 // Cache helpers
 export const cacheService = {
