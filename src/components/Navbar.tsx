@@ -177,6 +177,17 @@ export default function Navbar({ isDark, toggleTheme, onLoginClick, onRegisterCl
                   )}
                 </motion.button>
 
+                {onRegisterClick && (
+                  <motion.button
+                    onClick={onRegisterClick}
+                    className="px-4 py-2 rounded-xl border-2 border-violet-600 dark:border-violet-400 text-violet-600 dark:text-violet-400 font-semibold hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Регистрация
+                  </motion.button>
+                )}
+
                 {onLoginClick && (
                   <motion.button
                     onClick={onLoginClick}
