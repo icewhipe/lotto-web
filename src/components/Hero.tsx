@@ -323,8 +323,7 @@ export default function Hero() {
             Листай вниз
           </motion.p>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   )
 }
-
