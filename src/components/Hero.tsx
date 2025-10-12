@@ -20,7 +20,7 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
       {/* Enhanced Background - Improved Light Theme */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-violet-50/20 to-purple-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
       
@@ -130,49 +130,12 @@ export default function Hero() {
               Качественная подготовка специалистов с 1958 года.
             </motion.p>
 
+            {/* Enhanced Stats - BEFORE Buttons! */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 relative z-20"
+              className="flex flex-wrap gap-6 relative z-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.3 }}
-            >
-              <motion.a 
-                href="#admissions" 
-                className="group relative px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold rounded-2xl overflow-hidden shadow-lg shadow-violet-500/50 dark:shadow-violet-500/30"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="relative z-10 flex items-center gap-2 justify-center">
-                  Поступить в техникум
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-violet-500 to-purple-500"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.a>
-              
-              <motion.a 
-                href="#programs" 
-                className="group px-8 py-4 glass-effect font-bold rounded-2xl border-2 border-violet-200 dark:border-violet-800 hover:border-violet-400 dark:hover:border-violet-600 transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="flex items-center gap-2 justify-center">
-                  Наши специальности
-                  <Rocket className="w-5 h-5 group-hover:translate-y-[-2px] transition-transform" />
-                </span>
-              </motion.a>
-            </motion.div>
-
-            {/* Enhanced Stats - More Visible */}
-            <motion.div
-              className="flex flex-wrap gap-6 pt-6 relative z-20"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.3 }}
             >
               {stats.map((stat, index) => (
                 <motion.div
@@ -202,12 +165,12 @@ export default function Hero() {
               ))}
             </motion.div>
 
-            {/* Buttons AFTER Stats */}
+            {/* Action Buttons - AFTER Stats */}
             <motion.div
               className="flex flex-col sm:flex-row gap-4 relative z-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.3 }}
+              transition={{ delay: 0.7, duration: 0.3 }}
             >
               <motion.a 
                 href="#admissions" 
