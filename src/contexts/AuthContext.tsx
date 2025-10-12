@@ -94,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      // Реальный API call
+      // Пытаемся реальный API call к backend
       const response = await authAPI.login(email, password)
       
       if (response.success && response.data) {
@@ -104,12 +104,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('token', token)
         localStorage.setItem('user', JSON.stringify(userData))
         setUser(userData)
+        
+        return // Успешный вход
       } else {
-        throw new Error(response.error || 'Login failed')
+        // Backend вернул success: false
+        throw new Error(response.error || 'Ошибка входа')
       }
     } catch (error: any) {
       console.error('Login error:', error)
-      throw new Error(error.response?.data?.error || 'Неверный email или пароль')
+      
+      // Если backend недоступен - используем mock данные
+      if (error.code === 'ERR_NETWORK' || error.message.includes('Network Error')) {
+        console.warn('Backend недоступен, используем mock данные')
+        
+        // Mock login
+        const foundUser = mockUsers.find(u => u.email === email)
+        if (foundUser && password === '123456') {
+          // Mock токен
+          const mockToken = 'mock_jwt_token_' + Date.now()
+          localStorage.setItem('token', mockToken)
+          localStorage.setItem('user', JSON.stringify(foundUser))
+          setUser(foundUser)
+          return // Успешный mock вход
+        } else {
+          throw new Error('Неверный email или пароль')
+        }
+      }
+      
+      // Другая ошибка - пробрасываем наверх
+      const errorMessage = error.response?.data?.error || 
+                          error.message || 
+                          'Неверный email или пароль'
+      
+      throw new Error(errorMessage)
     }
   }
 

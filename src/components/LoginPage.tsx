@@ -21,12 +21,18 @@ export default function LoginPage({ onBack }: LoginPageProps) {
 
     try {
       await login(email, password)
-      // Успешный вход
+      
+      // Успешный вход - показываем toast
       toast.success('Вход выполнен успешно! 🎉', {
         duration: 2000,
         icon: '✅',
       })
+      
+      // НЕ делаем setLoading(false) - идёт редирект на dashboard
+      // AuthContext обновит user, App.tsx отрендерит Dashboard
+      
     } catch (err) {
+      // ОШИБКА - остаёмся на странице входа
       const errorMessage = (err as Error).message
       setError(errorMessage)
       
@@ -36,6 +42,7 @@ export default function LoginPage({ onBack }: LoginPageProps) {
         icon: '❌',
       })
       
+      // Убираем loading, остаёмся на странице
       setLoading(false)
     }
   }
