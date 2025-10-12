@@ -15,6 +15,7 @@ import { connectRedis } from './config/redis';
 
 // Import routes
 import authRoutes from './routes/auth.routes';
+import registrationRoutes from './routes/registration.routes';
 import rfidRoutes from './routes/rfid.routes';
 import turnstileRoutes from './routes/turnstile.routes';
 import gradesRoutes from './routes/grades.routes';
@@ -56,6 +57,7 @@ app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/registration', registrationRoutes);
 app.use('/api/rfid', rfidRoutes);
 app.use('/api/turnstiles', turnstileRoutes);
 app.use('/api/grades', gradesRoutes);
