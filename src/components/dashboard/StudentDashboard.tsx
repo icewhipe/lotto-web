@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { BookOpen, Calendar, TrendingUp, Award, Clock, AlertCircle } from 'lucide-react'
+import InDevelopment from '../InDevelopment'
 
 // Mock data
 const recentGrades = [
