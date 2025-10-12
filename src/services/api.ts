@@ -30,11 +30,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
+    // ТОЛЬКО при 401 (Unauthorized) делаем logout
+    // НЕ при ошибках входа! (403, 400, 500)
     if (error.response?.status === 401) {
-      // Токен истёк или невалиден
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/';
+      const url = error.config?.url || '';
+      
+      // НЕ редиректим если это login endpoint!
+      if (!url.includes('/auth/login') && !url.includes('/auth/register')) {
+        // Токен истёк или невалиден - разлогиниваем
+        console.warn('401 Unauthorized - auto logout');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/';
+      }
     }
     return Promise.reject(error);
   }
