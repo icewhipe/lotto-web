@@ -207,6 +207,21 @@ export default function LoginPage({ onBack }: LoginPageProps) {
             </button>
           </form>
 
+          {/* Register Link */}
+          {onRegisterClick && (
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Нет аккаунта?{' '}
+                <button
+                  onClick={onRegisterClick}
+                  className="text-violet-600 dark:text-violet-400 font-bold hover:underline"
+                >
+                  Зарегистрироваться
+                </button>
+              </p>
+            </div>
+          )}
+
           {/* Demo Accounts - Simplified */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <p className="text-xs text-center text-gray-600 dark:text-gray-400 mb-3">
