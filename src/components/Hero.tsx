@@ -8,9 +8,9 @@ const stats = [
 ]
 
 const floatingCards = [
-  { icon: GraduationCap, text: 'Качественное образование', delay: 0, color: 'from-violet-500 to-purple-600', top: '10%', left: '5%' },
-  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2, color: 'from-blue-500 to-cyan-600', top: '35%', left: '25%' },
-  { icon: Award, text: 'Современное оборудование', delay: 0.4, color: 'from-pink-500 to-rose-600', top: '60%', left: '10%' },
+  { icon: GraduationCap, text: 'Качественное образование', delay: 0, color: 'from-violet-500 to-purple-600', top: '0%', left: '5%' },
+  { icon: Briefcase, text: 'Гарантия трудоустройства', delay: 0.2, color: 'from-blue-500 to-cyan-600', top: '28%', left: '25%' },
+  { icon: Award, text: 'Современное оборудование', delay: 0.4, color: 'from-pink-500 to-rose-600', top: '56%', left: '10%' },
 ]
 
 export default function Hero() {
@@ -20,7 +20,7 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Enhanced Background - Improved Light Theme */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-violet-50/20 to-purple-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
       
@@ -241,7 +241,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Enhanced 3D Floating Cards - All Visible on Load */}
-          <div className="relative h-[500px] hidden lg:block" style={{ zIndex: 50 }}>
+          <div className="relative h-[600px] hidden lg:block" style={{ zIndex: 50 }}>
             {floatingCards.map((card, index) => (
               <motion.div
                 key={card.text}
