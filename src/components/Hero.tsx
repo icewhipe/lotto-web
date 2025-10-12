@@ -20,7 +20,7 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">
       {/* Enhanced Background - Improved Light Theme */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-violet-50/20 to-purple-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
       
