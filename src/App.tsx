@@ -37,6 +37,7 @@ const ChatBot = lazy(() => import('./components/ChatBot'))
 function App() {
   const [isDark, setIsDark] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
   const { isAuthenticated } = useAuth()
 
   useEffect(() => {
