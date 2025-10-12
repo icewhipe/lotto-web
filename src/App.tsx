@@ -78,7 +78,12 @@ function App() {
     <>
       <PageLoader />
       <div className="min-h-screen overflow-x-hidden bg-white dark:bg-gray-950">
-        <Navbar isDark={isDark} toggleTheme={toggleTheme} onLoginClick={() => setShowLogin(true)} />
+        <Navbar 
+          isDark={isDark} 
+          toggleTheme={toggleTheme} 
+          onLoginClick={() => setShowLogin(true)}
+          onRegisterClick={() => setShowRegister(true)}
+        />
         
         {/* Background Effects */}
         <Suspense fallback={null}>

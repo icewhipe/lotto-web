@@ -34,7 +34,7 @@ interface NavbarProps {
   onLoginClick?: () => void
 }
 
-export default function Navbar({ isDark, toggleTheme, onLoginClick }: NavbarProps) {
+export default function Navbar({ isDark, toggleTheme, onLoginClick, onRegisterClick }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
