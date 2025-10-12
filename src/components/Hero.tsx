@@ -20,7 +20,7 @@ export default function Hero() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-40">
       {/* Enhanced Background - Improved Light Theme */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-violet-50/20 to-purple-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
       
@@ -305,6 +305,30 @@ export default function Hero() {
             >
               <motion.div
                 className="w-2 h-3 bg-gradient-to-b from-violet-500 to-purple-600 rounded-full mx-auto"
+                animate={{ y: [0, 16, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </motion.div>
+            
+            {/* Glow effect */}
+            <motion.div
+              className="absolute inset-0 rounded-full bg-violet-500/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"
+            />
+          </motion.div>
+          
+          <motion.p
+            className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center font-medium"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Листай вниз
+          </motion.p>
+        </motion.div>
+      </motion.div>
+    </section>
+  )
+}
+      className="w-2 h-3 bg-gradient-to-b from-violet-500 to-purple-600 rounded-full mx-auto"
                 animate={{ y: [0, 16, 0] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
