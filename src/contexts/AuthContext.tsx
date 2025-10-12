@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { authAPI } from '../services/api'
 
 export type UserRole = 'student' | 'teacher' | 'parent' | 'applicant' | 'admin'
 
@@ -17,11 +18,12 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Mock users for demonstration
+// REMOVED: Mock users - теперь используем реальный API
 const mockUsers: User[] = [
   {
     id: '1',
@@ -64,35 +66,61 @@ const mockUsers: User[] = [
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
+  // Check for existing session on mount
   useEffect(() => {
-    // Check for saved user session
-    const savedUser = localStorage.getItem('lptt_user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token')
+      if (token) {
+        try {
+          // Проверяем токен через API
+          const response = await authAPI.getMe()
+          if (response.success && response.data) {
+            setUser(response.data.user)
+          }
+        } catch (error) {
+          // Токен невалиден
+          console.error('Auth check failed:', error)
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+        }
+      }
+      setLoading(false)
     }
+
+    checkAuth()
   }, [])
 
   const login = async (email: string, password: string) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    const foundUser = mockUsers.find(u => u.email === email)
-    if (foundUser && password === '123456') { // Mock password
-      setUser(foundUser)
-      localStorage.setItem('lptt_user', JSON.stringify(foundUser))
-    } else {
-      throw new Error('Неверный email или пароль')
+    try {
+      // Реальный API call
+      const response = await authAPI.login(email, password)
+      
+      if (response.success && response.data) {
+        const { token, user: userData } = response.data
+        
+        // Сохраняем токен и пользователя
+        localStorage.setItem('token', token)
+        localStorage.setItem('user', JSON.stringify(userData))
+        setUser(userData)
+      } else {
+        throw new Error(response.error || 'Login failed')
+      }
+    } catch (error: any) {
+      console.error('Login error:', error)
+      throw new Error(error.response?.data?.error || 'Неверный email или пароль')
     }
   }
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem('lptt_user')
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, loading }}>
       {children}
     </AuthContext.Provider>
   )
