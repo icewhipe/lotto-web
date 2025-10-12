@@ -167,7 +167,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-4 relative z-20"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.3 }}
+              transition={{ delay: 0.8, duration: 0.3 }}
             >
               <motion.a 
                 href="#admissions" 
