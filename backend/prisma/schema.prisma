@@ -28,6 +28,12 @@ model User {
   applicant Applicant?
   rfidCard  RFIDCard?
   
+  // Registration relations
+  inviteCodesCreated  InviteCode[]  @relation("InviteCodeCreator")
+  inviteCodeUsed      InviteCode?   @relation("InviteCodeUsedBy")
+  registrationReviewed RegistrationRequest[] @relation("RegistrationReviewer")
+  registrationRequest  RegistrationRequest?  @relation("RegistrationToUser")
+  
   @@index([email])
   @@index([role])
   @@map("users")
