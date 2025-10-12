@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import LoadingSpinner from './components/LoadingSpinner'
 import LoginPage from './components/LoginPage'
+import RegisterPage from './components/RegisterPage'
 import Dashboard from './components/Dashboard'
 import PageLoader from './components/PageLoader'
 
