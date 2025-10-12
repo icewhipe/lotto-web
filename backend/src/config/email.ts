@@ -1,24 +1,37 @@
 import nodemailer from 'nodemailer';
+import type { Transporter } from 'nodemailer';
 
-// Create transporter
-const transporter = nodemailer.createTransporter({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+// Create transporter (optional - система работает без email)
+let transporter: Transporter | null = null;
 
-// Verify connection
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('❌ Email configuration error:', error);
+try {
+  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    transporter = nodemailer.createTransporter({
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+    
+    // Verify connection
+    transporter.verify((error, success) => {
+      if (error) {
+        console.warn('⚠️  Email configuration error (optional):', error.message);
+        transporter = null;
+      } else {
+        console.log('✅ Email server is ready');
+      }
+    });
   } else {
-    console.log('✅ Email server is ready');
+    console.warn('⚠️  Email not configured (optional, система работает без него)');
   }
-});
+} catch (error) {
+  console.warn('⚠️  Email module error (optional):', error);
+  transporter = null;
+}
 
 /**
  * Отправить email
