@@ -125,10 +125,25 @@ export default function LoginPage({ onBack }: LoginPageProps) {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm flex items-center gap-2 border border-red-200 dark:border-red-800">
-                <AlertCircle className="w-4 h-4" />
-                {error}
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="p-4 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 border-2 border-red-300 dark:border-red-700 rounded-2xl shadow-lg"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-red-500 rounded-full flex-shrink-0">
+                    <XCircle className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-red-900 dark:text-red-100 mb-1">Ошибка входа</h4>
+                    <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+                    <p className="text-xs text-red-600 dark:text-red-400 mt-2">
+                      💡 Проверьте правильность email и пароля
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
             )}
 
             <div>
