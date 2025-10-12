@@ -40,14 +40,7 @@ export default function Dashboard() {
         case 'chat':
           return <StudentChat />
         case 'documents':
-          return (
-            <div className="glass-effect rounded-2xl p-8 text-center">
-              <h2 className="text-2xl font-black mb-4">Документы</h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Раздел в разработке
-              </p>
-            </div>
-          )
+          return <InDevelopment title="Документы в разработке" description="Здесь будут доступны ваши документы: справки, зачётная книжка, расписание сессии." />
         default:
           return <StudentDashboard />
       }
