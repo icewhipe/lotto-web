@@ -10,7 +10,7 @@ const mockNotes = [
 
 export default function NotesExchange() {
   return (
-    <div className="space-y-6 relative">
+    <div className="relative space-y-6">
       {/* Mock Content (Blurred) */}
       <div className="opacity-60 pointer-events-none">
         <div className="glass-effect rounded-2xl p-6 mb-6">

@@ -13,7 +13,7 @@ export default function StudentChat() {
   const [message, setMessage] = useState('')
 
   return (
-    <div className="space-y-6 relative h-[600px]">
+    <div className="relative h-[600px]">
       {/* Mock Content (Blurred) */}
       <div className="opacity-60 pointer-events-none h-full flex flex-col">
         <div className="glass-effect rounded-t-2xl p-4 border-b border-gray-200 dark:border-gray-700">

@@ -17,7 +17,7 @@ export default function InDevelopmentOverlay({
       className="absolute inset-0 z-50 flex items-center justify-center"
     >
       {/* Beautiful Blur Background */}
-      <div className="absolute inset-0 backdrop-blur-xl bg-gradient-to-br from-white/95 via-violet-50/90 to-purple-50/95 dark:from-gray-900/95 dark:via-violet-950/90 dark:to-purple-950/95" />
+      <div className="absolute inset-0 backdrop-blur-2xl bg-white/80 dark:bg-gray-900/80" />
       
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}

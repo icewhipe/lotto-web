@@ -13,7 +13,7 @@ const mockAttendance = [
 
 export default function AttendanceView() {
   return (
-    <div className="space-y-6 relative">
+    <div className="relative space-y-6">
       {/* Mock Content (Blurred) */}
       <div className="opacity-60 pointer-events-none">
         {/* Stats */}
