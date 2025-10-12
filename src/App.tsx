@@ -82,7 +82,6 @@ function App() {
           isDark={isDark} 
           toggleTheme={toggleTheme} 
           onLoginClick={() => setShowLogin(true)}
-          onRegisterClick={() => setShowRegister(true)}
         />
         
         {/* Background Effects */}
