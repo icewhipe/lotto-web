@@ -11,6 +11,7 @@ import StudentChat from './student/StudentChat'
 import TeacherDashboard from './dashboard/TeacherDashboard'
 import DirectorDashboard from './dashboard/DirectorDashboard'
 import AdminPanel from './admin/AdminPanel'
+import InDevelopment from './InDevelopment'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('dashboard')
