@@ -139,6 +139,8 @@ model Group {
   students  Student[]
   schedules Schedule[]
   chatRoom  ChatRoom?
+  inviteCodes InviteCode[]
+  registrationRequests RegistrationRequest[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
