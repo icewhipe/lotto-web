@@ -165,7 +165,17 @@ export default function Hero() {
               ))}
             </motion.div>
 
-            {/* Action Buttons - AFTER Stats */}
+            <motion.p
+              className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed relative z-20"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.3 }}
+            >
+              Современное профессиональное образование в сфере промышленности и транспорта.
+              Качественная подготовка специалистов с 1958 года.
+            </motion.p>
+
+            {/* Action Buttons - LAST */}
             <motion.div
               className="flex flex-col sm:flex-row gap-4 relative z-20"
               initial={{ opacity: 0, y: 20 }}
