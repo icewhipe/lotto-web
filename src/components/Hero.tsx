@@ -117,9 +117,9 @@ export default function Hero() {
               Качественная подготовка специалистов с 1958 года.
             </motion.p>
 
-            {/* Enhanced Stats - BEFORE Buttons! */}
+            {/* Enhanced Stats - Compact Grid Layout */}
             <motion.div
-              className="flex flex-wrap gap-6 relative z-20"
+              className="grid grid-cols-3 gap-3 relative z-20 max-w-2xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.3 }}
@@ -129,25 +129,25 @@ export default function Hero() {
                   key={stat.label}
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
                   className="group relative"
                 >
-                  <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl p-5 border-3 border-violet-400/70 dark:border-violet-600/70 hover:border-violet-500 dark:hover:border-violet-500 transition-all shadow-2xl hover:shadow-violet-500/30 hover:scale-105 duration-300">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg">
-                        <stat.icon className="w-7 h-7 text-white" />
+                  <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl p-4 border-2 border-violet-400/70 dark:border-violet-600/70 hover:border-violet-500 dark:hover:border-violet-500 transition-all shadow-xl hover:shadow-violet-500/30 hover:scale-105 duration-300">
+                    <div className="flex flex-col items-center text-center gap-2">
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg">
+                        <stat.icon className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <div className="text-4xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                        <div className="text-2xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
                           {stat.number}
                         </div>
-                        <div className="text-sm font-semibold" style={{ color: '#475569' }}>{stat.label}</div>
+                        <div className="text-xs font-semibold mt-0.5" style={{ color: '#475569' }}>{stat.label}</div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Glow effect */}
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
                 </motion.div>
               ))}
             </motion.div>
