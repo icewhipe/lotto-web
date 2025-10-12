@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast'
 
 interface LoginPageProps {
   onBack?: () => void
+  onRegisterClick?: () => void
 }
 
 export default function LoginPage({ onBack, onRegisterClick }: LoginPageProps) {
