@@ -21,9 +21,21 @@ export default function LoginPage({ onBack }: LoginPageProps) {
 
     try {
       await login(email, password)
+      // Успешный вход
+      toast.success('Вход выполнен успешно! 🎉', {
+        duration: 2000,
+        icon: '✅',
+      })
     } catch (err) {
-      setError((err as Error).message)
-    } finally {
+      const errorMessage = (err as Error).message
+      setError(errorMessage)
+      
+      // Toast уведомление
+      toast.error(errorMessage || 'Ошибка входа', {
+        duration: 4000,
+        icon: '❌',
+      })
+      
       setLoading(false)
     }
   }
