@@ -12,28 +12,28 @@ datasource db {
 // ============= ПОЛЬЗОВАТЕЛИ =============
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String
-  role      UserRole
-  isActive  Boolean  @default(true)
-  
+  id       String   @id @default(uuid())
+  email    String   @unique
+  password String
+  name     String
+  role     UserRole
+  isActive Boolean  @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   student   Student?
   teacher   Teacher?
   parent    Parent?
   applicant Applicant?
   rfidCard  RFIDCard?
-  
+
   // Registration relations
-  inviteCodesCreated  InviteCode[]  @relation("InviteCodeCreator")
-  inviteCodeUsed      InviteCode?   @relation("InviteCodeUsedBy")
+  inviteCodesCreated   InviteCode[]          @relation("InviteCodeCreator")
+  inviteCodeUsed       InviteCode?           @relation("InviteCodeUsedBy")
   registrationReviewed RegistrationRequest[] @relation("RegistrationReviewer")
   registrationRequest  RegistrationRequest?  @relation("RegistrationToUser")
-  
+
   @@index([email])
   @@index([role])
   @@map("users")
@@ -50,23 +50,23 @@ enum UserRole {
 // ============= СТУДЕНТЫ =============
 
 model Student {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  groupId   String
-  group     Group    @relation(fields: [groupId], references: [id])
-  
-  studentNumber String @unique
+  id      String @id @default(uuid())
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id])
+
+  studentNumber  String   @unique
   enrollmentDate DateTime
-  
-  grades    Grade[]
-  attendance Attendance[]
-  notes     Note[]
+
+  grades       Grade[]
+  attendance   Attendance[]
+  notes        Note[]
   chatMessages ChatMessage[]
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([groupId])
   @@index([studentNumber])
   @@map("students")
@@ -75,54 +75,54 @@ model Student {
 // ============= ПРЕПОДАВАТЕЛИ =============
 
 model Teacher {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  position  String
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  position   String
   department String
-  
+
   grades    Grade[]
   schedules Schedule[]
   subjects  Subject[]
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@map("teachers")
 }
 
 // ============= РОДИТЕЛИ =============
 
 model Parent {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   childrenIds String[]
-  phone     String?
-  
+  phone       String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@map("parents")
 }
 
 // ============= АБИТУРИЕНТЫ =============
 
 model Applicant {
-  id            String   @id @default(uuid())
-  userId        String   @unique
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   applicationStatus ApplicationStatus @default(PENDING)
   selectedProgram   String?
-  
-  documents     Document[]
-  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
+
+  documents Document[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("applicants")
 }
 
@@ -136,21 +136,21 @@ enum ApplicationStatus {
 // ============= ГРУППЫ =============
 
 model Group {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  year      Int
+  id          String    @id @default(uuid())
+  name        String    @unique
+  year        Int
   specialtyId String
-  specialty Specialty @relation(fields: [specialtyId], references: [id])
-  
-  students  Student[]
-  schedules Schedule[]
-  chatRoom  ChatRoom?
-  inviteCodes InviteCode[]
+  specialty   Specialty @relation(fields: [specialtyId], references: [id])
+
+  students             Student[]
+  schedules            Schedule[]
+  chatRoom             ChatRoom?
+  inviteCodes          InviteCode[]
   registrationRequests RegistrationRequest[]
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([specialtyId])
   @@map("groups")
 }
@@ -158,39 +158,40 @@ model Group {
 // ============= СПЕЦИАЛЬНОСТИ =============
 
 model Specialty {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  code        String   @unique
+  id          String @id @default(uuid())
+  name        String @unique
+  code        String @unique
   duration    String
   description String
-  
-  groups    Group[]
-  subjects  Subject[]
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
+
+  groups   Group[]
+  subjects Subject[]
+
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  RegistrationRequest RegistrationRequest[]
+
   @@map("specialties")
 }
 
 // ============= ПРЕДМЕТЫ =============
 
 model Subject {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
-  code        String   @unique
+  code        String    @unique
   specialtyId String
   specialty   Specialty @relation(fields: [specialtyId], references: [id])
   teacherId   String
-  teacher     Teacher  @relation(fields: [teacherId], references: [id])
-  
+  teacher     Teacher   @relation(fields: [teacherId], references: [id])
+
   grades    Grade[]
   schedules Schedule[]
   notes     Note[]
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([specialtyId])
   @@index([teacherId])
   @@map("subjects")
@@ -199,22 +200,22 @@ model Subject {
 // ============= ОЦЕНКИ =============
 
 model Grade {
-  id         String   @id @default(uuid())
-  studentId  String
-  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  subjectId  String
-  subject    Subject  @relation(fields: [subjectId], references: [id])
-  teacherId  String
-  teacher    Teacher  @relation(fields: [teacherId], references: [id])
-  
-  value      Int
-  type       GradeType
-  date       DateTime @default(now())
-  comment    String?
-  
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  
+  id        String  @id @default(uuid())
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  teacherId String
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  value   Int
+  type    GradeType
+  date    DateTime  @default(now())
+  comment String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([studentId])
   @@index([subjectId])
   @@index([date])
@@ -233,23 +234,23 @@ enum GradeType {
 // ============= РАСПИСАНИЕ =============
 
 model Schedule {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   groupId   String
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  group     Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
   subjectId String
-  subject   Subject  @relation(fields: [subjectId], references: [id])
+  subject   Subject @relation(fields: [subjectId], references: [id])
   teacherId String
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
-  
-  dayOfWeek Int      // 1-6 (Пн-Сб)
-  startTime String   // "09:00"
-  endTime   String   // "10:30"
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  dayOfWeek Int // 1-6 (Пн-Сб)
+  startTime String // "09:00"
+  endTime   String // "10:30"
   room      String
   type      LessonType
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([groupId])
   @@index([dayOfWeek])
   @@map("schedules")
@@ -265,17 +266,17 @@ enum LessonType {
 // ============= ПОСЕЩАЕМОСТЬ =============
 
 model Attendance {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   studentId String
-  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
-  date      DateTime
-  status    AttendanceStatus
-  reason    String?
-  
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  date   DateTime
+  status AttendanceStatus
+  reason String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([studentId])
   @@index([date])
   @@map("attendance")
@@ -291,26 +292,26 @@ enum AttendanceStatus {
 // ============= КОНСПЕКТЫ =============
 
 model Note {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
   title       String
   description String
   filePath    String
   fileSize    Int
-  
-  authorId    String
-  author      Student  @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  subjectId   String
-  subject     Subject  @relation(fields: [subjectId], references: [id])
-  
-  rating      Float    @default(0)
-  downloads   Int      @default(0)
-  views       Int      @default(0)
-  
-  isApproved  Boolean  @default(false)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+
+  authorId  String
+  author    Student @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id])
+
+  rating    Float @default(0)
+  downloads Int   @default(0)
+  views     Int   @default(0)
+
+  isApproved Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([authorId])
   @@index([subjectId])
   @@index([rating])
@@ -320,31 +321,31 @@ model Note {
 // ============= ЧАТ =============
 
 model ChatRoom {
-  id        String   @id @default(uuid())
-  groupId   String   @unique
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  
-  messages  ChatMessage[]
-  
+  id      String @id @default(uuid())
+  groupId String @unique
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  messages ChatMessage[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@map("chat_rooms")
 }
 
 model ChatMessage {
-  id        String   @id @default(uuid())
-  roomId    String
-  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  
-  senderId  String
-  sender    Student  @relation(fields: [senderId], references: [id], onDelete: Cascade)
-  
-  content   String
-  type      MessageType @default(TEXT)
-  
+  id     String   @id @default(uuid())
+  roomId String
+  room   ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  senderId String
+  sender   Student @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  content String
+  type    MessageType @default(TEXT)
+
   createdAt DateTime @default(now())
-  
+
   @@index([roomId])
   @@index([createdAt])
   @@map("chat_messages")
@@ -359,19 +360,19 @@ enum MessageType {
 // ============= ДОКУМЕНТЫ =============
 
 model Document {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   applicantId String
   applicant   Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  
-  type        DocumentType
-  fileName    String
-  filePath    String
-  fileSize    Int
-  status      DocumentStatus @default(PENDING)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+
+  type     DocumentType
+  fileName String
+  filePath String
+  fileSize Int
+  status   DocumentStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([applicantId])
   @@map("documents")
 }
@@ -394,20 +395,20 @@ enum DocumentStatus {
 // ============= RFID КАРТЫ =============
 
 model RFIDCard {
-  id          String   @id @default(uuid())
-  cardNumber  String   @unique
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  isActive    Boolean  @default(true)
-  issuedDate  DateTime @default(now())
-  expiryDate  DateTime?
-  
-  accessLogs  AccessLog[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  id         String @id @default(uuid())
+  cardNumber String @unique
+  userId     String @unique
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  isActive   Boolean   @default(true)
+  issuedDate DateTime  @default(now())
+  expiryDate DateTime?
+
+  accessLogs AccessLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([cardNumber])
   @@index([userId])
   @@map("rfid_cards")
@@ -416,20 +417,20 @@ model RFIDCard {
 // ============= ТУРНИКЕТЫ =============
 
 model Turnstile {
-  id          String   @id @default(uuid())
-  name        String
-  location    String
-  deviceId    String   @unique
-  ipAddress   String?
-  
-  isActive    Boolean  @default(true)
-  direction   TurnstileDirection
-  
-  accessLogs  AccessLog[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  id        String  @id @default(uuid())
+  name      String
+  location  String
+  deviceId  String  @unique
+  ipAddress String?
+
+  isActive  Boolean            @default(true)
+  direction TurnstileDirection
+
+  accessLogs AccessLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([deviceId])
   @@map("turnstiles")
 }
@@ -443,22 +444,22 @@ enum TurnstileDirection {
 // ============= ЛОГИ ДОСТУПА =============
 
 model AccessLog {
-  id           String   @id @default(uuid())
-  rfidCardId   String
-  rfidCard     RFIDCard @relation(fields: [rfidCardId], references: [id])
-  turnstileId  String
-  turnstile    Turnstile @relation(fields: [turnstileId], references: [id])
-  
-  timestamp    DateTime @default(now())
-  direction    AccessDirection
-  status       AccessStatus
-  reason       String?
-  
+  id          String    @id @default(uuid())
+  rfidCardId  String
+  rfidCard    RFIDCard  @relation(fields: [rfidCardId], references: [id])
+  turnstileId String
+  turnstile   Turnstile @relation(fields: [turnstileId], references: [id])
+
+  timestamp DateTime        @default(now())
+  direction AccessDirection
+  status    AccessStatus
+  reason    String?
+
   // Связь с посещаемостью
   attendanceId String?
-  
-  createdAt    DateTime @default(now())
-  
+
+  createdAt DateTime @default(now())
+
   @@index([rfidCardId])
   @@index([turnstileId])
   @@index([timestamp])
@@ -479,19 +480,19 @@ enum AccessStatus {
 // ============= СОБЫТИЯ (НОВОСТИ) =============
 
 model Event {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   title       String
-  description String   @db.Text
+  description String        @db.Text
   date        DateTime
   location    String?
   imageUrl    String?
   category    EventCategory @default(NEWS)
-  
-  isPublished Boolean  @default(false)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+
+  isPublished Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([date])
   @@index([category])
   @@map("events")
@@ -509,91 +510,91 @@ enum EventCategory {
 // ============= ГАЛЕРЕЯ =============
 
 model GalleryImage {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String?
   imageUrl    String
   albumId     String?
-  album       Album?   @relation(fields: [albumId], references: [id])
-  
-  views       Int      @default(0)
-  likes       Int      @default(0)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  album       Album?  @relation(fields: [albumId], references: [id])
+
+  views Int @default(0)
+  likes Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([albumId])
   @@map("gallery_images")
 }
 
 model Album {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String?
   coverImage  String?
-  
-  images      GalleryImage[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+
+  images GalleryImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("albums")
 }
 
 // ============= СИСТЕМА РЕГИСТРАЦИИ =============
 
 model InviteCode {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  groupId     String
-  group       Group    @relation(fields: [groupId], references: [id])
-  
-  usedBy      String?  @unique
-  usedByUser  User?    @relation("InviteCodeUsedBy", fields: [usedBy], references: [id])
-  usedAt      DateTime?
-  
-  expiresAt   DateTime
-  createdBy   String
-  creator     User     @relation("InviteCodeCreator", fields: [createdBy], references: [id])
-  createdAt   DateTime @default(now())
-  
-  isActive    Boolean  @default(true)
-  maxUses     Int      @default(1)
-  currentUses Int      @default(0)
-  
+  id      String @id @default(uuid())
+  code    String @unique
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id])
+
+  usedBy     String?   @unique
+  usedByUser User?     @relation("InviteCodeUsedBy", fields: [usedBy], references: [id])
+  usedAt     DateTime?
+
+  expiresAt DateTime
+  createdBy String
+  creator   User     @relation("InviteCodeCreator", fields: [createdBy], references: [id])
+  createdAt DateTime @default(now())
+
+  isActive    Boolean @default(true)
+  maxUses     Int     @default(1)
+  currentUses Int     @default(0)
+
   @@index([code])
   @@index([groupId])
   @@map("invite_codes")
 }
 
 model RegistrationRequest {
-  id          String   @id @default(uuid())
-  name        String
-  email       String   @unique
-  phone       String
-  birthDate   DateTime
-  password    String
-  
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String
+  birthDate DateTime
+  password  String
+
   specialtyId String
   specialty   Specialty @relation(fields: [specialtyId], references: [id])
   course      Int
-  
-  status      RegistrationStatus @default(PENDING)
-  
-  reviewedBy  String?
-  reviewer    User?    @relation("RegistrationReviewer", fields: [reviewedBy], references: [id])
-  reviewedAt  DateTime?
+
+  status RegistrationStatus @default(PENDING)
+
+  reviewedBy   String?
+  reviewer     User?     @relation("RegistrationReviewer", fields: [reviewedBy], references: [id])
+  reviewedAt   DateTime?
   rejectReason String?
-  
+
   assignedGroupId String?
   assignedGroup   Group?  @relation(fields: [assignedGroupId], references: [id])
-  
-  createdUserId String?  @unique
-  createdUser   User?    @relation("RegistrationToUser", fields: [createdUserId], references: [id])
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+
+  createdUserId String? @unique
+  createdUser   User?   @relation("RegistrationToUser", fields: [createdUserId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([status])
   @@index([email])
   @@map("registration_requests")

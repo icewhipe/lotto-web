@@ -68,9 +68,23 @@ function App() {
     return <Dashboard />
   }
 
+  // Show Register Page if register button clicked
+  if (showRegister) {
+    return <RegisterPage onBack={() => {
+      setShowRegister(false)
+      setShowLogin(true)
+    }} />
+  }
+
   // Show Login Page if login button clicked
   if (showLogin) {
-    return <LoginPage onBack={() => setShowLogin(false)} />
+    return <LoginPage 
+      onBack={() => setShowLogin(false)} 
+      onRegisterClick={() => {
+        setShowLogin(false)
+        setShowRegister(true)
+      }}
+    />
   }
 
   // Show main website
