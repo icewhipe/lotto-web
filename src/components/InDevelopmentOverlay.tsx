@@ -23,7 +23,7 @@ export default function InDevelopmentOverlay({
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-2xl w-full mx-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-violet-200 dark:border-violet-800 p-8"
+        className="relative max-w-2xl w-full mx-4 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border-3 border-violet-300 dark:border-violet-700 p-8 z-10"
       >
         {/* Animated Icon */}
         <motion.div
