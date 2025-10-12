@@ -56,7 +56,7 @@ export default function Hero() {
             className="space-y-6 relative z-30"
           >
             {/* Badges - Two Main Badges */}
-            <div className="flex flex-wrap items-center gap-3 relative z-20">
+            <div className="flex flex-wrap gap-3 relative z-20">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, x: -20 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -78,19 +78,6 @@ export default function Hero() {
                 <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
                   Аккредитация 2024
-                </span>
-              </motion.div>
-              
-              {/* Third badge - positioned to the right with margin */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, x: 20 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.4 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/15 via-green-500/15 to-emerald-500/15 border-2 border-emerald-400/40 dark:border-emerald-500/30 backdrop-blur-md shadow-lg sm:ml-auto"
-              >
-                <Rocket className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-sm font-bold bg-gradient-to-r from-emerald-600 to-green-600 dark:from-emerald-400 dark:to-green-400 bg-clip-text text-transparent">
-                  Топ-10 в регионе
                 </span>
               </motion.div>
             </div>
