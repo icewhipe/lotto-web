@@ -17,7 +17,6 @@ export default function Hero() {
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 500], [0, 150])
   const y2 = useTransform(scrollY, [0, 500], [0, -150])
-  const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">
@@ -46,7 +45,7 @@ export default function Hero() {
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03] bg-[size:32px_32px]" />
 
-      <motion.div className="container-custom relative z-10" style={{ opacity }}>
+      <div className="container-custom relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Hero Content */}
           <motion.div
