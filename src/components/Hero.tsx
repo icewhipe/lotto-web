@@ -116,9 +116,9 @@ export default function Hero() {
               Качественная подготовка специалистов с 1958 года.
             </motion.p>
 
-            {/* Enhanced Stats - Flex Layout with Spacing */}
+            {/* Enhanced Stats - Grid 3 Columns */}
             <motion.div
-              className="flex flex-wrap items-center gap-3 relative z-20"
+              className="grid grid-cols-3 gap-4 relative z-20 max-w-3xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.3 }}
@@ -129,7 +129,7 @@ export default function Hero() {
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
-                  className={`group relative ${index === 2 ? 'ml-4' : ''}`}
+                  className="group relative"
                 >
                   <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl p-4 border-2 border-violet-400/70 dark:border-violet-600/70 hover:border-violet-500 dark:hover:border-violet-500 transition-all shadow-xl hover:shadow-violet-500/30 hover:scale-105 duration-300">
                     <div className="flex flex-col items-center text-center gap-2">
