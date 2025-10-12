@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { LogIn, Mail, Lock, AlertCircle, ArrowLeft, Shield, Zap, Users } from 'lucide-react'
+import { LogIn, Mail, Lock, AlertCircle, ArrowLeft, Shield, Zap, Users, XCircle, CheckCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import toast, { Toaster } from 'react-hot-toast'
 
 interface LoginPageProps {
   onBack?: () => void
@@ -16,23 +17,37 @@ export default function LoginPage({ onBack }: LoginPageProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Сбрасываем ошибку и включаем loading
     setError('')
     setLoading(true)
+
+    // Используем setTimeout чтобы гарантировать что loading сбросится
+    const timeoutId = setTimeout(() => {
+      console.error('Login timeout - сбрасываем loading')
+      setLoading(false)
+      setError('Превышено время ожидания. Попробуйте ещё раз.')
+    }, 10000) // 10 секунд timeout
 
     try {
       await login(email, password)
       
-      // Успешный вход - показываем toast
+      // Успешный вход - очищаем timeout
+      clearTimeout(timeoutId)
+      
+      // Показываем toast
       toast.success('Вход выполнен успешно! 🎉', {
         duration: 2000,
         icon: '✅',
       })
       
       // НЕ делаем setLoading(false) - идёт редирект на dashboard
-      // AuthContext обновит user, App.tsx отрендерит Dashboard
       
     } catch (err) {
-      // ОШИБКА - остаёмся на странице входа
+      // ОШИБКА - очищаем timeout и останавливаем loading
+      clearTimeout(timeoutId)
+      setLoading(false)
+      
       const errorMessage = (err as Error).message
       setError(errorMessage)
       
@@ -42,8 +57,7 @@ export default function LoginPage({ onBack }: LoginPageProps) {
         icon: '❌',
       })
       
-      // Убираем loading, остаёмся на странице
-      setLoading(false)
+      console.error('Login failed:', errorMessage)
     }
   }
 
