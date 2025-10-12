@@ -150,4 +150,10 @@ export default function ScheduleView() {
       </div>
     </div>
   )
+  */
+}
+   </div>
+      </div>
+    </div>
+  )
 }
