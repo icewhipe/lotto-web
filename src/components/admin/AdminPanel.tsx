@@ -13,6 +13,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import AdminDashboard from './AdminDashboard'
 import NewsManager from './NewsManager'
 import GalleryManager from './GalleryManager'
+import InviteCodesManager from './InviteCodesManager'
 
 const menuItems = [
   { id: 'dashboard', name: 'Дэшборд', icon: LayoutDashboard },
