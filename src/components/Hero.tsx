@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight, GraduationCap, Briefcase, Award, Sparkles, Rocket } from 'lucide-react'
 
 const stats = [
@@ -14,9 +14,9 @@ const floatingCards = [
 ]
 
 export default function Hero() {
-  const { scrollY } = useScroll()
-  const y1 = useTransform(scrollY, [0, 500], [0, 150])
-  const y2 = useTransform(scrollY, [0, 500], [0, -150])
+  // const { scrollY } = useScroll()
+  // const y1 = useTransform(scrollY, [0, 500], [0, 150])
+  // const y2 = useTransform(scrollY, [0, 500], [0, -150])
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">

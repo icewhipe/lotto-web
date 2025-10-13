@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Send, MessageCircle } from 'lucide-react'
+import { Send } from 'lucide-react'
 
 export default function StudentChat() {
   const [message, setMessage] = useState('')

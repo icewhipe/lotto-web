@@ -120,7 +120,7 @@ export default function InviteCodesManager() {
 
   const printCodes = () => {
     const activeCodes = codes.filter(c => c.isActive && !c.usedBy)
-    const printContent = activeCodes.map(c => `${c.code} - ${c.group.name}`).join('\n')
+    // const printContent = activeCodes.map(c => `${c.code} - ${c.group.name}`).join('\n')
     
     const printWindow = window.open('', '_blank')
     if (printWindow) {
