@@ -32,6 +32,8 @@ export default function AdminPanel() {
     switch (activeTab) {
       case 'dashboard':
         return <AdminDashboard onActionClick={setActiveTab} />
+      case 'invite-codes':
+        return <InviteCodesManager />
       case 'news':
         return <NewsManager />
       case 'gallery':
