@@ -72,18 +72,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('token')
-      if (token) {
+      const savedUser = localStorage.getItem('user')
+      
+      if (token && savedUser) {
         try {
           // Проверяем токен через API
           const response = await authAPI.getMe()
           if (response.success && response.data) {
             setUser(response.data.user)
           }
-        } catch (error) {
-          // Токен невалиден
-          console.error('Auth check failed:', error)
-          localStorage.removeItem('token')
-          localStorage.removeItem('user')
+        } catch (error: any) {
+          console.warn('Backend недоступен при проверке авторизации, используем сохранённые данные')
+          
+          // Если backend недоступен - используем данные из localStorage
+          if (error.code === 'ERR_NETWORK' || error.message.includes('Network Error')) {
+            try {
+              const parsedUser = JSON.parse(savedUser)
+              setUser(parsedUser)
+              console.log('Восстановлен пользователь из localStorage:', parsedUser.email)
+            } catch (parseError) {
+              // Данные повреждены - чистим
+              console.error('Ошибка парсинга данных пользователя:', parseError)
+              localStorage.removeItem('token')
+              localStorage.removeItem('user')
+            }
+          } else {
+            // Другая ошибка (401, 403 и т.д.) - токен невалиден
+            console.error('Токен невалиден:', error)
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+          }
         }
       }
       setLoading(false)

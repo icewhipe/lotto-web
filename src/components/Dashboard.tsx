@@ -17,9 +17,19 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('dashboard')
   const { user } = useAuth()
 
-  if (!user) return null
+  // Debug logging
+  console.log('🔍 Dashboard render:', {
+    user: user ? { name: user.name, role: user.role, email: user.email } : null,
+    activeTab
+  })
+
+  if (!user) {
+    console.warn('⚠️ Dashboard: user is null, returning null')
+    return null
+  }
 
   const renderContent = () => {
+    console.log('🎨 Rendering content for:', { role: user.role, activeTab })
     // Common components for multiple roles
     if (activeTab === 'schedule') {
       return <ScheduleView />
@@ -27,12 +37,16 @@ export default function Dashboard() {
 
     // Student-specific views
     if (user.role === 'student' || user.role === 'parent') {
+      console.log('✅ User is student/parent, activeTab:', activeTab)
       switch (activeTab) {
         case 'dashboard':
+          console.log('📱 Rendering StudentDashboard')
           return <StudentDashboard />
         case 'grades':
+          console.log('📚 Rendering GradesView')
           return <GradesView />
         case 'attendance':
+          console.log('📅 Rendering AttendanceView')
           return <AttendanceView />
         case 'notes':
           return <NotesExchange />
