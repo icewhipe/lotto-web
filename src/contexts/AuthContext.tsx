@@ -23,6 +23,44 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+// Normalize backend role strings to frontend roles
+function normalizeRole(rawRole: string | undefined | null): UserRole {
+  if (!rawRole) return 'student'
+  const normalized = rawRole
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/^role[_-]?/, '')
+
+  switch (normalized) {
+    case 'student':
+    case 'студент':
+    case 'ученик':
+      return 'student'
+    case 'teacher':
+    case 'преподаватель':
+      return 'teacher'
+    case 'parent':
+    case 'guardian':
+    case 'родитель':
+      return 'parent'
+    case 'applicant':
+    case 'абитуриент':
+      return 'applicant'
+    case 'admin':
+    case 'administrator':
+    case 'администратор':
+      return 'admin'
+    default:
+      if (normalized.includes('student')) return 'student'
+      if (normalized.includes('teacher')) return 'teacher'
+      if (normalized.includes('parent') || normalized.includes('guardian')) return 'parent'
+      if (normalized.includes('applicant')) return 'applicant'
+      if (normalized.includes('admin')) return 'admin'
+      return 'student'
+  }
+}
+
 // REMOVED: Mock users - теперь используем реальный API
 const mockUsers: User[] = [
   {
@@ -77,7 +115,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Проверяем токен через API
           const response = await authAPI.getMe()
           if (response.success && response.data) {
-            setUser(response.data.user)
+            const apiUser = response.data.user
+            const normalizedRole = normalizeRole(apiUser.role)
+            setUser({ ...apiUser, role: normalizedRole })
           }
         } catch (error) {
           // Токен невалиден
@@ -99,11 +139,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (response.success && response.data) {
         const { token, user: userData } = response.data
+        const normalizedRole = normalizeRole(userData.role)
         
         // Сохраняем токен и пользователя
         localStorage.setItem('token', token)
-        localStorage.setItem('user', JSON.stringify(userData))
-        setUser(userData)
+        localStorage.setItem('user', JSON.stringify({ ...userData, role: normalizedRole }))
+        setUser({ ...userData, role: normalizedRole })
         
         return // Успешный вход
       } else {

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { LogIn, Mail, Lock, AlertCircle, ArrowLeft, Shield, Zap, Users, XCircle, CheckCircle } from 'lucide-react'
+import { LogIn, Mail, Lock, ArrowLeft, Shield, Zap, Users, XCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
-import toast, { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 
 interface LoginPageProps {
   onBack?: () => void

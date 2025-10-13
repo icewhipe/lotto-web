@@ -32,6 +32,7 @@ interface NavbarProps {
   isDark: boolean
   toggleTheme: () => void
   onLoginClick?: () => void
+  onRegisterClick?: () => void
 }
 
 export default function Navbar({ isDark, toggleTheme, onLoginClick, onRegisterClick }: NavbarProps) {

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { BookOpen, Calendar, TrendingUp, Award, Clock, AlertCircle, User, Mail, GraduationCap, Loader } from 'lucide-react'
+import { BookOpen, Calendar, TrendingUp, Award, Clock, AlertCircle, Loader } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useGrades } from '../../hooks/useGrades'
 import { useSchedule } from '../../hooks/useSchedule'

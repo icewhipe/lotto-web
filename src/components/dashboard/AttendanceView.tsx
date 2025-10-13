@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Calendar, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { CheckCircle, XCircle, Clock } from 'lucide-react'
 
 export default function AttendanceView() {
   const mockAttendance = [
