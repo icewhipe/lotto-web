@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
-import { BookOpen, Calendar, TrendingUp, Award, Clock, AlertCircle, User, Mail, Phone, GraduationCap } from 'lucide-react'
+import { BookOpen, Calendar, TrendingUp, Award, Clock, AlertCircle, User, Mail, GraduationCap, Loader } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useGrades } from '../../hooks/useGrades'
+import { useSchedule } from '../../hooks/useSchedule'
 
 const stats = [
   { label: 'Средний балл', value: '4.7', icon: TrendingUp, color: 'from-green-500 to-emerald-600' },
@@ -11,6 +13,14 @@ const stats = [
 
 export default function StudentDashboard() {
   const { user } = useAuth()
+  const { grades, loading: gradesLoading, average } = useGrades(user?.id)
+  const { schedule, loading: scheduleLoading } = useSchedule(user?.groupId, new Date().getDay())
+
+  // Берём последние 3 оценки
+  const recentGrades = grades.slice(0, 3)
+  
+  // Берём первые 3 урока на сегодня
+  const todayLessons = schedule.slice(0, 3)
 
   return (
     <div className="space-y-6">
@@ -27,7 +37,7 @@ export default function StudentDashboard() {
           <div>
             <h1 className="text-4xl font-black mb-2">Добро пожаловать, {user?.name?.split(' ')[0] || 'Студент'}! 👋</h1>
             <p className="text-white/90 text-lg">
-              {user?.groupId && `Группа: ${user.groupId}`} • Статистика за текущий семестр
+              {user?.groupId && `Группа: ${user.groupId}`} • Твой личный кабинет
             </p>
           </div>
         </div>
@@ -48,104 +58,106 @@ export default function StudentDashboard() {
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
             </div>
-            <p className="text-3xl font-black mb-1">{stat.value}</p>
+            <p className="text-3xl font-black mb-1">
+              {stat.label === 'Средний балл' && average ? average.toFixed(2) : stat.value}
+            </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
           </motion.div>
         ))}
       </div>
 
-      {/* Quick Info Cards */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Profile Card */}
+      {/* Content Grid */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Today's Schedule */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
           className="glass-effect rounded-2xl p-6"
         >
           <div className="flex items-center gap-3 mb-6">
-            <User className="w-6 h-6 text-violet-600 dark:text-violet-400" />
-            <h2 className="text-xl font-bold">Профиль</h2>
+            <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <h2 className="text-xl font-bold">Расписание на сегодня</h2>
           </div>
           
-          <div className="space-y-3">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-violet-50 dark:bg-violet-900/20">
-              <Mail className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Email</p>
-                <p className="font-semibold text-sm">{user?.email}</p>
-              </div>
+          {scheduleLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader className="w-8 h-8 animate-spin text-violet-600" />
             </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20">
-              <GraduationCap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Группа</p>
-                <p className="font-semibold text-sm">{user?.groupId || 'Не назначена'}</p>
-              </div>
+          ) : todayLessons.length > 0 ? (
+            <div className="space-y-3">
+              {todayLessons.map((lesson, index) => (
+                <div
+                  key={lesson.id || index}
+                  className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors"
+                >
+                  <div className="text-sm font-mono text-gray-500 min-w-[110px]">
+                    {lesson.startTime} - {lesson.endTime}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold">{lesson.subject.name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {lesson.teacher.user.name} • Каб. {lesson.room}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <p className="text-gray-500 text-center py-4">На сегодня занятий нет</p>
+          )}
         </motion.div>
 
-        {/* Today's Schedule Preview */}
+        {/* Recent Grades */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
           className="glass-effect rounded-2xl p-6"
         >
           <div className="flex items-center gap-3 mb-6">
-            <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-            <h2 className="text-xl font-bold">Сегодня</h2>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20">
-              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Следующее занятие</div>
-              <p className="font-bold">Математика</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">10:15 - 11:45 • Каб. 201</p>
-            </div>
-            <div className="text-center py-4 text-sm text-gray-500 dark:text-gray-400">
-              💡 Полное расписание в разделе "Расписание"
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Recent Grade */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="glass-effect rounded-2xl p-6"
-        >
-          <div className="flex items-center gap-3 mb-6">
             <BookOpen className="w-6 h-6 text-green-600 dark:text-green-400" />
-            <h2 className="text-xl font-bold">Последняя оценка</h2>
+            <h2 className="text-xl font-bold">Последние оценки</h2>
           </div>
           
-          <div className="p-4 rounded-xl bg-green-50 dark:bg-green-900/20">
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <p className="font-bold">Информатика</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Контрольная работа</p>
-              </div>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-3xl font-black shadow-lg">
-                5
-              </div>
+          {gradesLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader className="w-8 h-8 animate-spin text-violet-600" />
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">08.10.2025 • Петров А.С.</p>
-          </div>
-          
-          <div className="text-center py-3 text-sm text-gray-500 dark:text-gray-400">
-            💡 Все оценки в разделе "Оценки"
-          </div>
+          ) : recentGrades.length > 0 ? (
+            <div className="space-y-3">
+              {recentGrades.map((grade, index) => (
+                <div
+                  key={grade.id || index}
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors"
+                >
+                  <div className="flex-1">
+                    <p className="font-semibold">{grade.subject.name}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {grade.teacher.user.name} • {new Date(grade.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ${
+                    grade.value === 5 ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' :
+                    grade.value === 4 ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' :
+                    'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400'
+                  }`}>
+                    {grade.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-center py-4">Оценок пока нет</p>
+          )}
         </motion.div>
       </div>
 
-      {/* Development Notice */}
+      {/* Backend Status */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
+        transition={{ delay: 0.6 }}
         className="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-2xl p-6 border-2 border-violet-200 dark:border-violet-800"
       >
         <div className="flex items-center gap-4">
@@ -153,16 +165,14 @@ export default function StudentDashboard() {
             <Clock className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">
-            <h3 className="font-bold text-lg mb-1">Интеграция с backend в процессе</h3>
+            <h3 className="font-bold text-lg mb-1">
+              {grades.length > 0 ? '✅ Backend подключён!' : '⚠️ Демо-режим'}
+            </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Сейчас отображаются демо-данные. Backend API готов на 90%! Скоро подключим реальные оценки, расписание и посещаемость из базы данных.
+              {grades.length > 0 
+                ? 'Загружены реальные данные из базы данных PostgreSQL'
+                : 'Backend API готов на 95%! Сейчас показываются демо-данные.'}
             </p>
-          </div>
-          <div className="text-right">
-            <div className="text-3xl font-black bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
-              90%
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">готово</div>
           </div>
         </div>
       </motion.div>
