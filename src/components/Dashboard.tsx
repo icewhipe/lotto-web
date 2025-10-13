@@ -36,7 +36,8 @@ export default function Dashboard() {
     }
 
     // Student-specific views
-    if (user.role === 'student' || user.role === 'parent') {
+    const userRole = user.role.toLowerCase()
+    if (userRole === 'student' || userRole === 'parent') {
       console.log('✅ User is student/parent, activeTab:', activeTab)
       switch (activeTab) {
         case 'dashboard':
@@ -62,7 +63,7 @@ export default function Dashboard() {
     }
 
     // Teacher-specific views
-    if (user.role === 'teacher') {
+    if (userRole === 'teacher') {
       switch (activeTab) {
         case 'dashboard':
           return <TeacherDashboard />
@@ -99,7 +100,7 @@ export default function Dashboard() {
     }
 
     // Applicant-specific views
-    if (user.role === 'applicant') {
+    if (userRole === 'applicant') {
       return (
         <div className="space-y-6">
           <div>
@@ -118,7 +119,7 @@ export default function Dashboard() {
     }
 
     // Admin views
-    if (user.role === 'admin') {
+    if (userRole === 'admin') {
       return <AdminPanel />
     }
     
@@ -135,7 +136,7 @@ export default function Dashboard() {
   }
 
   // Admin gets full AdminPanel
-  if (user.role === 'admin') {
+  if (user.role.toLowerCase() === 'admin') {
     return renderContent()
   }
 

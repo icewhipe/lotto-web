@@ -66,7 +66,8 @@ export default function DashboardLayout({ children, activeTab, onTabChange }: Da
   
   if (!user) return null
 
-  const menu = menuItems[user.role] || menuItems.student
+  const userRole = user.role.toLowerCase() as keyof typeof menuItems
+  const menu = menuItems[userRole] || menuItems.student
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -98,11 +99,11 @@ export default function DashboardLayout({ children, activeTab, onTabChange }: Da
               <div className="text-right">
                 <p className="text-base font-bold text-gray-900 dark:text-white">{user.name}</p>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                  {user.role === 'student' && '👨‍🎓 Студент'}
-                  {user.role === 'teacher' && '👩‍🏫 Преподаватель'}
-                  {user.role === 'parent' && '👨‍👩‍👦 Родитель'}
-                  {user.role === 'applicant' && '🎓 Абитуриент'}
-                  {user.role === 'admin' && '⚙️ Администратор'}
+                  {userRole === 'student' && '👨‍🎓 Студент'}
+                  {userRole === 'teacher' && '👩‍🏫 Преподаватель'}
+                  {userRole === 'parent' && '👨‍👩‍👦 Родитель'}
+                  {userRole === 'applicant' && '🎓 Абитуриент'}
+                  {userRole === 'admin' && '⚙️ Администратор'}
                 </p>
                 {user.groupId && (
                   <p className="text-xs text-violet-600 dark:text-violet-400 font-semibold mt-0.5">
