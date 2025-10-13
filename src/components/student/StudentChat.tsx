@@ -2,28 +2,23 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Send, MessageCircle } from 'lucide-react'
 
-const mockMessages = [
-  { id: 1, user: 'Иван Петров', message: 'Привет! Кто знает когда экзамен?', time: '10:30', isOwn: false },
-  { id: 2, user: 'Вы', message: 'Кажется в понедельник', time: '10:32', isOwn: true },
-  { id: 3, user: 'Мария Смирнова', message: 'Точно! 15 числа', time: '10:35', isOwn: false },
-]
-
 export default function StudentChat() {
   const [message, setMessage] = useState('')
+  
+  const mockMessages = [
+    { id: 1, user: 'Иван Петров', message: 'Привет! Кто знает когда экзамен?', time: '10:30', isOwn: false },
+    { id: 2, user: 'Вы', message: 'Кажется в понедельник', time: '10:32', isOwn: true },
+    { id: 3, user: 'Мария Смирнова', message: 'Точно! 15 числа', time: '10:35', isOwn: false },
+  ]
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-black mb-2">Чат группы 💬</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Демо-данные • WebSocket интеграция в процессе
-        </p>
+        <p className="text-gray-600 dark:text-gray-400">Демо-данные</p>
       </div>
 
-      {/* Chat Container */}
       <div className="glass-effect rounded-2xl overflow-hidden h-[500px] flex flex-col">
-        {/* Messages */}
         <div className="flex-1 p-6 space-y-4 overflow-y-auto">
           {mockMessages.map((msg) => (
             <div key={msg.id} className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}>
@@ -40,7 +35,6 @@ export default function StudentChat() {
           ))}
         </div>
 
-        {/* Input */}
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex gap-2">
             <input
@@ -48,15 +42,15 @@ export default function StudentChat() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Написать сообщение..."
-              className="flex-1 px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-none focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="flex-1 px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800"
               disabled
             />
-            <button className="px-6 py-3 bg-violet-600 text-white rounded-xl font-semibold flex items-center gap-2 disabled:opacity-50" disabled>
+            <button className="px-6 py-3 bg-violet-600 text-white rounded-xl font-semibold flex items-center gap-2" disabled>
               <Send className="w-5 h-5" />
             </button>
           </div>
           <p className="text-xs text-gray-500 mt-2 text-center">
-            💡 Демо-режим • WebSocket в разработке
+            💡 Демо-режим
           </p>
         </div>
       </div>
