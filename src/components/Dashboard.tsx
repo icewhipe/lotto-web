@@ -40,10 +40,10 @@ export default function Dashboard() {
     const userRole = user.role.toLowerCase()
     if (userRole === 'student' || userRole === 'parent') {
       console.log('✅ User is student/parent, activeTab:', activeTab)
-      switch (activeTab) {
-        case 'dashboard':
-          console.log('📱 Rendering StudentDashboard')
-          return <StudentDashboard />
+              switch (activeTab) {
+                case 'dashboard':
+                  console.log('📱 Rendering StudentDashboard')
+                  return <StudentDashboard onTabChange={setActiveTab} />
         case 'grades':
           console.log('📚 Rendering GradesView')
           return <GradesView />

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  BookOpen, Calendar, TrendingUp, Award, Clock, AlertCircle, Loader,
+import {
+  BookOpen, Calendar, TrendingUp, Award, Clock, Loader,
   User, Edit2, Target, Zap, Star, Bell, CheckCircle, ArrowRight,
-  BarChart3, PieChart, Activity
+  BarChart3, PieChart, Activity, Users
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useGrades } from '../../hooks/useGrades'
@@ -34,7 +34,11 @@ ChartJS.register(
   Filler
 )
 
-export default function StudentDashboard() {
+interface StudentDashboardProps {
+  onTabChange?: (tab: string) => void
+}
+
+export default function StudentDashboard({ onTabChange }: StudentDashboardProps) {
   const { user } = useAuth()
   const { grades, loading: gradesLoading, average } = useGrades(user?.id)
   const { schedule, loading: scheduleLoading } = useSchedule(user?.groupId, new Date().getDay())
@@ -441,24 +445,36 @@ export default function StudentDashboard() {
             </h3>
             
             <div className="grid grid-cols-2 gap-3">
-              <button className="p-4 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 text-white hover:shadow-lg hover:scale-105 transition-all">
+              <button 
+                onClick={() => onTabChange?.('grades')}
+                className="flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 text-white hover:shadow-lg hover:scale-105 transition-all"
+              >
                 <BookOpen className="w-6 h-6 mb-2" />
                 <span className="text-sm font-semibold">Оценки</span>
               </button>
               
-              <button className="p-4 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 text-white hover:shadow-lg hover:scale-105 transition-all">
+              <button 
+                onClick={() => onTabChange?.('schedule')}
+                className="flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 text-white hover:shadow-lg hover:scale-105 transition-all"
+              >
                 <Calendar className="w-6 h-6 mb-2" />
                 <span className="text-sm font-semibold">Расписание</span>
               </button>
               
-              <button className="p-4 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 text-white hover:shadow-lg hover:scale-105 transition-all">
-                <Target className="w-6 h-6 mb-2" />
-                <span className="text-sm font-semibold">Прогресс</span>
+              <button 
+                onClick={() => onTabChange?.('attendance')}
+                className="flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 text-white hover:shadow-lg hover:scale-105 transition-all"
+              >
+                <Users className="w-6 h-6 mb-2" />
+                <span className="text-sm font-semibold">Посещаемость</span>
               </button>
               
-              <button className="p-4 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 text-white hover:shadow-lg hover:scale-105 transition-all">
-                <AlertCircle className="w-6 h-6 mb-2" />
-                <span className="text-sm font-semibold">Задолжности</span>
+              <button 
+                onClick={() => onTabChange?.('progress')}
+                className="flex flex-col items-center justify-center p-4 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 text-white hover:shadow-lg hover:scale-105 transition-all"
+              >
+                <Target className="w-6 h-6 mb-2" />
+                <span className="text-sm font-semibold">Прогресс</span>
               </button>
             </div>
           </motion.div>
