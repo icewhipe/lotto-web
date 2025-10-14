@@ -14,6 +14,7 @@ import AdminDashboard from './AdminDashboard'
 import NewsManager from './NewsManager'
 import GalleryManager from './GalleryManager'
 import InviteCodesManager from './InviteCodesManager'
+import UsersManager from './UsersManager'
 
 const menuItems = [
   { id: 'dashboard', name: 'Дэшборд', icon: LayoutDashboard },
@@ -47,13 +48,7 @@ export default function AdminPanel() {
           </div>
         )
       case 'users':
-        return (
-          <div className="glass-effect rounded-2xl p-8 text-center">
-            <Users className="w-16 h-16 mx-auto mb-4 text-emerald-600 dark:text-emerald-400" />
-            <h2 className="text-2xl font-black mb-2">Пользователи</h2>
-            <p className="text-gray-600 dark:text-gray-400">В разработке</p>
-          </div>
-        )
+        return <UsersManager />
       case 'settings':
         return (
           <div className="glass-effect rounded-2xl p-8 text-center">

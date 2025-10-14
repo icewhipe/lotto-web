@@ -112,6 +112,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
+      // ✅ СНАЧАЛА проверяем локальные credentials (созданные через админ панель)
+      const localCredentials = JSON.parse(localStorage.getItem('user_credentials') || '{}')
+      
+      if (localCredentials[email] && localCredentials[email].password === password) {
+        const localUser = localCredentials[email].user
+        const mockToken = 'local_token_' + Date.now()
+        localStorage.setItem('token', mockToken)
+        localStorage.setItem('user', JSON.stringify(localUser))
+        setUser(localUser)
+        console.log('✅ Вход через локальные credentials:', localUser)
+        return // Успешный вход
+      }
+
       // Пытаемся реальный API call к backend
       const response = await authAPI.login(email, password)
       
