@@ -1,156 +1,142 @@
-# 📑 Индекс документации
+# 📚 Документация ЛПТТ - Электронный Техникум
 
-Полный список всей документации проекта.
-
----
-
-## 📚 Основная документация
-
-### 🏠 Корень проекта
-- [README.md](../README.md) — Главная страница проекта
-- [CHANGELOG.md](../CHANGELOG.md) — История изменений
-- [CONTRIBUTING.md](../CONTRIBUTING.md) — Руководство для контрибьюторов
-- [LICENSE](../LICENSE) — Лицензия MIT
+Полная документация проекта.
 
 ---
 
-## 🌐 Web приложение
+## 🎯 Для пользователей
 
-### Общее
-- [Quick Start](./web/QUICK_START.md) — Быстрый старт за 5 минут
+### Руководства по ролям:
 
-### Разработка (Planned)
-- [ ] Design System — Цвета, типографика, spacing
-- [ ] Components — Библиотека UI компонентов
-- [ ] Animations — Framer Motion и CSS анимации
-- [ ] Themes — Темная/светлая темы
-- [ ] Routing — React Router навигация
-- [ ] State Management — Context API
-- [ ] API Integration — Подключение к backend
+- 👨‍🎓 [Руководство для студента](guides/STUDENT_GUIDE.md)
+  - Просмотр оценок, посещаемости, расписания
+  - Статистика и аналитика
+  - Часто задаваемые вопросы
 
----
+- 👨‍🏫 [Руководство для преподавателя](guides/TEACHER_GUIDE.md)
+  - Выставление оценок
+  - Отметка посещаемости
+  - Работа с группами
+  - Расписание
 
-## 📱 iOS приложение
+- 👨‍👩‍👧 [Руководство для родителя](guides/PARENT_GUIDE.md)
+  - Контроль успеваемости детей
+  - Просмотр посещаемости
+  - Расписание ребёнка
+  - Уведомления
 
-### Начало работы
-- [Setup](./ios/SETUP.md) — Установка и настройка Xcode
-- [Architecture](./ios/ARCHITECTURE.md) — MVVM архитектура
+- 👨‍💼 [Руководство для администратора](guides/ADMIN_GUIDE.md)
+  - Управление пользователями
+  - Создание групп и предметов
+  - Генерация инвайт-кодов
+  - Статистика системы
 
-### Разработка
-- [Optimization](./ios/OPTIMIZATION.md) — Performance оптимизации
-- [Troubleshooting](./ios/TROUBLESHOOTING.md) — Решение проблем
+- 👔 [Руководство для директора](guides/DIRECTOR_GUIDE.md)
+  - Общая аналитика техникума
+  - Отчёты по успеваемости
+  - Рейтинги групп
+  - Управленческие решения
 
-### Planned
-- [ ] Components — UI библиотека
-- [ ] Animations — SwiftUI анимации
-- [ ] Networking — API integration
-- [ ] State Management — Combine framework
-- [ ] Testing — Unit и UI тесты
-- [ ] Deployment — App Store submission
-
----
-
-## 🔧 Backend
-
-### API
-- [Database Schema](./backend/DATABASE.md) — Prisma схема БД
-
-### Planned
-- [ ] API Reference — Все endpoints
-- [ ] Authentication — JWT, sessions
-- [ ] WebSockets — Real-time
-- [ ] File Upload — Multer, storage
-- [ ] Email — Nodemailer
-- [ ] Caching — Redis
-- [ ] Testing — Jest, Supertest
+- 📋 [Руководство для завуча](guides/ZAVUCH_GUIDE.md)
+  - Контроль учебного процесса
+  - Управление расписанием
+  - Мониторинг преподавателей
+  - Организация сессии
 
 ---
 
-## 📋 Руководства
+## 🛠️ Для разработчиков
 
-### Начало работы
-- [Quick Start](./guides/QUICK_START.md) — Запуск всех платформ
+### Установка и настройка:
 
-### Planned
-- [ ] Installation — Детальная установка
-- [ ] Configuration — Настройка окружения
-- [ ] Development — Процесс разработки
-- [ ] Testing — Тестирование
-- [ ] Deployment — Деплой
-- [ ] Monitoring — Мониторинг production
+- 🚀 [Быстрый старт](setup/ЗАПУСК_ВСЕГО_ПРОЕКТА.md)
+  - Установка зависимостей
+  - Настройка базы данных
+  - Запуск backend и frontend
+  - Тестовые аккаунты
 
----
+- 🔧 [Решение проблем](setup/TROUBLESHOOTING.md)
+  - Типичные ошибки
+  - Способы решения
+  - Отладка
+  - Получение помощи
 
-## 📦 Архив
+- 🐛 [Исправление esbuild](setup/ИСПРАВЛЕНИЕ_ESBUILD.md)
+  - Проблема с версиями
+  - Полная переустановка
 
-Старые версии документации:
-- [Архив](./archive/) — Исторические документы
-
----
-
-## 🔍 Поиск документации
-
-### По теме
-
-| Тема | Документ |
-|------|----------|
-| **Первый запуск** | [Quick Start](./guides/QUICK_START.md) |
-| **Web разработка** | [Web Quick Start](./web/QUICK_START.md) |
-| **iOS разработка** | [iOS Setup](./ios/SETUP.md) |
-| **Backend разработка** | [Database](./backend/DATABASE.md) |
-| **Проблемы iOS** | [Troubleshooting](./ios/TROUBLESHOOTING.md) |
-| **Производительность** | [Optimization](./ios/OPTIMIZATION.md) |
-| **Архитектура** | [Architecture](./ios/ARCHITECTURE.md) |
-| **История изменений** | [Changelog](../CHANGELOG.md) |
-| **Как помочь** | [Contributing](../CONTRIBUTING.md) |
+- 📦 [Проблема с node_modules](setup/РЕШЕНИЕ_NODE_MODULES.md)
+  - Git конфликты
+  - Правильная работа с зависимостями
 
 ---
 
-## 📊 Статистика
+### API Документация:
 
-- **Файлов документации:** 15+
-- **Примеров кода:** 100+
-- **Диаграмм:** 10+
-- **Скриншотов:** Planned
+- 🔌 [Backend API (полная)](api/BACKEND_API_COMPLETE.md)
+  - Все endpoints
+  - Примеры запросов
+  - Структура ответов
 
----
+- 📡 [API для тестирования](api/BACKEND_ГОТОВ_ТЕСТИРУЙ.md)
+  - Как тестировать через curl
+  - Примеры с Postman
+  - Проверка работоспособности
 
-## 💡 Как использовать
-
-### Новичок?
-1. Начните с [README.md](../README.md)
-2. Выберите платформу
-3. Следуйте Quick Start guide
-
-### Разработчик?
-1. Изучите Architecture
-2. Прочитайте Contributing
-3. Начните кодить!
-
-### Проблемы?
-1. Проверьте Troubleshooting
-2. Поищите в Issues
-3. Спросите в Telegram
+- 🎯 [Интеграция завершена](api/BACKEND_INTEGRATION_COMPLETE.md)
+  - Финальный отчёт
+  - Что готово
+  - Следующие шаги
 
 ---
 
-## 🔗 Внешние ресурсы
+### Архитектура:
 
-### React/TypeScript
-- [React Docs](https://react.dev/)
-- [TypeScript Docs](https://www.typescriptlang.org/docs/)
-- [Vite Guide](https://vitejs.dev/guide/)
-
-### iOS/Swift
-- [SwiftUI Tutorials](https://developer.apple.com/tutorials/swiftui)
-- [Swift Docs](https://docs.swift.org/)
-- [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
-
-### Backend
-- [Express.js](https://expressjs.com/)
-- [Prisma Docs](https://www.prisma.io/docs/)
-- [PostgreSQL Docs](https://www.postgresql.org/docs/)
+- 🏗️ [Архитектура проекта](ARCHITECTURE.md)
+  - Структура приложения
+  - Технологический стек
+  - Паттерны и подходы
 
 ---
 
-[← Назад к документации](./README.md)
+## 📖 Общая информация
+
+- 📄 [README](../README.md) - Главная страница проекта
+- 📝 [CHANGELOG](../CHANGELOG.md) - История изменений
+- 🤝 [CONTRIBUTING](../CONTRIBUTING.md) - Участие в разработке
+
+---
+
+## 🗂️ Архивные документы
+
+Старые инструкции и документы перенесены в [archive/](archive/)
+
+---
+
+## 🔍 Быстрый поиск
+
+### Хочу узнать как:
+
+**Пользователь:**
+- ❓ Как посмотреть оценки? → [Студент](guides/STUDENT_GUIDE.md#оценки)
+- ❓ Как выставить оценку? → [Преподаватель](guides/TEACHER_GUIDE.md#выставление-оценок)
+- ❓ Как создать пользователя? → [Админ](guides/ADMIN_GUIDE.md#управление-пользователями)
+- ❓ Как получить отчёт? → [Директор](guides/DIRECTOR_GUIDE.md#отчёты)
+
+**Разработчик:**
+- ❓ Как запустить проект? → [Быстрый старт](setup/ЗАПУСК_ВСЕГО_ПРОЕКТА.md)
+- ❓ Backend не запускается? → [Troubleshooting](setup/TROUBLESHOOTING.md)
+- ❓ Какие есть endpoints? → [API документация](api/BACKEND_API_COMPLETE.md)
+- ❓ Как работает аутентификация? → [Архитектура](ARCHITECTURE.md)
+
+---
+
+## 📞 Поддержка
+
+- 📧 **Email**: support@lptt.ru
+- 💻 **IT-отдел**: it@lptt.ru
+- 🐛 **GitHub Issues**: [Создать issue](https://github.com/icewhipe/lotto-web/issues)
+
+---
+
+**Документация обновлена: 14.10.2024**
