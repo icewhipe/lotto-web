@@ -1,12 +1,11 @@
-import nodemailer from 'nodemailer';
-import type { Transporter } from 'nodemailer';
+import nodemailer, { Transporter } from 'nodemailer';
 
 // Create transporter (optional - система работает без email)
 let transporter: Transporter | null = null;
 
 try {
   if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-    transporter = nodemailer.createTransporter({
+    transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: false,
@@ -17,7 +16,7 @@ try {
     });
     
     // Verify connection
-    transporter.verify((error, success) => {
+    transporter.verify((error: any, success: any) => {
       if (error) {
         console.warn('⚠️  Email configuration error (optional):', error.message);
         transporter = null;
@@ -43,6 +42,11 @@ export const sendEmail = async (options: {
   html?: string;
 }) => {
   try {
+    if (!transporter) {
+      console.warn('⚠️  Email transporter not available');
+      return { success: false, error: 'Email not configured' };
+    }
+
     const mailOptions = {
       from: `"ЛПТТ Дневник" <${process.env.SMTP_USER}>`,
       to: options.to,

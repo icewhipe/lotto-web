@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { AuthRequest } from '../middleware/authMiddleware';
 import prisma from '../config/database';
 import bcrypt from 'bcryptjs';
 import { sendEmail, sendWelcomeEmail } from '../config/email';
@@ -290,11 +291,11 @@ export const getRegistrationRequests = async (req: Request, res: Response) => {
 };
 
 // ============= УТВЕРДИТЬ ЗАЯВКУ (admin) =============
-export const approveRegistration = async (req: Request, res: Response) => {
+export const approveRegistration = async (req: AuthRequest, res: Response) => {
   try {
     const { requestId } = req.params;
     const { groupId } = req.body;
-    const adminId = req.user!.id;
+    const adminId = (req.user as any)?.id || req.user!.userId;
 
     if (!groupId) {
       return res.status(400).json({
@@ -401,11 +402,11 @@ export const approveRegistration = async (req: Request, res: Response) => {
 };
 
 // ============= ОТКЛОНИТЬ ЗАЯВКУ (admin) =============
-export const rejectRegistration = async (req: Request, res: Response) => {
+export const rejectRegistration = async (req: AuthRequest, res: Response) => {
   try {
     const { requestId } = req.params;
     const { reason } = req.body;
-    const adminId = req.user!.id;
+    const adminId = (req.user as any)?.id || req.user!.userId;
 
     const request = await prisma.registrationRequest.findUnique({
       where: { id: requestId },
@@ -464,10 +465,10 @@ export const rejectRegistration = async (req: Request, res: Response) => {
 };
 
 // ============= ГЕНЕРАЦИЯ КОДОВ ПРИГЛАШЕНИЯ (admin) =============
-export const generateInviteCodes = async (req: Request, res: Response) => {
+export const generateInviteCodes = async (req: AuthRequest, res: Response) => {
   try {
     const { groupId, count, expiresInDays } = req.body;
-    const adminId = req.user!.id;
+    const adminId = (req.user as any)?.id || req.user!.userId;
 
     if (!groupId || !count) {
       return res.status(400).json({

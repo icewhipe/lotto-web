@@ -32,8 +32,8 @@ const storage = multer.diskStorage({
 });
 
 // File filter for different types
-const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: FileFilterCallback) => {
-  const uploadType = req.body.uploadType;
+const fileFilter = (req: any, file: Express.Multer.File, cb: FileFilterCallback) => {
+  const uploadType = req.body?.uploadType;
 
   if (uploadType === 'images') {
     // Images only

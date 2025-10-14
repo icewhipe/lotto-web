@@ -20,6 +20,7 @@ import rfidRoutes from './routes/rfid.routes';
 import turnstileRoutes from './routes/turnstile.routes';
 import gradesRoutes from './routes/grades.routes';
 import scheduleRoutes from './routes/schedule.routes';
+import attendanceRoutes from './routes/attendance.routes';
 
 // Initialize express
 const app: Express = express();
@@ -62,6 +63,7 @@ app.use('/api/rfid', rfidRoutes);
 app.use('/api/turnstiles', turnstileRoutes);
 app.use('/api/grades', gradesRoutes);
 app.use('/api/schedule', scheduleRoutes);
+app.use('/api/attendance', attendanceRoutes);
 
 // Health check
 app.get('/api/health', (req: Request, res: Response) => {
@@ -84,6 +86,7 @@ app.get('/', (req: Request, res: Response) => {
       turnstiles: '/api/turnstiles',
       grades: '/api/grades',
       schedule: '/api/schedule',
+      attendance: '/api/attendance',
       health: '/api/health',
     },
   });
