@@ -119,25 +119,17 @@ export default function Dashboard() {
       )
     }
 
-    // Director views (highest priority)
+    // Director views (highest priority) - БЕЗ DashboardLayout, вернётся снаружи
     if (userRole === 'director' || user.email === 'director@lptt.ru') {
-      return (
-        <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
-          <DirectorDashboard />
-        </DashboardLayout>
-      )
+      return <DirectorDashboard />
     }
 
-    // Zavuch views
+    // Zavuch views - БЕЗ DashboardLayout, вернётся снаружи
     if (userRole === 'zavuch' || user.email === 'zavuch@lptt.ru') {
-      return (
-        <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
-          <ZavuchDashboard />
-        </DashboardLayout>
-      )
+      return <ZavuchDashboard />
     }
 
-    // Admin views
+    // Admin views - БЕЗ обёртки
     if (userRole === 'admin') {
       return <AdminPanel />
     }
@@ -150,7 +142,7 @@ export default function Dashboard() {
     return renderContent()
   }
 
-  // Director and Zavuch get DashboardLayout
+  // Director and Zavuch get DashboardLayout wrapper
   if (user.role.toLowerCase() === 'director' || user.email === 'director@lptt.ru' ||
       user.role.toLowerCase() === 'zavuch' || user.email === 'zavuch@lptt.ru') {
     return (
