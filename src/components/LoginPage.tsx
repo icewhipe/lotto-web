@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { LogIn, Mail, Lock, ArrowLeft, Shield, Zap, Users, XCircle } from 'lucide-react'
+import { LogIn, Mail, Lock, ArrowLeft, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import toast from 'react-hot-toast'
 
@@ -14,197 +14,206 @@ export default function LoginPage({ onBack, onRegisterClick }: LoginPageProps) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Сбрасываем ошибку и включаем loading
     setError('')
     setLoading(true)
 
-    // Используем setTimeout чтобы гарантировать что loading сбросится
     const timeoutId = setTimeout(() => {
-      console.error('Login timeout - сбрасываем loading')
       setLoading(false)
-      setError('Превышено время ожидания. Попробуйте ещё раз.')
-    }, 10000) // 10 секунд timeout
+      setError('Превышено время ожидания')
+    }, 10000)
 
     try {
       await login(email, password)
-      
-      // Успешный вход - очищаем timeout
       clearTimeout(timeoutId)
       
-      // Показываем toast
-      toast.success('Вход выполнен успешно! 🎉', {
+      toast.success('Вход выполнен! 🎉', {
         duration: 2000,
-        icon: '✅',
       })
       
-      // НЕ делаем setLoading(false) - идёт редирект на dashboard
-      
     } catch (err) {
-      // ОШИБКА - очищаем timeout и останавливаем loading
       clearTimeout(timeoutId)
       setLoading(false)
       
       const errorMessage = (err as Error).message
       setError(errorMessage)
       
-      // Toast уведомление
-      toast.error(errorMessage || 'Ошибка входа', {
-        duration: 4000,
-        icon: '❌',
-      })
-      
-      console.error('Login failed:', errorMessage)
+      toast.error(errorMessage || 'Ошибка входа')
     }
   }
 
-  const demoAccounts = [
-    { email: 'student@lptt.ru', role: 'Студент', icon: '👨‍🎓' },
-    { email: 'teacher@lptt.ru', role: 'Преподаватель', icon: '👩‍🏫' },
-    { email: 'parent@lptt.ru', role: 'Родитель', icon: '👨‍👩‍👦' },
-    { email: 'applicant@lptt.ru', role: 'Абитуриент', icon: '🎓' },
-    { email: 'admin@lptt.ru', role: 'Администратор', icon: '⚙️' },
-  ]
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-white dark:bg-gray-950">
-      {/* Simple Back Button */}
-      <button
+    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 via-violet-50/30 to-purple-50/30 dark:from-gray-950 dark:via-violet-950/20 dark:to-purple-950/20 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden opacity-30">
+        {[...Array(10)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-violet-500 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -15, 0],
+              opacity: [0.1, 0.3, 0.1],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Back Button */}
+      <motion.button
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
         onClick={onBack || (() => window.location.href = '/')}
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl border border-gray-200 dark:border-gray-700 hover:scale-105 transition-transform"
+        className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 glass-effect rounded-xl hover:scale-105 transition-transform"
       >
         <ArrowLeft className="w-5 h-5" />
         <span className="font-semibold">Назад</span>
-      </button>
+      </motion.button>
 
-      {/* Simple Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-violet-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      </div>
-
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
-        {/* Left Side - Info */}
-        <div className="text-center lg:text-left space-y-6">
-          <div>
-            <h1 className="text-6xl font-black mb-3">
-              <span className="bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
-                ЛПТТ
+      {/* Login Card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.1 }}
+        className="relative z-10 w-full max-w-md"
+      >
+        <div className="glass-effect rounded-3xl p-8 md:p-10 border border-white/20 shadow-2xl">
+          {/* Logo/Icon */}
+          <div className="text-center mb-8">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', duration: 0.8 }}
+              className="inline-block mb-6"
+            >
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 flex items-center justify-center shadow-xl">
+                <LogIn className="w-10 h-10 text-white" />
+              </div>
+            </motion.div>
+            
+            <h1 className="text-4xl font-black mb-2">
+              <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Вход
               </span>
             </h1>
-            <p className="text-xl font-bold text-gray-800 dark:text-gray-200">
-              Электронный дневник
-            </p>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Лискинский промышленно-транспортный техникум
+            <p className="text-gray-600 dark:text-gray-400">
+              Электронный дневник ЛПТТ
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-              Возможности системы
-            </h2>
-            <div className="space-y-3">
-              {[
-                { icon: Shield, title: 'Безопасность', desc: 'Защищенное хранение данных' },
-                { icon: Zap, title: 'Быстрый доступ', desc: 'Оценки и расписание 24/7' },
-                { icon: Users, title: 'Для всех', desc: 'Студенты, преподаватели, родители' },
-              ].map((feature) => (
-                <div
-                  key={feature.title}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm text-gray-900 dark:text-white">{feature.title}</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">{feature.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side - Login Form - SIMPLIFIED */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-              <LogIn className="w-8 h-8 text-white" />
-            </div>
-            <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-2">
-              Вход в систему
-            </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Введите свои данные
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Error Message */}
             {error && (
               <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="p-4 bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 border-2 border-red-300 dark:border-red-700 rounded-2xl shadow-lg"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-start gap-3"
               >
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-red-500 rounded-full flex-shrink-0">
-                    <XCircle className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-red-900 dark:text-red-100 mb-1">Ошибка входа</h4>
-                    <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
-                    <p className="text-xs text-red-600 dark:text-red-400 mt-2">
-                      💡 Проверьте правильность email и пароля
-                    </p>
-                  </div>
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-red-800 dark:text-red-200">{error}</p>
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                    Проверьте email и пароль
+                  </p>
                 </div>
               </motion.div>
             )}
 
+            {/* Email */}
             <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Email</label>
+              <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                Email
+              </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@lptt.ru"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500 text-gray-900 dark:text-white"
+                  className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 focus:border-violet-500 dark:focus:border-violet-500 outline-none transition-colors text-gray-900 dark:text-white placeholder-gray-400"
                   required
+                  disabled={loading}
                 />
               </div>
             </div>
 
+            {/* Password */}
             <div>
-              <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Пароль</label>
+              <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                Пароль
+              </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500 text-gray-900 dark:text-white"
+                  className="w-full pl-12 pr-12 py-3.5 rounded-xl bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 focus:border-violet-500 dark:focus:border-violet-500 outline-none transition-colors text-gray-900 dark:text-white placeholder-gray-400"
                   required
+                  disabled={loading}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-lg bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 text-white font-bold text-lg hover:shadow-xl hover:shadow-violet-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 relative overflow-hidden group"
             >
-              <LogIn className="w-5 h-5" />
-              {loading ? 'Вход...' : 'Войти'}
+              {loading ? (
+                <>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  >
+                    <LogIn className="w-5 h-5" />
+                  </motion.div>
+                  <span>Вход...</span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-5 h-5" />
+                  <span>Войти</span>
+                </>
+              )}
+              
+              {/* Shine effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                animate={{
+                  x: ['-100%', '200%'],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatDelay: 1,
+                }}
+              />
             </button>
           </form>
 
@@ -222,30 +231,8 @@ export default function LoginPage({ onBack, onRegisterClick }: LoginPageProps) {
               </p>
             </div>
           )}
-
-          {/* Demo Accounts - Simplified */}
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-center text-gray-600 dark:text-gray-400 mb-3">
-              Тестовые аккаунты (пароль: 123456)
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              {demoAccounts.map((account) => (
-                <button
-                  key={account.email}
-                  onClick={() => {
-                    setEmail(account.email)
-                    setPassword('123456')
-                  }}
-                  className="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 text-center"
-                >
-                  <span className="text-xl mb-1 block">{account.icon}</span>
-                  <p className="text-xs font-semibold text-gray-900 dark:text-white">{account.role}</p>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
