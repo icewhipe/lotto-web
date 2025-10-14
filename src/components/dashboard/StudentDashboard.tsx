@@ -223,44 +223,44 @@ export default function StudentDashboard() {
             </h3>
             
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-500 flex items-center justify-center">
+              <div className="stat-card bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300">Средний балл</span>
+                  <span className="font-semibold text-sm text-gray-700 dark:text-gray-300">Средний балл</span>
                 </div>
-                <span className="text-2xl font-black text-green-600">{avgGrade.toFixed(2)}</span>
+                <span className="text-3xl font-black text-green-600">{avgGrade.toFixed(2)}</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center">
+              <div className="stat-card bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 shadow-lg">
                     <BookOpen className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300">Всего оценок</span>
+                  <span className="font-semibold text-sm text-gray-700 dark:text-gray-300">Всего оценок</span>
                 </div>
-                <span className="text-2xl font-black text-blue-600">{totalGrades}</span>
+                <span className="text-3xl font-black text-blue-600">{totalGrades}</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-purple-500 flex items-center justify-center">
+              <div className="stat-card bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 shadow-lg">
                     <Award className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300">Отличных</span>
+                  <span className="font-semibold text-sm text-gray-700 dark:text-gray-300">Отличных</span>
                 </div>
-                <span className="text-2xl font-black text-purple-600">{fives}</span>
+                <span className="text-3xl font-black text-purple-600">{fives}</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center">
+              <div className="stat-card bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 shadow-lg">
                     <Calendar className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-semibold text-gray-700 dark:text-gray-300">Посещаемость</span>
+                  <span className="font-semibold text-sm text-gray-700 dark:text-gray-300">Посещаемость</span>
                 </div>
-                <span className="text-2xl font-black text-orange-600">95%</span>
+                <span className="text-3xl font-black text-orange-600">95%</span>
               </div>
             </div>
           </motion.div>

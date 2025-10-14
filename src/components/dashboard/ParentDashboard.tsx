@@ -159,13 +159,13 @@ export default function ParentDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 + index * 0.1 }}
-            className="glass-effect rounded-2xl p-6 hover:scale-105 transition-transform"
+            className="stat-card bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20"
           >
             <div className="flex items-center justify-between mb-4">
               <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} shadow-lg`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-lg">
+              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400 bg-white/50 dark:bg-gray-800/50 px-2 py-1 rounded-lg">
                 {stat.badge}
               </span>
             </div>

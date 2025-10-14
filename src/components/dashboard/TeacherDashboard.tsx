@@ -101,7 +101,7 @@ export default function TeacherDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="glass-effect rounded-2xl p-6 hover:scale-105 transition-transform cursor-pointer"
+            className="stat-card bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20"
           >
             <div className="flex items-center justify-between mb-4">
               <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} shadow-lg`}>
