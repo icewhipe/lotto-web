@@ -1,215 +1,160 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth theme transition - NO LAGS! */
-* {
-  transition: background-color 0.3s ease, 
-              border-color 0.3s ease, 
-              color 0.3s ease;
-}
-
-/* Exclude specific elements from transition to prevent lag */
-.no-theme-transition,
-.no-theme-transition * {
-  transition: none !important;
-}
-
-/* Улучшенная светлая тема v2 */
-:root {
-  /* Backgrounds */
-  --color-bg-base: #ffffff;
-  --color-bg-elevated: #f8fafc;
-  --color-bg-card: #ffffff;
-  --color-bg-hover: #f1f5f9;
-  --color-bg-accent: #f0f4ff;
-  
-  /* Text colors */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-tertiary: #64748b;
-  --color-text-muted: #94a3b8;
-  
-  /* Borders */
-  --color-border: #e2e8f0;
-  --color-border-hover: #cbd5e1;
-  --color-border-focus: #667eea;
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-  
-  /* Glass effect for light theme */
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(229, 231, 235, 0.8);
-}
-
-/* Dark theme overrides */
-.dark {
-  --color-bg-base: #0f172a;
-  --color-bg-elevated: #1e293b;
-  --color-bg-card: #1e293b;
-  --color-bg-hover: #334155;
-  --color-bg-accent: #1e1b4b;
-  
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-text-tertiary: #94a3b8;
-  --color-text-muted: #64748b;
-  
-  --color-border: #334155;
-  --color-border-hover: #475569;
-  --color-border-focus: #667eea;
-  
-  --glass-bg: rgba(30, 41, 59, 0.8);
-  --glass-border: rgba(51, 65, 85, 0.8);
-}
-
+/* Глобальные стили */
 @layer base {
+  body {
+    @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white;
+    @apply antialiased;
+    /* ЕДИНЫЙ ФОН - НЕ ПЕРЕЛИВАЕТСЯ ПРИ СКРОЛЛЕ */
+    @apply min-h-screen;
+  }
+
   html {
     @apply scroll-smooth;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  body {
-    @apply font-sans antialiased;
-    @apply bg-white dark:bg-gray-950;
-    color: #1e293b;
-    text-rendering: optimizeLegibility;
-  }
-  
-  .dark body {
-    color: #f1f5f9;
-  }
-  
-  /* NO TRANSITIONS - Instant theme switch for maximum performance */
-
-  ::selection {
-    @apply bg-gradient-to-r from-primary-500 to-purple-600 text-white;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold;
-    text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
   }
 }
 
+/* Кастомные компоненты */
 @layer components {
-  /* OPTIMIZED: Fixed colors, no transitions */
+  /* Glass Effect - унифицированный для всех карточек */
   .glass-effect {
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px) saturate(150%);
-    border: 1px solid rgba(229, 231, 235, 0.5);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-  }
-  
-  .dark .glass-effect {
-    background-color: rgba(17, 24, 39, 0.7);
-    border-color: rgba(75, 85, 99, 0.5);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.5);
+    @apply bg-white/70 dark:bg-gray-900/70;
+    @apply backdrop-blur-md;
+    @apply border border-gray-200/50 dark:border-gray-700/50;
+    @apply shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50;
   }
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary-500 to-purple-600;
-    @apply bg-clip-text text-transparent;
-  }
-
-  .btn-primary {
-    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full;
-    @apply bg-gradient-to-r from-primary-500 to-purple-600;
-    @apply text-white font-semibold;
-    @apply shadow-lg shadow-primary-500/40;
-    @apply hover:shadow-xl hover:shadow-primary-500/50;
-    @apply hover:-translate-y-0.5;
-    @apply transition-all duration-300;
-  }
-
-  .btn-secondary {
-    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full;
-    @apply glass-effect;
-    @apply text-gray-900 dark:text-gray-50 font-semibold;
-    @apply hover:-translate-y-0.5;
-    @apply transition-all duration-300;
-  }
-
-  .card-hover {
-    @apply transition-all duration-300;
-    @apply hover:-translate-y-2 hover:shadow-2xl;
-  }
-
-  .section-padding {
-    @apply py-20 md:py-32;
-  }
-
+  /* Container с отступами */
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent;
+  }
+
+  /* Карточка с hover эффектом */
+  .card-hover {
+    @apply transition-all duration-300;
+    @apply hover:scale-[1.02] hover:shadow-xl;
+  }
+
+  /* Кнопки с градиентом по ролям */
+  .btn-director {
+    @apply bg-gradient-to-r from-amber-500 to-yellow-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-zavuch {
+    @apply bg-gradient-to-r from-green-500 to-emerald-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-admin {
+    @apply bg-gradient-to-r from-red-500 to-rose-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-teacher {
+    @apply bg-gradient-to-r from-blue-500 to-cyan-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-student {
+    @apply bg-gradient-to-r from-violet-500 to-purple-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-parent {
+    @apply bg-gradient-to-r from-pink-500 to-rose-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  /* Статистические карточки */
+  .stat-card {
+    @apply glass-effect rounded-2xl p-6;
+    @apply hover:scale-105 transition-transform cursor-pointer;
+  }
+
+  /* Heading унифицированный */
+  .page-heading {
+    @apply text-3xl font-black mb-2;
+    @apply bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300;
+    @apply bg-clip-text text-transparent;
+  }
+
+  /* Scrollbar стилизация */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-600;
+  }
 }
 
+/* Утилиты */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  /* Анимация wave */
+  @keyframes wave {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(20deg);
+    }
+    75% {
+      transform: rotate(-20deg);
+    }
   }
 
-  .animation-delay-200 {
-    animation-delay: 200ms;
+  .animate-wave {
+    animation: wave 1s ease-in-out infinite;
+    transform-origin: 70% 70%;
+    display: inline-block;
   }
 
-  .animation-delay-400 {
-    animation-delay: 400ms;
+  /* Gradient borders */
+  .border-gradient {
+    border-image: linear-gradient(to right, #8b5cf6, #a855f7) 1;
   }
 
-  .animation-delay-600 {
-    animation-delay: 600ms;
+  /* Truncate text */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
   }
-}
 
-/* Optimized Light Theme Colors */
-:root {
-  --light-bg: #ffffff;
-  --light-surface: #f8fafc;
-  --light-card: #ffffff;
-  --light-border: #e2e8f0;
-  --light-text-primary: #1e293b;
-  --light-text-secondary: #475569;
-  --light-text-tertiary: #64748b;
-}
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-900;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-primary-500 to-purple-600 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply from-primary-600 to-purple-700;
-}
-
-/* Smooth animations for reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 }
