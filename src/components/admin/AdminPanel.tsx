@@ -72,10 +72,13 @@ export default function AdminPanel() {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 bottom-0 w-64 glass-effect border-r border-gray-200 dark:border-gray-800 p-6 z-40">
         <div className="mb-8">
-          <h2 className="text-2xl font-black bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white shadow-xl">
+            <Settings className="w-8 h-8" />
+          </div>
+          <h2 className="text-2xl font-black text-center bg-gradient-to-r from-red-600 to-rose-600 dark:from-red-400 dark:to-rose-400 bg-clip-text text-transparent">
             ADMIN
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Панель управления</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center">Панель управления</p>
         </div>
 
         <nav className="space-y-2">
@@ -87,7 +90,7 @@ export default function AdminPanel() {
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
                 activeTab === item.id
-                  ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg'
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >

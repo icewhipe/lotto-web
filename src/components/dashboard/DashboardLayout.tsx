@@ -11,7 +11,8 @@ import {
   Home,
   ArrowLeft,
   TrendingUp,
-  MessageCircle
+  MessageCircle,
+  BarChart3
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -58,6 +59,20 @@ const menuItems = {
     { id: 'schedule', name: 'Расписание', icon: Calendar },
     { id: 'reports', name: 'Отчеты', icon: FileText },
     { id: 'settings', name: 'Настройки', icon: Settings },
+  ],
+  director: [
+    { id: 'dashboard', name: 'Главная', icon: LayoutDashboard },
+    { id: 'analytics', name: 'Аналитика', icon: BarChart3 },
+    { id: 'reports', name: 'Отчёты', icon: FileText },
+    { id: 'staff', name: 'Персонал', icon: Users },
+    { id: 'settings', name: 'Настройки', icon: Settings },
+  ],
+  zavuch: [
+    { id: 'dashboard', name: 'Главная', icon: LayoutDashboard },
+    { id: 'schedule', name: 'Расписание', icon: Calendar },
+    { id: 'groups', name: 'Группы', icon: Users },
+    { id: 'teachers', name: 'Преподаватели', icon: Users },
+    { id: 'reports', name: 'Отчёты', icon: FileText },
   ],
 }
 

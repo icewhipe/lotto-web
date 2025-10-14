@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { authAPI } from '../services/api'
 
-export type UserRole = 'student' | 'teacher' | 'parent' | 'applicant' | 'admin'
+export type UserRole = 'student' | 'teacher' | 'parent' | 'applicant' | 'admin' | 'director' | 'zavuch'
 
 export interface User {
   id: string

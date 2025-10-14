@@ -129,25 +129,33 @@ export default function AdminDashboard({ onActionClick }: AdminDashboardProps) {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="relative overflow-hidden bg-gradient-to-br from-red-500 via-rose-500 to-pink-500 rounded-3xl p-8 text-white shadow-2xl"
       >
-        <div>
-          <h1 className="text-4xl font-black bg-gradient-to-r from-violet-600 to-purple-600 dark:from-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
-            Админ панель
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Добро пожаловать! Управляйте контентом сайта
-          </p>
-        </div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-rose-400/20 rounded-full blur-2xl" />
         
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all"
-        >
-          <Settings className="w-5 h-5" />
-          Настройки
-        </motion.button>
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-4xl shadow-lg ring-4 ring-white/30">
+              ⚙️
+            </div>
+            <div>
+              <h1 className="text-4xl font-black mb-2">Админ панель</h1>
+              <p className="text-white/90 text-lg">
+                Управление системой и контентом
+              </p>
+            </div>
+          </div>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl font-bold transition-all flex items-center gap-2"
+          >
+            <Settings className="w-5 h-5" />
+            Настройки
+          </motion.button>
+        </div>
       </motion.div>
 
       {/* Stats Grid */}

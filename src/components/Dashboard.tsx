@@ -10,6 +10,7 @@ import ProgressTracker from './student/ProgressTracker'
 import StudentChat from './student/StudentChat'
 import TeacherDashboard from './dashboard/TeacherDashboard'
 import DirectorDashboard from './dashboard/DirectorDashboard'
+import ZavuchDashboard from './dashboard/ZavuchDashboard'
 import AdminPanel from './admin/AdminPanel'
 import InDevelopment from './InDevelopment'
 
@@ -118,13 +119,8 @@ export default function Dashboard() {
       )
     }
 
-    // Admin views
-    if (userRole === 'admin') {
-      return <AdminPanel />
-    }
-    
-    // Director views (if you add this role)
-    if (user.email === 'director@lptt.ru') {
+    // Director views (highest priority)
+    if (userRole === 'director' || user.email === 'director@lptt.ru') {
       return (
         <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
           <DirectorDashboard />
@@ -132,12 +128,36 @@ export default function Dashboard() {
       )
     }
 
+    // Zavuch views
+    if (userRole === 'zavuch' || user.email === 'zavuch@lptt.ru') {
+      return (
+        <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
+          <ZavuchDashboard />
+        </DashboardLayout>
+      )
+    }
+
+    // Admin views
+    if (userRole === 'admin') {
+      return <AdminPanel />
+    }
+
     return null
   }
 
-  // Admin gets full AdminPanel
+  // Admin gets full AdminPanel (without DashboardLayout)
   if (user.role.toLowerCase() === 'admin') {
     return renderContent()
+  }
+
+  // Director and Zavuch get DashboardLayout
+  if (user.role.toLowerCase() === 'director' || user.email === 'director@lptt.ru' ||
+      user.role.toLowerCase() === 'zavuch' || user.email === 'zavuch@lptt.ru') {
+    return (
+      <DashboardLayout activeTab={activeTab} onTabChange={setActiveTab}>
+        {renderContent()}
+      </DashboardLayout>
+    )
   }
 
   // Other roles get DashboardLayout wrapper
