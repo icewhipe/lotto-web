@@ -8,7 +8,7 @@ interface RegisterPageProps {
   onBack?: () => void
 }
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
 export default function RegisterPage({ onBack }: RegisterPageProps) {
   const [step, setStep] = useState<'invite' | 'form' | 'success'>('invite')

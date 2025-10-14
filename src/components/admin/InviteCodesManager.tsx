@@ -4,7 +4,7 @@ import { Key, Plus, Check, X, Copy, Printer } from 'lucide-react'
 import toast, { Toaster } from 'react-hot-toast'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
 interface InviteCode {
   id: string
