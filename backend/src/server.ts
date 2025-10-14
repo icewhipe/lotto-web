@@ -21,6 +21,10 @@ import turnstileRoutes from './routes/turnstile.routes';
 import gradesRoutes from './routes/grades.routes';
 import scheduleRoutes from './routes/schedule.routes';
 import attendanceRoutes from './routes/attendance.routes';
+import teacherRoutes from './routes/teacher.routes';
+import parentRoutes from './routes/parent.routes';
+import adminRoutes from './routes/admin.routes';
+import directorRoutes from './routes/director.routes';
 
 // Initialize express
 const app: Express = express();
