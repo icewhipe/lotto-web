@@ -379,7 +379,7 @@ async function main() {
   // ====================================
   console.log('📅 Создание расписания...')
 
-  const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']
+  const days = [1, 2, 3, 4, 5, 6] // 1 = Понедельник, 6 = Суббота
   const lessonTimes = [
     { start: '09:00', end: '10:30' },
     { start: '10:45', end: '12:15' },
