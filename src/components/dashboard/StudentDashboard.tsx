@@ -6,8 +6,7 @@ import {
   BarChart3, PieChart, Activity, Users
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
-import { useGrades } from '../../hooks/useGrades'
-import { useSchedule } from '../../hooks/useSchedule'
+import { useStudentDashboard } from '../../hooks/useStudentDashboard'
 import { Line, Doughnut } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -40,15 +39,20 @@ interface StudentDashboardProps {
 
 export default function StudentDashboard({ onTabChange }: StudentDashboardProps) {
   const { user } = useAuth()
-  const { grades, loading: gradesLoading, average } = useGrades(user?.id)
-  const { schedule, loading: scheduleLoading } = useSchedule(user?.groupId, new Date().getDay())
+  const { grades, schedule, loading: gradesLoading } = useStudentDashboard()
   const [showProfileEdit, setShowProfileEdit] = useState(false)
+  const scheduleLoading = gradesLoading
+  
+  // Calculate average from grades
+  const average = grades.length > 0 
+    ? grades.reduce((sum: number, g: any) => sum + g.value, 0) / grades.length 
+    : 0
 
   // Статистика
   const totalGrades = grades.length
-  const fives = grades.filter(g => g.value === 5).length
-  const fours = grades.filter(g => g.value === 4).length
-  const threes = grades.filter(g => g.value === 3).length
+  const fives = grades.filter((g: any) => g.value === 5).length
+  const fours = grades.filter((g: any) => g.value === 4).length
+  const threes = grades.filter((g: any) => g.value === 3).length
   const avgGrade = average || 0
 
   // Последние оценки (топ 5)
@@ -60,11 +64,11 @@ export default function StudentDashboard({ onTabChange }: StudentDashboardProps)
   // Данные для графика прогресса (последние 7 оценок)
   const recentGradesForChart = grades.slice(0, 7).reverse()
   const progressData = {
-    labels: recentGradesForChart.map((_g, i) => `${i + 1}`),
+    labels: recentGradesForChart.map((_g: any, i: number) => `${i + 1}`),
     datasets: [
       {
         label: 'Оценки',
-        data: recentGradesForChart.map(g => g.value),
+        data: recentGradesForChart.map((g: any) => g.value),
         borderColor: 'rgb(139, 92, 246)',
         backgroundColor: 'rgba(139, 92, 246, 0.1)',
         tension: 0.4,
@@ -339,7 +343,7 @@ export default function StudentDashboard({ onTabChange }: StudentDashboardProps)
               </div>
             ) : todayLessons.length > 0 ? (
               <div className="space-y-2">
-                {todayLessons.map((lesson, index) => (
+                {todayLessons.map((lesson: any, index: number) => (
                   <div
                     key={lesson.id || index}
                     className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 hover:shadow-md transition-shadow"
@@ -399,7 +403,7 @@ export default function StudentDashboard({ onTabChange }: StudentDashboardProps)
               </div>
             ) : recentGrades.length > 0 ? (
               <div className="space-y-2">
-                {recentGrades.map((grade, index) => (
+                {recentGrades.map((grade: any, index: number) => (
                   <div
                     key={grade.id || index}
                     className="flex items-center justify-between p-3 rounded-xl hover:bg-white/50 dark:hover:bg-gray-800/50 transition-colors group"

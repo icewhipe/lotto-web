@@ -1,12 +1,10 @@
 import { motion } from 'framer-motion'
 import { BookOpen, TrendingUp, Loader, Calendar, Award, BarChart3, Filter } from 'lucide-react'
-import { useAuth } from '../../contexts/AuthContext'
-import { useGrades } from '../../hooks/useGrades'
+import { useStudentDashboard } from '../../hooks/useStudentDashboard'
 import { useState } from 'react'
 
 export default function GradesView() {
-  const { user } = useAuth()
-  const { grades, loading, error, average } = useGrades(user?.id)
+  const { grades, loading } = useStudentDashboard()
   const [filterSubject, setFilterSubject] = useState<string>('all')
 
   if (loading) {
@@ -32,6 +30,10 @@ export default function GradesView() {
     { id: '8', subject: { name: 'История' }, value: 5, date: '2024-10-05', type: 'TEST', teacher: { user: { name: 'Смирнова Е.В.' } } },
   ]
 
+  // Calculate average
+  const average = displayGrades.length > 0 
+    ? displayGrades.reduce((sum, g) => sum + g.value, 0) / displayGrades.length 
+    : 0
   const displayAverage = average || 4.6
 
   // Уникальные предметы
@@ -244,13 +246,6 @@ export default function GradesView() {
         )}
       </div>
 
-      {error && (
-        <div className="glass-effect rounded-2xl p-6 border-2 border-yellow-200 dark:border-yellow-800">
-          <p className="text-yellow-800 dark:text-yellow-200">
-            ⚠️ Backend недоступен. Показаны демо-данные.
-          </p>
-        </div>
-      )}
     </div>
   )
 }

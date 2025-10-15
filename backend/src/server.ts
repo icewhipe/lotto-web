@@ -25,6 +25,7 @@ import teacherRoutes from './routes/teacher.routes';
 import parentRoutes from './routes/parent.routes';
 import adminRoutes from './routes/admin.routes';
 import directorRoutes from './routes/director.routes';
+import specialtyRoutes from './routes/specialty.routes';
 
 // Initialize express
 const app: Express = express();
@@ -68,6 +69,13 @@ app.use('/api/turnstiles', turnstileRoutes);
 app.use('/api/grades', gradesRoutes);
 app.use('/api/schedule', scheduleRoutes);
 app.use('/api/attendance', attendanceRoutes);
+
+// Role-specific routes
+app.use('/api/teacher', teacherRoutes);
+app.use('/api/parent', parentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/director', directorRoutes);
+app.use('/api/specialties', specialtyRoutes);
 
 // Health check
 app.get('/api/health', (req: Request, res: Response) => {
