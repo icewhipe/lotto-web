@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Ticket,
-  Plus,
   Copy,
   Check,
   Trash2,
   X,
   Users,
   Calendar,
-  Mail,
   Sparkles,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -31,7 +29,7 @@ interface InviteCode {
 export default function InviteCodesManager() {
   const [codes, setCodes] = useState<InviteCode[]>([])
   const [groups, setGroups] = useState<any[]>([])
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
   const [showGenerateModal, setShowGenerateModal] = useState(false)
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
 

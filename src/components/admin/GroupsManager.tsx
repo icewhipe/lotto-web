@@ -8,7 +8,6 @@ import {
   Trash2,
   Calendar,
   GraduationCap,
-  TrendingUp,
   X,
   BookOpen,
 } from 'lucide-react'

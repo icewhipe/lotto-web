@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { 
   LayoutDashboard,
   FileText,
-  Image,
   Calendar,
   Users,
   Settings,

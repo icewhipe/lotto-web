@@ -2,19 +2,13 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users,
-  Plus,
   Search,
   Filter,
   Edit,
   Trash2,
   UserPlus,
-  Download,
-  Upload,
   X,
   Check,
-  Mail,
-  Phone,
-  Calendar,
   GraduationCap,
 } from 'lucide-react'
 import { adminAPI } from '../../services/api'
