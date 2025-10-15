@@ -302,7 +302,7 @@ export const adminAPI = {
     name: string;
     code: string;
     specialtyId: string;
-    teacherId: string;
+    teacherId?: string; // Опционально
   }) => {
     const response = await api.post('/admin/subject', data);
     return response.data;
