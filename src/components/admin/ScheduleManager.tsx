@@ -18,11 +18,15 @@ const DAYS = [
 ]
 
 const LESSON_TIMES = [
-  { number: 1, start: '09:00', end: '10:30' },
-  { number: 2, start: '10:45', end: '12:15' },
-  { number: 3, start: '12:30', end: '14:00' },
-  { number: 4, start: '14:15', end: '15:45' },
-  { number: 5, start: '16:00', end: '17:30' },
+  { number: 1, start: '08:00', end: '08:45', label: '1 урок' },
+  { number: 2, start: '08:50', end: '09:35', label: '2 урок' },
+  { number: 3, start: '09:45', end: '10:30', label: '3 урок' },
+  { number: 4, start: '10:35', end: '11:20', label: '4 урок' },
+  { number: 5, start: '11:30', end: '12:15', label: '5(1) урок' },
+  { number: 6, start: '12:20', end: '13:05', label: '5(2) урок' },
+  { number: 7, start: '13:10', end: '13:55', label: '6 урок' },
+  { number: 8, start: '14:00', end: '14:45', label: '7 урок' },
+  { number: 9, start: '14:50', end: '15:35', label: '8 урок' },
 ]
 
 export default function ScheduleManager() {
@@ -222,7 +226,7 @@ export default function ScheduleManager() {
                   >
                     {LESSON_TIMES.map((lesson) => (
                       <option key={lesson.number} value={lesson.number}>
-                        {lesson.number} пара ({lesson.start} - {lesson.end})
+                        {lesson.label} ({lesson.start} - {lesson.end})
                       </option>
                     ))}
                   </select>

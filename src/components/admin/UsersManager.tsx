@@ -5,8 +5,8 @@ import {
   UserPlus, Shield, GraduationCap, BookOpen,
   Crown, Briefcase, Save
 } from 'lucide-react'
+import { adminAPI } from '../../services/api'
 import toast from 'react-hot-toast'
-// TODO: Подключить к adminAPI в будущем
 
 interface User {
   id: string
