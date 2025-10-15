@@ -3,6 +3,7 @@ import { Rocket, ArrowRight } from 'lucide-react'
 
 interface UnderConstructionProps {
   onLoginClick: () => void
+  onNavigateToSite?: () => void
 }
 
 export default function UnderConstruction({ onLoginClick }: UnderConstructionProps) {
