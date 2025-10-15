@@ -260,6 +260,108 @@ export default function SpecialtiesManager() {
         </AnimatePresence>
       </motion.div>
 
+      {/* Edit Modal */}
+      <AnimatePresence>
+        {showEditModal && editingSpecialty && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => {
+              setShowEditModal(false)
+              setEditingSpecialty(null)
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white dark:bg-gray-900 rounded-2xl p-8 max-w-lg w-full shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-black">Редактировать специальность</h2>
+                <button
+                  onClick={() => {
+                    setShowEditModal(false)
+                    setEditingSpecialty(null)
+                  }}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleEditSpecialty} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Код специальности</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.code}
+                    onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Название</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Срок обучения</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.duration}
+                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Описание</label>
+                  <textarea
+                    required
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowEditModal(false)
+                      setEditingSpecialty(null)
+                    }}
+                    className="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                  >
+                    Сохранить
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Create Modal */}
       <AnimatePresence>
         {showCreateModal && (
