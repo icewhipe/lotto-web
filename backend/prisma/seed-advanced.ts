@@ -306,11 +306,14 @@ async function main() {
         },
       })
 
+      const enrollmentDate = new Date(group.year, 8, 1) // 1 сентября года поступления
+      
       const student = await prisma.student.create({
         data: {
           userId: user.id,
           groupId: group.id,
           studentNumber: `${group.name}-${String(i + 1).padStart(2, '0')}`,
+          enrollmentDate,
         },
       })
 
