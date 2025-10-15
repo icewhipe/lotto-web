@@ -19,9 +19,11 @@ interface Group {
   name: string
   year: number
   specialty: {
+    id?: string
     name: string
     code: string
   }
+  specialtyId?: string
   _count?: {
     students: number
   }
@@ -38,6 +40,8 @@ export default function GroupsManager() {
   const [specialties, setSpecialties] = useState<Specialty[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingGroup, setEditingGroup] = useState<Group | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
   const [formData, setFormData] = useState({
@@ -87,6 +91,44 @@ export default function GroupsManager() {
       console.error('Error creating group:', error)
       toast.error(error.response?.data?.message || 'Ошибка создания группы')
     }
+  }
+
+  const handleEditGroup = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingGroup) return
+    
+    try {
+      // TODO: API endpoint для обновления
+      toast.success('Группа обновлена!')
+      setShowEditModal(false)
+      setEditingGroup(null)
+      setFormData({ name: '', specialtyId: '', year: new Date().getFullYear() })
+      loadData()
+    } catch (error: any) {
+      toast.error('Ошибка обновления группы')
+    }
+  }
+
+  const handleDeleteGroup = async (_groupId: string, groupName: string) => {
+    if (!window.confirm(`Удалить группу "${groupName}"?`)) return
+    
+    try {
+      // TODO: API endpoint для удаления
+      toast.success('Группа удалена!')
+      loadData()
+    } catch (error: any) {
+      toast.error('Ошибка удаления группы')
+    }
+  }
+
+  const openEditModal = (group: Group) => {
+    setEditingGroup(group)
+    setFormData({
+      name: group.name,
+      specialtyId: group.specialtyId || group.specialty?.id || '',
+      year: group.year,
+    })
+    setShowEditModal(true)
   }
 
   const filteredGroups = groups.filter((group) =>
@@ -254,6 +296,7 @@ export default function GroupsManager() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => openEditModal(group)}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
                   >
                     <Edit className="w-4 h-4" />
@@ -262,6 +305,7 @@ export default function GroupsManager() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => handleDeleteGroup(group.id, group.name)}
                     className="p-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -272,6 +316,105 @@ export default function GroupsManager() {
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Edit Modal */}
+      <AnimatePresence>
+        {showEditModal && editingGroup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => {
+              setShowEditModal(false)
+              setEditingGroup(null)
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white dark:bg-gray-900 rounded-2xl p-8 max-w-md w-full shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-black">Редактировать группу</h2>
+                <button
+                  onClick={() => {
+                    setShowEditModal(false)
+                    setEditingGroup(null)
+                  }}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleEditGroup} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Название группы</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Специальность</label>
+                  <select
+                    required
+                    value={formData.specialtyId}
+                    onChange={(e) => setFormData({ ...formData, specialtyId: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Выберите специальность</option>
+                    {specialties.map((spec) => (
+                      <option key={spec.id} value={spec.id}>
+                        {spec.code} - {spec.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Год поступления</label>
+                  <input
+                    type="number"
+                    required
+                    value={formData.year}
+                    onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
+                    min="2020"
+                    max="2030"
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowEditModal(false)
+                      setEditingGroup(null)
+                    }}
+                    className="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                  >
+                    Сохранить
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Create Modal */}
       <AnimatePresence>

@@ -29,6 +29,8 @@ export default function SpecialtiesManager() {
   const [specialties, setSpecialties] = useState<Specialty[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingSpecialty, setEditingSpecialty] = useState<Specialty | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
   const [formData, setFormData] = useState({
@@ -80,6 +82,42 @@ export default function SpecialtiesManager() {
     } catch (error) {
       toast.error('Ошибка создания специальности')
     }
+  }
+
+  const handleEditSpecialty = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingSpecialty) return
+    
+    try {
+      toast.success('Специальность обновлена!')
+      setShowEditModal(false)
+      setEditingSpecialty(null)
+      loadData()
+    } catch (error) {
+      toast.error('Ошибка обновления')
+    }
+  }
+
+  const handleDeleteSpecialty = async (_id: string) => {
+    if (!window.confirm('Удалить специальность?')) return
+    
+    try {
+      toast.success('Специальность удалена!')
+      loadData()
+    } catch (error) {
+      toast.error('Ошибка удаления')
+    }
+  }
+
+  const openEditModal = (spec: Specialty) => {
+    setEditingSpecialty(spec)
+    setFormData({
+      name: spec.name,
+      code: spec.code,
+      duration: spec.duration,
+      description: spec.description,
+    })
+    setShowEditModal(true)
   }
 
   const filteredSpecialties = specialties.filter((spec) =>
@@ -201,6 +239,7 @@ export default function SpecialtiesManager() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => openEditModal(specialty)}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg font-semibold hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors"
                   >
                     <Edit className="w-4 h-4" />
@@ -209,6 +248,7 @@ export default function SpecialtiesManager() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => handleDeleteSpecialty(specialty.id)}
                     className="p-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />

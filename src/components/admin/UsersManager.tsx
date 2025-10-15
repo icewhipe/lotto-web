@@ -5,7 +5,7 @@ import {
   UserPlus, Shield, GraduationCap, BookOpen,
   Crown, Briefcase, Save
 } from 'lucide-react'
-import { adminAPI } from '../../services/api'
+// import { adminAPI } from '../../services/api' // TODO: Подключить позже
 import toast from 'react-hot-toast'
 
 interface User {
