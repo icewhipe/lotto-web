@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { GraduationCap, Zap, Code, Cpu } from 'lucide-react'
-
-const techIcons = [GraduationCap, Zap, Code, Cpu]
+import { GraduationCap } from 'lucide-react'
 
 export default function PageLoader() {
   const [isLoading, setIsLoading] = useState(true)
@@ -51,22 +49,20 @@ export default function PageLoader() {
       {isLoading && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={{ opacity: 0, filter: 'blur(20px)' }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
           className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
         >
-          {/* Animated gradient background */}
+          {/* Liquid Glass background */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-primary-500 via-purple-600 to-secondary-500"
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(1200px 800px at 10% 20%, rgba(37,99,235,0.12), transparent), radial-gradient(1000px 700px at 90% 80%, rgba(59,130,246,0.10), transparent), linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))'
+            }}
             animate={{
-              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+              filter: ['blur(0px)', 'blur(6px)', 'blur(0px)']
             }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-            style={{ backgroundSize: '200% 200%' }}
+            transition={{ duration: 6, repeat: Infinity }}
           />
 
           {/* Grid overlay */}
@@ -77,9 +73,9 @@ export default function PageLoader() {
             }} />
           </div>
 
-          {/* Animated tech particles */}
+          {/* Subtle glass ripples */}
           <div className="absolute inset-0 overflow-hidden">
-            {[...Array(30)].map((_, i) => (
+            {[...Array(18)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute"
@@ -89,22 +85,17 @@ export default function PageLoader() {
                   opacity: 0,
                 }}
                 animate={{
-                  y: [null, -200],
-                  opacity: [0, 0.6, 0],
-                  scale: [0, 1, 0],
+                  y: [null, -120],
+                  opacity: [0, 0.5, 0],
+                  scale: [0.8, 1, 0.8],
                 }}
                 transition={{
-                  duration: 3 + Math.random() * 2,
+                  duration: 4 + Math.random() * 3,
                   repeat: Infinity,
                   delay: Math.random() * 3,
                 }}
               >
-                {techIcons[i % techIcons.length] && (
-                  (() => {
-                    const Icon = techIcons[i % techIcons.length]
-                    return <Icon className="w-6 h-6 text-white" />
-                  })()
-                )}
+                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-2xl" />
               </motion.div>
             ))}
           </div>
@@ -131,7 +122,7 @@ export default function PageLoader() {
 
           {/* Main loader content */}
           <div className="relative z-10 text-center px-4">
-            {/* Animated logo with tech effect */}
+            {/* Animated logo with glass tile */}
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
@@ -176,7 +167,7 @@ export default function PageLoader() {
                 
                 {/* Logo */}
                 <motion.div 
-                  className="w-24 h-24 mx-auto bg-white/20 backdrop-blur-2xl rounded-3xl flex items-center justify-center relative overflow-hidden"
+                  className="w-24 h-24 mx-auto glass-effect rounded-3xl flex items-center justify-center relative overflow-hidden"
                   whileHover={{ scale: 1.05 }}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
@@ -200,7 +191,7 @@ export default function PageLoader() {
               className="mb-6"
             >
               <motion.h2 
-                className="text-5xl font-black text-white mb-3"
+                className="text-5xl font-black text-blue-50 mb-3"
                 animate={{ 
                   textShadow: [
                     '0 0 20px rgba(255,255,255,0.5)',
@@ -225,16 +216,16 @@ export default function PageLoader() {
 
             {/* Progress bar with glow */}
             <div className="w-80 max-w-full mx-auto">
-              <div className="h-3 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm relative">
+              <div className="h-3 glass-effect rounded-full overflow-hidden relative">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-white via-cyan-200 to-white relative"
+                  className="h-full bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 relative"
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(progress, 100)}%` }}
                   transition={{ duration: 0.3 }}
                 >
                   {/* Shimmer effect */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
                     animate={{ x: ['-100%', '200%'] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
                   />

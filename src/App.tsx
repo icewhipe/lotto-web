@@ -40,6 +40,13 @@ function App() {
   const [showRegister, setShowRegister] = useState(false)
   const { isAuthenticated } = useAuth()
 
+  // Global event to open login from Hero CTA
+  useEffect(() => {
+    const handler = () => setShowLogin(true)
+    window.addEventListener('open-login', handler)
+    return () => window.removeEventListener('open-login', handler)
+  }, [])
+
   useEffect(() => {
     // Check for saved theme preference or default to light mode
     const savedTheme = localStorage.getItem('theme')

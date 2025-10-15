@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
 import { Megaphone, Trophy, PartyPopper, ArrowRight, X, Calendar, User } from 'lucide-react'
+import { newsAPI } from '../services/api'
 
-const newsItems = [
+const fallbackNews = [
   {
     icon: Megaphone,
     category: 'Объявление',
@@ -39,7 +40,33 @@ const newsItems = [
 export default function News() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.1 })
-  const [selectedNews, setSelectedNews] = useState<typeof newsItems[0] | null>(null)
+  const [newsItems, setNewsItems] = useState<any[]>(fallbackNews)
+  const [selectedNews, setSelectedNews] = useState<any | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await newsAPI.getAll()
+        if (!cancelled && res?.success && Array.isArray(res.data?.news)) {
+          const mapped = res.data.news.map((n: any) => ({
+            icon: Megaphone,
+            category: n.category || 'Новость',
+            title: n.title,
+            excerpt: n.content?.slice(0, 120) + '…',
+            fullText: n.content,
+            date: new Date(n.createdAt).toLocaleDateString('ru-RU'),
+            author: n.author || 'Пресс-служба',
+            gradient: 'from-primary-500 to-purple-600',
+          }))
+          if (mapped.length) setNewsItems(mapped)
+      }
+      } catch (e) {
+        // fallback remains
+      }
+    })()
+    return () => { cancelled = true }
+  }, [])
 
   return (
     <section id="news" className="section-padding bg-gray-50 dark:bg-gray-900/50" ref={ref}>
@@ -170,7 +197,7 @@ export default function News() {
               {/* Content */}
               <div className="p-8">
                 <div className="prose prose-lg dark:prose-invert max-w-none">
-                  {selectedNews.fullText.split('\n\n').map((paragraph, index) => (
+                  {selectedNews.fullText.split('\n\n').map((paragraph: string, index: number) => (
                     <motion.p
                       key={index}
                       initial={{ opacity: 0, y: 20 }}

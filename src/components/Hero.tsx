@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, GraduationCap, Briefcase, Award, Sparkles, Rocket } from 'lucide-react'
+import { ArrowRight, GraduationCap, Briefcase, Award, Sparkles, NotebookPen } from 'lucide-react'
 
 const stats = [
   { number: '65+', label: 'лет опыта', icon: Award },
@@ -16,28 +16,9 @@ const floatingCards = [
 export default function Hero() {
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">
-      {/* Enhanced Background - Improved Light Theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-violet-50/20 to-purple-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
-      
-      {/* Simplified Gradient Orbs - Better Performance */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute -top-48 -right-48 w-[600px] h-[600px] rounded-full opacity-20"
-          style={{ 
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-            willChange: 'transform'
-          }}
-        />
-        <div 
-          className="absolute -bottom-48 -left-48 w-[500px] h-[500px] rounded-full opacity-20"
-          style={{ 
-            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
-            filter: 'blur(60px)'
-          }}
-        />
-      </div>
+    <section id="home" className="relative min-h-screen flex items-start md:items-center justify-center overflow-hidden pt-20 md:pt-16">
+      {/* Background - clean, blue-toned */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/30 to-blue-100/10 dark:from-slate-950 dark:via-blue-950/30 dark:to-slate-900" />
 
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03] bg-[size:32px_32px]" />
@@ -49,19 +30,19 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-6 relative z-30"
+            className="space-y-5 relative z-30"
           >
-            {/* Badges - Two Main Badges */}
-            <div className="flex flex-wrap gap-3 relative z-20">
+            {/* Badges - inline row */}
+            <div className="flex flex-wrap gap-3 items-center relative z-20">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, x: -20 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
                 transition={{ delay: 0.1, duration: 0.4 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-violet-500/15 via-purple-500/15 to-pink-500/15 border-2 border-violet-400/40 dark:border-violet-500/30 backdrop-blur-md shadow-lg"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 via-blue-500/10 to-blue-500/10 border-2 border-blue-400/30 dark:border-blue-500/30 backdrop-blur-md shadow-lg"
               >
-                <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-                <span className="text-sm font-bold bg-gradient-to-r from-violet-600 to-pink-600 dark:from-violet-400 dark:to-pink-400 bg-clip-text text-transparent">
-                  Лучший техникум 2024
+                <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <span className="text-sm font-bold bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                  Набор 2025–2026
                 </span>
               </motion.div>
               
@@ -69,28 +50,28 @@ export default function Hero() {
                 initial={{ opacity: 0, scale: 0.8, x: -20 }}
                 animate={{ opacity: 1, scale: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/15 to-blue-500/15 border-2 border-blue-400/40 dark:border-blue-500/30 backdrop-blur-md shadow-lg"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 via-blue-500/10 to-blue-500/10 border-2 border-blue-400/30 dark:border-blue-500/30 backdrop-blur-md shadow-lg"
               >
                 <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
-                  Аккредитация 2024
+                <span className="text-sm font-bold bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                  г. Лиски, ул. Лысенко, 1А
                 </span>
               </motion.div>
             </div>
 
             <motion.h1
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight relative z-20"
+              className="text-5xl md:text-6xl lg:text-6xl font-black leading-[1.05] tracking-tight relative z-20 text-balance"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.4 }}
             >
               Твоё будущее <br />
               <span className="relative inline-block">
-                <span className="relative z-10 bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                <span className="relative z-10 bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-600 dark:from-blue-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
                   начинается здесь
                 </span>
                 <motion.span
-                  className="absolute -inset-1 bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-pink-600/20 blur-2xl"
+                  className="absolute -inset-1 bg-gradient-to-r from-blue-600/15 via-blue-600/15 to-cyan-600/15 blur-2xl"
                   animate={{
                     opacity: [0.5, 0.8, 0.5],
                   }}
@@ -128,13 +109,13 @@ export default function Hero() {
                   transition={{ delay: 0.5 + index * 0.1 }}
                   className="group relative"
                 >
-                  <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl p-4 border-2 border-violet-400/70 dark:border-violet-600/70 hover:border-violet-500 dark:hover:border-violet-500 transition-all shadow-xl hover:shadow-violet-500/30 hover:scale-105 duration-300">
+                  <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-xl p-4 border-2 border-blue-400/40 dark:border-blue-600/50 hover:border-blue-500 dark:hover:border-blue-500 transition-all shadow-xl hover:shadow-blue-500/30 hover:scale-105 duration-300">
                     <div className="flex flex-col items-center text-center gap-2">
-                      <div className="p-2 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg">
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-600 shadow-lg">
                         <stat.icon className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <div className="text-2xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 dark:from-violet-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                        <div className="text-2xl font-black bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-600 dark:from-blue-400 dark:via-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
                           {stat.number}
                         </div>
                         <div className="text-xs font-semibold mt-0.5" style={{ color: '#475569' }}>{stat.label}</div>
@@ -143,7 +124,7 @@ export default function Hero() {
                   </div>
                   
                   {/* Glow effect */}
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-600/20 to-cyan-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
                 </motion.div>
               ))}
             </motion.div>
@@ -167,7 +148,7 @@ export default function Hero() {
             >
               <motion.a 
                 href="#admissions" 
-                className="group relative px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold rounded-2xl overflow-hidden shadow-lg shadow-violet-500/50 dark:shadow-violet-500/30"
+                className="group relative px-8 py-4 bg-gradient-to-r from-blue-700 to-blue-600 text-white font-bold rounded-2xl overflow-hidden shadow-lg shadow-blue-500/40 dark:shadow-blue-500/30"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -176,24 +157,27 @@ export default function Hero() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-violet-500 to-purple-500"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500"
                   initial={{ x: '-100%' }}
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.3 }}
                 />
               </motion.a>
               
-              <motion.a 
-                href="#programs" 
-                className="group px-8 py-4 glass-effect font-bold rounded-2xl border-2 border-violet-200 dark:border-violet-800 hover:border-violet-400 dark:hover:border-violet-600 transition-colors"
+              <motion.button 
+                onClick={() => {
+                  const evt = new Event('open-login')
+                  window.dispatchEvent(evt)
+                }}
+                className="group px-8 py-4 glass-effect font-bold rounded-2xl border-2 border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600 transition-colors text-gray-900 dark:text-gray-50"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <span className="flex items-center gap-2 justify-center">
-                  Наши специальности
-                  <Rocket className="w-5 h-5 group-hover:translate-y-[-2px] transition-transform" />
+                  Электронный дневник
+                  <NotebookPen className="w-5 h-5 group-hover:translate-y-[-2px] transition-transform" />
                 </span>
-              </motion.a>
+              </motion.button>
             </motion.div>
           </motion.div>
 
