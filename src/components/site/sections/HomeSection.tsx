@@ -1,4 +1,4 @@
-import GlassmorphicHome from '../GlassmorphicHome'
+import LiquidGlassHome from '../LiquidGlassHome'
 
 interface HomeSectionProps {
   isDark: boolean
@@ -7,6 +7,6 @@ interface HomeSectionProps {
 }
 
 export default function HomeSection({ isDark, onNavigate, onNavigateToDiary }: HomeSectionProps) {
-  // Use glassmorphic premium version
-  return <GlassmorphicHome isDark={isDark} onNavigate={onNavigate} onNavigateToDiary={onNavigateToDiary} />
+  // Use liquid glass premium version
+  return <LiquidGlassHome isDark={isDark} onNavigate={onNavigate} onNavigateToDiary={onNavigateToDiary} />
 }

@@ -256,12 +256,12 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
           </div>
         </div>
 
-        {/* Navigation Bar */}
+        {/* Navigation Bar - Fixed, no horizontal scroll */}
         <div className={`hidden lg:block border-t ${
           isDarkMode ? 'border-blue-500/20 bg-slate-900/50' : 'border-blue-100 bg-white/50'
         } backdrop-blur-xl`}>
           <div className="container mx-auto px-6">
-            <div className="flex items-center gap-1 overflow-x-auto">
+            <div className="flex items-center gap-1 flex-wrap">
               {navigationStructure.map((section) => (
                 <div key={section.id} className="relative group">
                   <motion.button
