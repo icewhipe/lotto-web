@@ -482,7 +482,6 @@ async function main() {
         data: {
           studentId: student.id,
           date,
-          lessonNumber: randomInt(1, 4),
           status,
         },
       })
