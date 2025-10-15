@@ -424,7 +424,7 @@ async function main() {
   // ====================================
   console.log('📝 Создание оценок...')
 
-  const gradeTypes = ['Экзамен', 'Контрольная работа', 'Домашняя работа', 'Практическая работа', 'Лабораторная работа', 'Тест']
+  const gradeTypes = ['EXAM', 'TEST', 'HOMEWORK', 'CLASSWORK', 'QUIZ', 'PROJECT']
   let gradeCount = 0
 
   for (const student of allStudents) {
