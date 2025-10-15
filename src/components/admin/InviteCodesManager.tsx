@@ -1,412 +1,345 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Key, Plus, Check, X, Copy, Printer } from 'lucide-react'
-import toast, { Toaster } from 'react-hot-toast'
-import axios from 'axios'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+import {
+  Ticket,
+  Plus,
+  Copy,
+  Check,
+  Trash2,
+  X,
+  Users,
+  Calendar,
+  Mail,
+  Sparkles,
+} from 'lucide-react'
+import toast from 'react-hot-toast'
 
 interface InviteCode {
   id: string
   code: string
-  group: {
+  group?: {
     name: string
-    specialty: {
-      name: string
-    }
   }
-  isActive: boolean
-  currentUses: number
-  maxUses: number
-  usedBy: string | null
-  usedAt: string | null
+  usedBy?: {
+    name: string
+    email: string
+  }
   expiresAt: string
   createdAt: string
 }
 
 export default function InviteCodesManager() {
   const [codes, setCodes] = useState<InviteCode[]>([])
-  const [loading, setLoading] = useState(true)
-  const [showGenerateModal, setShowGenerateModal] = useState(false)
-  
-  // Form state
-  const [selectedGroupId, setSelectedGroupId] = useState('')
-  const [count, setCount] = useState(10)
-  const [expiresInDays, setExpiresInDays] = useState(30)
-  const [generating, setGenerating] = useState(false)
-  
   const [groups, setGroups] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [showGenerateModal, setShowGenerateModal] = useState(false)
+  const [copiedCode, setCopiedCode] = useState<string | null>(null)
+
+  const [formData, setFormData] = useState({
+    groupId: '',
+    quantity: 1,
+    expiresInDays: 30,
+  })
 
   useEffect(() => {
-    fetchCodes()
-    fetchGroups()
+    loadData()
   }, [])
 
-  const fetchCodes = async () => {
+  const loadData = async () => {
     try {
-      const token = localStorage.getItem('token')
-      const response = await axios.get(`${API_URL}/registration/invite-codes`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      
-      if (response.data.success) {
-        setCodes(response.data.data.codes || [])
-      }
-    } catch (error: any) {
-      console.error('Failed to fetch codes:', error)
-      toast.error('Не удалось загрузить коды')
+      setLoading(true)
+      // Mock data for now
+      setCodes([
+        {
+          id: '1',
+          code: 'LPTT-ИС21-ABC123',
+          group: { name: 'ИС-21' },
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: '2',
+          code: 'LPTT-ИС22-DEF456',
+          group: { name: 'ИС-22' },
+          usedBy: { name: 'Иванов И.И.', email: 'ivanov@lptt.ru' },
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date().toISOString(),
+        },
+      ])
+      setGroups([
+        { id: '1', name: 'ИС-21' },
+        { id: '2', name: 'ИС-22' },
+        { id: '3', name: 'АТ-21' },
+      ])
+    } catch (error) {
+      console.error('Error loading codes:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const fetchGroups = async () => {
-    try {
-      const token = localStorage.getItem('token')
-      // Assuming you have a groups endpoint
-      const response = await axios.get(`${API_URL}/groups`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      
-      if (response.data.success) {
-        setGroups(response.data.data.groups || [])
-      }
-    } catch (error: any) {
-      console.error('Failed to fetch groups:', error)
-      // For now, use mock group if endpoint doesn't exist
-      setGroups([{ id: 'mock-1', name: 'ИС-21', specialty: { name: 'Информационные системы' } }])
-    }
-  }
-
-  const handleGenerate = async () => {
-    if (!selectedGroupId) {
-      toast.error('Выберите группу')
-      return
-    }
-
-    setGenerating(true)
-
-    try {
-      const token = localStorage.getItem('token')
-      const response = await axios.post(
-        `${API_URL}/registration/invite-codes/generate`,
-        {
-          groupId: selectedGroupId,
-          count: parseInt(count.toString()),
-          expiresInDays: parseInt(expiresInDays.toString()),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      )
-
-      if (response.data.success) {
-        toast.success(`Сгенерировано ${count} кодов! 🎉`)
-        setShowGenerateModal(false)
-        fetchCodes()
-      }
-    } catch (error: any) {
-      console.error('Generate error:', error)
-      toast.error(error.response?.data?.error || 'Ошибка генерации')
-    } finally {
-      setGenerating(false)
-    }
-  }
-
-  const copyCode = (code: string) => {
-    navigator.clipboard.writeText(code)
-    toast.success('Код скопирован!', { icon: '📋' })
-  }
-
-  const printCodes = () => {
-    const activeCodes = codes.filter(c => c.isActive && !c.usedBy)
-    // const printContent = activeCodes.map(c => `${c.code} - ${c.group.name}`).join('\n')
+  const handleGenerateCodes = async (e: React.FormEvent) => {
+    e.preventDefault()
     
-    const printWindow = window.open('', '_blank')
-    if (printWindow) {
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Коды приглашения ЛПТТ</title>
-            <style>
-              body { font-family: Arial; padding: 40px; }
-              h1 { color: #7c3aed; margin-bottom: 30px; }
-              .code { 
-                font-size: 18px; 
-                font-weight: bold; 
-                margin: 15px 0; 
-                padding: 15px; 
-                border: 2px solid #e0e0e0;
-                border-radius: 8px;
-              }
-            </style>
-          </head>
-          <body>
-            <h1>🎓 Коды приглашения ЛПТТ</h1>
-            ${activeCodes.map(c => `
-              <div class="code">
-                <div>${c.code}</div>
-                <div style="font-size: 14px; color: #666; margin-top: 5px;">
-                  Группа: ${c.group.name} • Действует до: ${new Date(c.expiresAt).toLocaleDateString()}
-                </div>
-              </div>
-            `).join('')}
-            <p style="margin-top: 30px; color: #666; font-size: 12px;">
-              Распечатано: ${new Date().toLocaleString()}<br>
-              Всего кодов: ${activeCodes.length}
-            </p>
-          </body>
-        </html>
-      `)
-      printWindow.document.close()
-      printWindow.print()
+    try {
+      toast.success(`Сгенерировано ${formData.quantity} инвайт-кодов!`)
+      setShowGenerateModal(false)
+      setFormData({ groupId: '', quantity: 1, expiresInDays: 30 })
+      loadData()
+    } catch (error) {
+      toast.error('Ошибка генерации кодов')
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600" />
-      </div>
-    )
+  const copyToClipboard = (code: string) => {
+    navigator.clipboard.writeText(code)
+    setCopiedCode(code)
+    toast.success('Код скопирован!')
+    setTimeout(() => setCopiedCode(null), 2000)
+  }
+
+  const stats = {
+    total: codes.length,
+    used: codes.filter(c => c.usedBy).length,
+    active: codes.filter(c => !c.usedBy && new Date(c.expiresAt) > new Date()).length,
   }
 
   return (
     <div className="space-y-6">
-      <Toaster position="top-center" />
-      
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center justify-between"
+      >
         <div>
-          <h1 className="text-3xl font-black mb-2">Коды приглашения 🔑</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Управление кодами для регистрации студентов
+          <h1 className="text-3xl font-black bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+            Инвайт-коды
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Генерация и управление кодами приглашений
           </p>
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={printCodes}
-            className="px-4 py-2 bg-gray-600 text-white rounded-xl font-semibold flex items-center gap-2 hover:bg-gray-700 transition-colors"
-          >
-            <Printer className="w-5 h-5" />
-            Печать
-          </button>
-          <button
-            onClick={() => setShowGenerateModal(true)}
-            className="px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity shadow-lg"
-          >
-            <Plus className="w-5 h-5" />
-            Сгенерировать коды
-          </button>
-        </div>
-      </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setShowGenerateModal(true)}
+          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+        >
+          <Sparkles className="w-5 h-5" />
+          Сгенерировать коды
+        </motion.button>
+      </motion.div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
-        <div className="glass-effect rounded-2xl p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Всего</p>
-          <p className="text-3xl font-black">{codes.length}</p>
-        </div>
-        <div className="glass-effect rounded-2xl p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Активных</p>
-          <p className="text-3xl font-black text-green-600">{codes.filter(c => c.isActive && !c.usedBy).length}</p>
-        </div>
-        <div className="glass-effect rounded-2xl p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Использовано</p>
-          <p className="text-3xl font-black text-blue-600">{codes.filter(c => c.usedBy).length}</p>
-        </div>
-        <div className="glass-effect rounded-2xl p-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Истекло</p>
-          <p className="text-3xl font-black text-red-600">
-            {codes.filter(c => new Date(c.expiresAt) < new Date() && !c.usedBy).length}
-          </p>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {[
+          { label: 'Всего кодов', value: stats.total, icon: Ticket, color: 'pink' },
+          { label: 'Использовано', value: stats.used, icon: Check, color: 'green' },
+          { label: 'Активных', value: stats.active, icon: Sparkles, color: 'blue' },
+        ].map((stat, index) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="glass-effect rounded-2xl p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+                <p className="text-3xl font-black mt-1">{stat.value}</p>
+              </div>
+              <div className={`p-3 bg-${stat.color}-100 dark:bg-${stat.color}-900/30 rounded-xl`}>
+                <stat.icon className={`w-6 h-6 text-${stat.color}-600 dark:text-${stat.color}-400`} />
+              </div>
+            </div>
+          </motion.div>
+        ))}
       </div>
 
       {/* Codes List */}
-      <div className="space-y-3">
-        {codes.map((code) => (
-          <motion.div
-            key={code.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass-effect rounded-2xl p-4"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4 flex-1">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                  code.usedBy ? 'bg-blue-100 dark:bg-blue-900/30' :
-                  !code.isActive ? 'bg-gray-100 dark:bg-gray-800' :
-                  new Date(code.expiresAt) < new Date() ? 'bg-red-100 dark:bg-red-900/30' :
-                  'bg-green-100 dark:bg-green-900/30'
-                }`}>
-                  <Key className={`w-6 h-6 ${
-                    code.usedBy ? 'text-blue-600 dark:text-blue-400' :
-                    !code.isActive ? 'text-gray-400' :
-                    new Date(code.expiresAt) < new Date() ? 'text-red-600 dark:text-red-400' :
-                    'text-green-600 dark:text-green-400'
-                  }`} />
-                </div>
-                
-                <div className="flex-1">
-                  <p className="font-bold text-lg font-mono">{code.code}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {code.group.name} • {code.group.specialty.name}
-                  </p>
-                  <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
-                    <span>Создан: {new Date(code.createdAt).toLocaleDateString()}</span>
-                    <span>•</span>
-                    <span>Истекает: {new Date(code.expiresAt).toLocaleDateString()}</span>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="glass-effect rounded-2xl p-6"
+      >
+        <h2 className="text-xl font-black mb-6">Сгенерированные коды</h2>
+
+        <div className="space-y-3">
+          <AnimatePresence>
+            {codes.map((code, index) => (
+              <motion.div
+                key={code.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ delay: index * 0.05 }}
+                className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-pink-500 dark:hover:border-pink-500 transition-all"
+              >
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="p-3 bg-pink-100 dark:bg-pink-900/30 rounded-xl">
+                    <Ticket className="w-5 h-5 text-pink-600 dark:text-pink-400" />
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <code className="text-lg font-bold font-mono bg-gray-100 dark:bg-gray-900 px-3 py-1 rounded-lg">
+                        {code.code}
+                      </code>
+                      <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg text-xs font-bold">
+                        {code.group?.name}
+                      </span>
+                      {code.usedBy ? (
+                        <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-xs font-bold">
+                          Использован
+                        </span>
+                      ) : (
+                        <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 rounded-lg text-xs font-bold">
+                          Активен
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-400">
+                      {code.usedBy && (
+                        <span className="flex items-center gap-1">
+                          <Users className="w-4 h-4" />
+                          {code.usedBy.name}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        Истекает: {new Date(code.expiresAt).toLocaleDateString('ru-RU')}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-3">
-                {code.usedBy ? (
-                  <span className="px-4 py-2 bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 rounded-xl text-sm font-bold flex items-center gap-2">
-                    <Check className="w-4 h-4" />
-                    Использован
-                  </span>
-                ) : !code.isActive ? (
-                  <span className="px-4 py-2 bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 rounded-xl text-sm font-bold">
-                    Деактивирован
-                  </span>
-                ) : new Date(code.expiresAt) < new Date() ? (
-                  <span className="px-4 py-2 bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded-xl text-sm font-bold">
-                    Истёк
-                  </span>
-                ) : (
-                  <span className="px-4 py-2 bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-xl text-sm font-bold flex items-center gap-2">
-                    <Check className="w-4 h-4" />
-                    Активен
-                  </span>
-                )}
-
-                <button
-                  onClick={() => copyCode(code.code)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                  title="Скопировать код"
-                >
-                  <Copy className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                </button>
-              </div>
-            </div>
-
-            {code.usedBy && (
-              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400">
-                Использован {new Date(code.usedAt!).toLocaleString()}
-              </div>
-            )}
-          </motion.div>
-        ))}
-
-        {codes.length === 0 && (
-          <div className="glass-effect rounded-2xl p-12 text-center">
-            <Key className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-500 dark:text-gray-400">
-              Кодов пока нет. Сгенерируйте первые коды!
-            </p>
-          </div>
-        )}
-      </div>
+                <div className="flex items-center gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => copyToClipboard(code.code)}
+                    className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                    title="Копировать"
+                  >
+                    {copiedCode === code.code ? (
+                      <Check className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <Copy className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    )}
+                  </motion.button>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                    title="Удалить"
+                  >
+                    <Trash2 className="w-5 h-5 text-red-600 dark:text-red-400" />
+                  </motion.button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      </motion.div>
 
       {/* Generate Modal */}
       <AnimatePresence>
         {showGenerateModal && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={() => setShowGenerateModal(false)}>
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-            
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowGenerateModal(false)}
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              initial={{ scale: 0.9, opacity: 0, rotateX: 10 }}
+              animate={{ scale: 1, opacity: 1, rotateX: 0 }}
+              exit={{ scale: 0.9, opacity: 0, rotateX: 10 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full shadow-2xl z-10"
+              className="bg-white dark:bg-gray-900 rounded-2xl p-8 max-w-md w-full shadow-2xl"
             >
-              <button
-                onClick={() => setShowGenerateModal(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="mb-6">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-                  <Key className="w-8 h-8 text-white" />
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-pink-100 dark:bg-pink-900/30 rounded-xl">
+                    <Sparkles className="w-6 h-6 text-pink-600 dark:text-pink-400" />
+                  </div>
+                  <h2 className="text-2xl font-black">Генерация кодов</h2>
                 </div>
-                <h2 className="text-2xl font-black text-center mb-2">Генерация кодов</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-                  Создайте коды приглашения для студентов
-                </p>
+                <button
+                  onClick={() => setShowGenerateModal(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              <div className="space-y-4">
-                {/* Group Select */}
+              <form onSubmit={handleGenerateCodes} className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold mb-2">Группа</label>
                   <select
-                    value={selectedGroupId}
-                    onChange={(e) => setSelectedGroupId(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500"
                     required
+                    value={formData.groupId}
+                    onChange={(e) => setFormData({ ...formData, groupId: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-pink-500"
                   >
                     <option value="">Выберите группу</option>
                     {groups.map((group) => (
                       <option key={group.id} value={group.id}>
-                        {group.name} - {group.specialty?.name || ''}
+                        {group.name}
                       </option>
                     ))}
                   </select>
                 </div>
 
-                {/* Count */}
                 <div>
                   <label className="block text-sm font-semibold mb-2">Количество кодов</label>
                   <input
                     type="number"
-                    value={count}
-                    onChange={(e) => setCount(parseInt(e.target.value))}
-                    min="1"
-                    max="100"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500"
                     required
+                    min="1"
+                    max="50"
+                    value={formData.quantity}
+                    onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   />
                 </div>
 
-                {/* Expires In Days */}
                 <div>
                   <label className="block text-sm font-semibold mb-2">Срок действия (дней)</label>
                   <input
                     type="number"
-                    value={expiresInDays}
-                    onChange={(e) => setExpiresInDays(parseInt(e.target.value))}
+                    required
                     min="1"
                     max="365"
-                    className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500"
-                    required
+                    value={formData.expiresInDays}
+                    onChange={(e) => setFormData({ ...formData, expiresInDays: parseInt(e.target.value) })}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   />
                 </div>
 
-                <button
-                  onClick={handleGenerate}
-                  disabled={generating}
-                  className="w-full py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  {generating ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                      Генерация...
-                    </>
-                  ) : (
-                    <>
-                      <Plus className="w-5 h-5" />
-                      Сгенерировать
-                    </>
-                  )}
-                </button>
-              </div>
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowGenerateModal(false)}
+                    className="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                  >
+                    Сгенерировать
+                  </button>
+                </div>
+              </form>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

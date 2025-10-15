@@ -11,17 +11,17 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import AdminDashboard from './AdminDashboard'
-import NewsManager from './NewsManager'
-import GalleryManager from './GalleryManager'
+import StudentsManager from './StudentsManager'
+import GroupsManager from './GroupsManager'
 import InviteCodesManager from './InviteCodesManager'
 import UsersManager from './UsersManager'
 
 const menuItems = [
   { id: 'dashboard', name: 'Дэшборд', icon: LayoutDashboard },
-  { id: 'news', name: 'Новости', icon: FileText },
-  { id: 'gallery', name: 'Галерея', icon: Image },
-  { id: 'events', name: 'События', icon: Calendar },
-  { id: 'users', name: 'Пользователи', icon: Users },
+  { id: 'students', name: 'Студенты', icon: Users },
+  { id: 'groups', name: 'Группы', icon: FileText },
+  { id: 'invite-codes', name: 'Инвайт-коды', icon: Calendar },
+  { id: 'users', name: 'Все пользователи', icon: Users },
   { id: 'settings', name: 'Настройки', icon: Settings },
 ]
 
@@ -33,20 +33,12 @@ export default function AdminPanel() {
     switch (activeTab) {
       case 'dashboard':
         return <AdminDashboard onActionClick={setActiveTab} />
+      case 'students':
+        return <StudentsManager />
+      case 'groups':
+        return <GroupsManager />
       case 'invite-codes':
         return <InviteCodesManager />
-      case 'news':
-        return <NewsManager />
-      case 'gallery':
-        return <GalleryManager />
-      case 'events':
-        return (
-          <div className="glass-effect rounded-2xl p-8 text-center">
-            <Calendar className="w-16 h-16 mx-auto mb-4 text-purple-600 dark:text-purple-400" />
-            <h2 className="text-2xl font-black mb-2">События</h2>
-            <p className="text-gray-600 dark:text-gray-400">В разработке</p>
-          </div>
-        )
       case 'users':
         return <UsersManager />
       case 'settings':
