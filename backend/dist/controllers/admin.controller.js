@@ -270,12 +270,19 @@ exports.getAllSubjects = getAllSubjects;
 const createSubject = async (req, res) => {
     try {
         const { name, code, specialtyId, teacherId } = req.body;
+        // Используем connect для связи с specialty
         const subject = await prisma.subject.create({
             data: {
                 name,
                 code,
-                specialtyId,
-                teacherId,
+                specialty: {
+                    connect: { id: specialtyId }
+                },
+                ...(teacherId && teacherId !== '' && {
+                    teacher: {
+                        connect: { id: teacherId }
+                    }
+                }),
             },
             include: {
                 specialty: true,

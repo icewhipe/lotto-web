@@ -182,8 +182,8 @@ model Subject {
   code        String    @unique
   specialtyId String
   specialty   Specialty @relation(fields: [specialtyId], references: [id])
-  teacherId   String
-  teacher     Teacher   @relation(fields: [teacherId], references: [id])
+  teacherId   String?
+  teacher     Teacher?  @relation(fields: [teacherId], references: [id])
 
   grades    Grade[]
   schedules Schedule[]

@@ -14,7 +14,6 @@ const DAYS = [
   { id: 3, name: 'Среда', short: 'Ср' },
   { id: 4, name: 'Четверг', short: 'Чт' },
   { id: 5, name: 'Пятница', short: 'Пт' },
-  { id: 6, name: 'Суббота', short: 'Сб' },
 ]
 
 const LESSON_TIMES = [
