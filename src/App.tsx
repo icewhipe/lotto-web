@@ -6,23 +6,40 @@ import RegisterPage from './components/RegisterPage'
 import Dashboard from './components/Dashboard'
 import PageLoader from './components/PageLoader'
 import UnderConstruction from './components/UnderConstruction'
-import MainSite from './components/MainSite'
+import FullSite from './components/site/FullSite'
 
 function App() {
-  const [showMainSite, setShowMainSite] = useState(false)
+  const [showFullSite, setShowFullSite] = useState(true) // Changed to true to show new site by default
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
   const { isAuthenticated } = useAuth()
 
   useEffect(() => {
-    // Check for saved theme preference or default to light mode
+    // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark)
+    setIsDarkMode(shouldBeDark)
+    
+    if (shouldBeDark) {
       document.documentElement.classList.add('dark')
     }
   }, [])
+
+  const toggleTheme = () => {
+    const newIsDark = !isDarkMode
+    setIsDarkMode(newIsDark)
+    
+    if (newIsDark) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }
 
   // Show Dashboard if authenticated
   if (isAuthenticated) {
@@ -43,7 +60,7 @@ function App() {
       <LoginPage 
         onBack={() => {
           setShowLogin(false)
-          setShowMainSite(false)
+          setShowFullSite(true)
         }} 
         onRegisterClick={() => {
           setShowLogin(false)
@@ -53,24 +70,28 @@ function App() {
     )
   }
 
-  // Show Main Site (new design)
-  if (showMainSite) {
+  // Show Full Site (new design with all sections)
+  if (showFullSite) {
     return (
       <AnimatePresence mode="wait">
         <motion.div
-          key="mainsite"
+          key="fullsite"
           initial={{ opacity: 0, filter: 'blur(20px)', scale: 0.95 }}
           animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
           exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.05 }}
           transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
         >
-          <MainSite onNavigateToDiary={() => setShowLogin(true)} />
+          <FullSite 
+            onNavigateToDiary={() => setShowLogin(true)}
+            isDarkMode={isDarkMode}
+            onToggleTheme={toggleTheme}
+          />
         </motion.div>
       </AnimatePresence>
     )
   }
 
-  // Show main website - UNDER CONSTRUCTION
+  // Show construction page (fallback)
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -82,7 +103,7 @@ function App() {
         <PageLoader />
         <UnderConstruction 
           onLoginClick={() => setShowLogin(true)}
-          onNavigateToSite={() => setShowMainSite(true)}
+          onNavigateToSite={() => setShowFullSite(true)}
         />
       </motion.div>
     </AnimatePresence>
