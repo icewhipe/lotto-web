@@ -252,30 +252,166 @@ export const galleryAPI = {
   },
 };
 
-// ============= USERS API (для админа) =============
+// ============= ADMIN API =============
 
-export const usersAPI = {
-  // Получить всех пользователей
-  getAll: async () => {
-    const response = await api.get('/users');
+export const adminAPI = {
+  // Пользователи
+  getUsers: async (filters?: { role?: string; search?: string }) => {
+    const response = await api.get('/admin/users', { params: filters });
     return response.data;
   },
 
-  // Создать пользователя
-  create: async (data: any) => {
-    const response = await api.post('/users', data);
+  createUser: async (data: {
+    email: string;
+    password: string;
+    name: string;
+    role: string;
+    groupId?: string;
+  }) => {
+    const response = await api.post('/admin/user', data);
     return response.data;
   },
 
-  // Обновить пользователя
-  update: async (userId: string, data: any) => {
-    const response = await api.put(`/users/${userId}`, data);
+  deleteUser: async (userId: string) => {
+    const response = await api.delete(`/admin/user/${userId}`);
     return response.data;
   },
 
-  // Удалить пользователя
-  delete: async (userId: string) => {
-    const response = await api.delete(`/users/${userId}`);
+  // Группы
+  getGroups: async () => {
+    const response = await api.get('/admin/groups');
+    return response.data;
+  },
+
+  createGroup: async (data: {
+    name: string;
+    specialtyId: string;
+    year: number;
+  }) => {
+    const response = await api.post('/admin/group', data);
+    return response.data;
+  },
+
+  // Предметы
+  getSubjects: async () => {
+    const response = await api.get('/admin/subjects');
+    return response.data;
+  },
+
+  createSubject: async (data: {
+    name: string;
+    code: string;
+    specialtyId: string;
+    teacherId: string;
+  }) => {
+    const response = await api.post('/admin/subject', data);
+    return response.data;
+  },
+
+  // Статистика
+  getStats: async () => {
+    const response = await api.get('/admin/stats');
+    return response.data;
+  },
+};
+
+// ============= TEACHER API =============
+
+export const teacherAPI = {
+  // Расписание преподавателя
+  getSchedule: async () => {
+    const response = await api.get('/teacher/schedule');
+    return response.data;
+  },
+
+  // Студенты преподавателя
+  getStudents: async () => {
+    const response = await api.get('/teacher/students');
+    return response.data;
+  },
+
+  // Группы преподавателя
+  getGroups: async () => {
+    const response = await api.get('/teacher/groups');
+    return response.data;
+  },
+
+  // Выставить оценку
+  createGrade: async (data: {
+    studentId: string;
+    subjectId: string;
+    value: number;
+    type: string;
+    comment?: string;
+  }) => {
+    const response = await api.post('/teacher/grade', data);
+    return response.data;
+  },
+
+  // Отметить посещаемость
+  markAttendance: async (data: {
+    studentId: string;
+    date: string;
+    status: string;
+    reason?: string;
+  }) => {
+    const response = await api.post('/teacher/attendance', data);
+    return response.data;
+  },
+};
+
+// ============= PARENT API =============
+
+export const parentAPI = {
+  // Получить детей
+  getChildren: async () => {
+    const response = await api.get('/parent/children');
+    return response.data;
+  },
+
+  // Оценки ребёнка
+  getChildGrades: async (childId: string) => {
+    const response = await api.get(`/parent/child/${childId}/grades`);
+    return response.data;
+  },
+
+  // Посещаемость ребёнка
+  getChildAttendance: async (childId: string) => {
+    const response = await api.get(`/parent/child/${childId}/attendance`);
+    return response.data;
+  },
+
+  // Расписание ребёнка
+  getChildSchedule: async (childId: string) => {
+    const response = await api.get(`/parent/child/${childId}/schedule`);
+    return response.data;
+  },
+};
+
+// ============= DIRECTOR API =============
+
+export const directorAPI = {
+  // Аналитика
+  getAnalytics: async () => {
+    const response = await api.get('/director/analytics');
+    return response.data;
+  },
+
+  // Отчёт по успеваемости
+  getPerformanceReport: async () => {
+    const response = await api.get('/director/performance-report');
+    return response.data;
+  },
+
+  // Отчёт по посещаемости
+  getAttendanceReport: async () => {
+    const response = await api.get('/director/attendance-report');
+    return response.data;
+  },
+
+  // Обзор групп
+  getGroupsOverview: async () => {
+    const response = await api.get('/director/groups-overview');
     return response.data;
   },
 };
