@@ -96,6 +96,19 @@ export default function InviteCodesManager() {
     setTimeout(() => setCopiedCode(null), 2000)
   }
 
+  const handleDeleteCode = async (codeId: string) => {
+    if (!window.confirm('Вы уверены, что хотите удалить этот код?')) return
+    
+    try {
+      // TODO: Подключить к API
+      setCodes(codes.filter(c => c.id !== codeId))
+      toast.success('Код удалён!')
+    } catch (error) {
+      console.error('Error deleting code:', error)
+      toast.error('Ошибка удаления кода')
+    }
+  }
+
   const stats = {
     total: codes.length,
     used: codes.filter(c => c.usedBy).length,
@@ -232,6 +245,7 @@ export default function InviteCodesManager() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => handleDeleteCode(code.id)}
                     className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                     title="Удалить"
                   >

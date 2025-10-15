@@ -6,6 +6,7 @@ import {
   Crown, Briefcase, Save
 } from 'lucide-react'
 import toast from 'react-hot-toast'
+// TODO: Подключить к adminAPI в будущем
 
 interface User {
   id: string
@@ -87,7 +88,7 @@ export default function UsersManager() {
     ]
   }
 
-  const handleCreateUser = () => {
+  const handleCreateUser = async () => {
     if (!newUser.email || !newUser.password || !newUser.name) {
       toast.error('Заполните все поля!')
       return
@@ -126,10 +127,14 @@ export default function UsersManager() {
     toast.success(`Пользователь ${newUser.name} создан!`)
     
     setIsCreateModalOpen(false)
+    resetForm()
+  }
+
+  const resetForm = () => {
     setNewUser({ email: '', password: '', name: '', role: 'STUDENT' })
   }
 
-  const handleDeleteUser = (userId: string) => {
+  const handleDeleteUser = async (userId: string) => {
     const user = users.find(u => u.id === userId)
     if (!user) return
 
