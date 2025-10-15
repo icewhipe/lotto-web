@@ -10,7 +10,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",
-    "seed": "tsx src/utils/seedDatabase.ts",
+    "seed": "tsx prisma/seed.ts",
+    "seed:full": "tsx prisma/seed-advanced.ts",
     "create-invite-code": "tsx src/utils/createTestInviteCode.ts",
     "test": "jest"
   },
