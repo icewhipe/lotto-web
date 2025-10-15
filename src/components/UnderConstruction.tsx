@@ -95,29 +95,123 @@ export default function UnderConstruction({ onLoginClick }: UnderConstructionPro
               </p>
               
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
                 onClick={onLoginClick}
-                className="group relative px-10 py-5 bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 text-white font-bold text-xl rounded-2xl shadow-2xl hover:shadow-violet-500/50 transition-all mx-auto inline-flex items-center gap-3"
+                className="group relative px-10 py-5 text-white text-xl font-black rounded-2xl overflow-hidden mx-auto inline-flex items-center gap-3"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <span>Войти</span>
+                {/* Анимированный градиентный фон */}
                 <motion.div
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="absolute inset-0 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600"
+                  animate={{
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                  style={{
+                    backgroundSize: '200% 200%',
+                  }}
+                />
+                
+                {/* Пульсирующее свечение */}
+                <motion.div
+                  className="absolute -inset-4 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 opacity-0 group-hover:opacity-50 blur-2xl"
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                    scale: [0.98, 1.02, 0.98],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                />
+
+                {/* Блики */}
+                <motion.div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100"
+                  initial={{ x: '-100%' }}
+                  whileHover={{
+                    x: '100%',
+                    transition: {
+                      duration: 0.6,
+                      ease: 'easeInOut',
+                    },
+                  }}
+                >
+                  <div className="h-full w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12" />
+                </motion.div>
+
+                {/* Частицы */}
+                {[...Array(4)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1.5 h-1.5 bg-white rounded-full"
+                    style={{
+                      left: `${25 + i * 20}%`,
+                      top: '50%',
+                    }}
+                    animate={{
+                      y: [-15, -30, -15],
+                      opacity: [0, 1, 0],
+                      scale: [0, 1.2, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: i * 0.3,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                ))}
+
+                {/* Текст кнопки */}
+                <span className="relative z-10">
+                  <motion.span
+                    animate={{
+                      textShadow: [
+                        '0 0 20px rgba(255,255,255,0.5)',
+                        '0 0 30px rgba(255,255,255,0.8)',
+                        '0 0 20px rgba(255,255,255,0.5)',
+                      ],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
+                  >
+                    Войти
+                  </motion.span>
+                </span>
+                
+                <motion.div
+                  className="relative z-10"
+                  animate={{
+                    x: [0, 5, 0],
+                  }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
                 >
                   <ArrowRight className="w-6 h-6" />
                 </motion.div>
-                
-                {/* Shine effect */}
+
+                {/* Граница с анимацией */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-2xl"
+                  className="absolute inset-0 rounded-2xl border-2 border-white/20"
                   animate={{
-                    x: ['-100%', '200%'],
+                    borderColor: ['rgba(255,255,255,0.2)', 'rgba(255,255,255,0.5)', 'rgba(255,255,255,0.2)'],
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 2,
                     repeat: Infinity,
-                    repeatDelay: 2,
+                    ease: 'easeInOut',
                   }}
                 />
               </motion.button>
