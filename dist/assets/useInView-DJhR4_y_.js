@@ -1,1 +1,0 @@
-import{r as e}from"./react-vendor-Bh6Yd7jx.js";function r(r,t){const[n,s]=e.useState(!1);return e.useEffect(()=>{const e=new IntersectionObserver(([e])=>{s(e.isIntersecting)},t),n=r.current;return n&&e.observe(n),()=>{n&&e.unobserve(n)}},[r,t]),n}export{r as u};
