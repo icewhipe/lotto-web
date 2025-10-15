@@ -51,12 +51,33 @@ export default function StudentsManager() {
     try {
       setLoading(true)
       const [studentsRes, groupsRes] = await Promise.all([
-        adminAPI.getUsers({ role: 'STUDENT' }),
-        adminAPI.getGroups(),
+        adminAPI.getUsers({ role: 'STUDENT' }).catch(err => {
+          console.error('Error loading students:', err)
+          return { success: false, data: [] }
+        }),
+        adminAPI.getGroups().catch(err => {
+          console.error('Error loading groups:', err)
+          return { success: false, data: [] }
+        }),
       ])
       
-      setStudents(studentsRes.data || [])
-      setGroups(groupsRes.data || [])
+      if (studentsRes.success && studentsRes.data) {
+        // Преобразуем users в students формат
+        const studentsData = Array.isArray(studentsRes.data) 
+          ? studentsRes.data 
+          : studentsRes.data.users || []
+        
+        setStudents(studentsData.map((u: any) => ({
+          id: u.id,
+          user: { name: u.name, email: u.email },
+          group: u.student?.group || { name: 'Не указана' },
+          studentNumber: u.student?.studentNumber || 'N/A',
+        })))
+      }
+      
+      if (groupsRes.success && groupsRes.data) {
+        setGroups(Array.isArray(groupsRes.data) ? groupsRes.data : groupsRes.data.groups || [])
+      }
     } catch (error) {
       console.error('Error loading data:', error)
       toast.error('Ошибка загрузки данных')

@@ -47,7 +47,10 @@ export default function SpecialtiesManager() {
       setLoading(true)
       const response = await fetch('http://localhost:3000/api/specialties')
       const data = await response.json()
-      setSpecialties(data.data || [])
+      
+      if (data.success && data.data) {
+        setSpecialties(Array.isArray(data.data) ? data.data : data.data.specialties || [])
+      }
     } catch (error) {
       console.error('Error loading specialties:', error)
       toast.error('Ошибка загрузки специальностей')

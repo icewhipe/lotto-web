@@ -54,12 +54,17 @@ export default function GroupsManager() {
     try {
       setLoading(true)
       const [groupsRes, specialtiesRes] = await Promise.all([
-        adminAPI.getGroups(),
-        fetch('http://localhost:3000/api/specialties').then(r => r.json()).catch(() => ({ data: [] })),
+        adminAPI.getGroups().catch(() => ({ success: false, data: [] })),
+        fetch('http://localhost:3000/api/specialties').then(r => r.json()).catch(() => ({ success: false, data: [] })),
       ])
       
-      setGroups(groupsRes.data || [])
-      setSpecialties(specialtiesRes.data || [])
+      if (groupsRes.success && groupsRes.data) {
+        setGroups(Array.isArray(groupsRes.data) ? groupsRes.data : groupsRes.data.groups || [])
+      }
+      
+      if (specialtiesRes.success && specialtiesRes.data) {
+        setSpecialties(Array.isArray(specialtiesRes.data) ? specialtiesRes.data : specialtiesRes.data.specialties || [])
+      }
     } catch (error) {
       console.error('Error loading data:', error)
       toast.error('Ошибка загрузки данных')
