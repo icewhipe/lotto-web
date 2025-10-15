@@ -9,7 +9,7 @@ import UnderConstruction from './components/UnderConstruction'
 import FullSite from './components/site/FullSite'
 
 function App() {
-  const [showFullSite, setShowFullSite] = useState(true) // Changed to true to show new site by default
+  const [showFullSite, setShowFullSite] = useState(true) // Show new glassmorphic site by default
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -70,16 +70,16 @@ function App() {
     )
   }
 
-  // Show Full Site (new design with all sections)
+  // Show Full Site (glassmorphic design)
   if (showFullSite) {
     return (
       <AnimatePresence mode="wait">
         <motion.div
           key="fullsite"
-          initial={{ opacity: 0, filter: 'blur(20px)', scale: 0.95 }}
-          animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
-          exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.05 }}
-          transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
         >
           <FullSite 
             onNavigateToDiary={() => setShowLogin(true)}
