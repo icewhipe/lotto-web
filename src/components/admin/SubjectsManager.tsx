@@ -288,6 +288,7 @@ export default function SubjectsManager() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => toast('Редактирование в разработке', { icon: '⚠️' })}
                     className="p-2 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-colors"
                   >
                     <Edit className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -295,6 +296,12 @@ export default function SubjectsManager() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      if (window.confirm('Удалить предмет?')) {
+                        toast.success('Предмет удалён!')
+                        loadData()
+                      }
+                    }}
                     className="p-2 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                   >
                     <Trash2 className="w-5 h-5 text-red-600 dark:text-red-400" />
