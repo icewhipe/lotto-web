@@ -13,12 +13,16 @@ import AdminDashboard from './AdminDashboard'
 import StudentsManager from './StudentsManager'
 import GroupsManager from './GroupsManager'
 import InviteCodesManager from './InviteCodesManager'
+import SpecialtiesManager from './SpecialtiesManager'
+import ScheduleManager from './ScheduleManager'
 import UsersManager from './UsersManager'
 
 const menuItems = [
   { id: 'dashboard', name: 'Дэшборд', icon: LayoutDashboard },
   { id: 'students', name: 'Студенты', icon: Users },
-  { id: 'groups', name: 'Группы', icon: FileText },
+  { id: 'groups', name: 'Группы', icon: Users },
+  { id: 'specialties', name: 'Специальности', icon: FileText },
+  { id: 'schedule', name: 'Расписание', icon: Calendar },
   { id: 'invite-codes', name: 'Инвайт-коды', icon: Calendar },
   { id: 'users', name: 'Все пользователи', icon: Users },
   { id: 'settings', name: 'Настройки', icon: Settings },
@@ -36,6 +40,10 @@ export default function AdminPanel() {
         return <StudentsManager />
       case 'groups':
         return <GroupsManager />
+      case 'specialties':
+        return <SpecialtiesManager />
+      case 'schedule':
+        return <ScheduleManager />
       case 'invite-codes':
         return <InviteCodesManager />
       case 'users':
