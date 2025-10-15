@@ -80,10 +80,15 @@ export default function SubjectsManager() {
       
       if (teachersRes.success && teachersRes.data) {
         const teachersData = Array.isArray(teachersRes.data) ? teachersRes.data : teachersRes.data.users || []
-        setTeachers(teachersData.map((t: any) => ({
-          id: t.teacher?.id || t.id,
-          user: { name: t.name, email: t.email }
-        })))
+        // Фильтруем только тех, у кого есть teacher.id
+        const validTeachers = teachersData
+          .filter((t: any) => t.teacher && t.teacher.id)
+          .map((t: any) => ({
+            id: t.teacher.id, // ВАЖНО: используем teacher.id, а не user.id
+            user: { name: t.name, email: t.email }
+          }))
+        setTeachers(validTeachers)
+        console.log('Loaded teachers:', validTeachers)
       }
     } catch (error) {
       console.error('Error loading data:', error)
@@ -97,7 +102,17 @@ export default function SubjectsManager() {
     e.preventDefault()
     
     try {
-      const response = await adminAPI.createSubject(formData)
+      // Убираем пустой teacherId если не выбран
+      const dataToSend = {
+        name: formData.name,
+        code: formData.code,
+        specialtyId: formData.specialtyId,
+        ...(formData.teacherId && { teacherId: formData.teacherId })
+      }
+      
+      console.log('Creating subject with data:', dataToSend)
+      
+      const response = await adminAPI.createSubject(dataToSend)
       
       if (response.success) {
         toast.success('Предмет создан!')

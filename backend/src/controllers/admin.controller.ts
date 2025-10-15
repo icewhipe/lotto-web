@@ -275,12 +275,13 @@ export const createSubject = async (req: AuthRequest, res: Response) => {
   try {
     const { name, code, specialtyId, teacherId } = req.body;
 
+    // teacherId опционален - может быть пустым
     const subject = await prisma.subject.create({
       data: {
         name,
         code,
         specialtyId,
-        teacherId,
+        ...(teacherId && teacherId !== '' && { teacherId }), // Добавляем только если есть
       },
       include: {
         specialty: true,

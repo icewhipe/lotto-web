@@ -23,6 +23,11 @@ const turnstile_routes_1 = __importDefault(require("./routes/turnstile.routes"))
 const grades_routes_1 = __importDefault(require("./routes/grades.routes"));
 const schedule_routes_1 = __importDefault(require("./routes/schedule.routes"));
 const attendance_routes_1 = __importDefault(require("./routes/attendance.routes"));
+const teacher_routes_1 = __importDefault(require("./routes/teacher.routes"));
+const parent_routes_1 = __importDefault(require("./routes/parent.routes"));
+const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
+const director_routes_1 = __importDefault(require("./routes/director.routes"));
+const specialty_routes_1 = __importDefault(require("./routes/specialty.routes"));
 // Initialize express
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
@@ -58,6 +63,12 @@ app.use('/api/turnstiles', turnstile_routes_1.default);
 app.use('/api/grades', grades_routes_1.default);
 app.use('/api/schedule', schedule_routes_1.default);
 app.use('/api/attendance', attendance_routes_1.default);
+// Role-specific routes
+app.use('/api/teacher', teacher_routes_1.default);
+app.use('/api/parent', parent_routes_1.default);
+app.use('/api/admin', admin_routes_1.default);
+app.use('/api/director', director_routes_1.default);
+app.use('/api/specialties', specialty_routes_1.default);
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({
