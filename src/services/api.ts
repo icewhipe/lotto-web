@@ -193,6 +193,121 @@ export const attendanceAPI = {
   },
 };
 
+// ============= PUBLIC API (для сайта) =============
+
+export const publicAPI = {
+  // Получить статистику
+  getStats: async () => {
+    try {
+      const response = await api.get('/public/stats');
+      return response.data;
+    } catch (error) {
+      // Fallback data if API unavailable
+      return {
+        success: true,
+        data: {
+          students: 532,
+          specialties: 12,
+          teachers: 48,
+          employmentRate: 98,
+          yearsOfExperience: 50
+        }
+      };
+    }
+  },
+
+  // Получить новости
+  getNews: async (params?: { page?: number; limit?: number; category?: string }) => {
+    try {
+      const response = await api.get('/public/news', { params });
+      return response.data;
+    } catch (error) {
+      return { success: true, data: { items: [], pagination: { page: 1, limit: 10, total: 0 } } };
+    }
+  },
+
+  // Получить одну новость
+  getNewsById: async (id: string) => {
+    try {
+      const response = await api.get(`/public/news/${id}`);
+      return response.data;
+    } catch (error) {
+      return { success: false, error: 'Новость не найдена' };
+    }
+  },
+
+  // Получить фотогалерею
+  getPhotos: async (params?: { albumId?: string; page?: number; limit?: number }) => {
+    try {
+      const response = await api.get('/public/gallery/photos', { params });
+      return response.data;
+    } catch (error) {
+      return { success: true, data: { items: [], pagination: { page: 1, limit: 20, total: 0 } } };
+    }
+  },
+
+  // Получить альбомы
+  getAlbums: async () => {
+    try {
+      const response = await api.get('/public/gallery/albums');
+      return response.data;
+    } catch (error) {
+      return { success: true, data: [] };
+    }
+  },
+
+  // Получить расписание
+  getSchedule: async (params: { groupId?: string; date?: string }) => {
+    try {
+      const response = await api.get('/public/schedule', { params });
+      return response.data;
+    } catch (error) {
+      return { success: true, data: { group: {}, date: params.date, lessons: [] } };
+    }
+  },
+
+  // Получить специальности
+  getSpecialties: async () => {
+    try {
+      const response = await api.get('/public/specialties');
+      return response.data;
+    } catch (error) {
+      return { success: true, data: [] };
+    }
+  },
+
+  // Подать заявление
+  submitApplication: async (data: {
+    name: string;
+    email: string;
+    phone: string;
+    birthDate: string;
+    specialtyId: string;
+    educationType: string;
+  }) => {
+    const response = await api.post('/public/applications', data);
+    return response.data;
+  },
+
+  // Получить контакты
+  getContacts: async () => {
+    try {
+      const response = await api.get('/public/contacts');
+      return response.data;
+    } catch (error) {
+      return {
+        success: true,
+        data: {
+          phone: '+7 (47391) 4-11-91',
+          email: 'lptt@lptt.obrvrn.ru',
+          address: 'г. Лиски, ул. Лысенко, 1А',
+          workingHours: 'Пн-Пт: 8:00-17:00'
+        }
+      };
+    }
+  },
+};
+
 // ============= NEWS API (для админа) =============
 
 export const newsAPI = {

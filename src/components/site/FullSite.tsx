@@ -27,6 +27,7 @@ import { navigationStructure } from '../../data/navigationStructure'
 
 // Import section components
 import HomeSection from './sections/HomeSection'
+import LiquidGlassHomeV2 from './LiquidGlassHomeV2'
 import NewsSection from './sections/NewsSection'
 import PhotoGallerySection from './sections/PhotoGallerySection'
 import VideoGallerySection from './sections/VideoGallerySection'
@@ -83,9 +84,9 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
   }
 
   const renderContent = () => {
-    // Home
+    // Home - Use new Liquid Glass Home V2
     if (activeSection === 'home') {
-      return <HomeSection isDark={isDarkMode} onNavigate={handleNavigate} onNavigateToDiary={onNavigateToDiary} />
+      return <LiquidGlassHomeV2 isDark={isDarkMode} onNavigate={handleNavigate} onNavigateToDiary={onNavigateToDiary} />
     }
 
     // Press Center
@@ -170,15 +171,18 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
         ? 'bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900' 
         : 'bg-white'
     }`}>
-      {/* Header */}
+      {/* Header - Enhanced Sticky */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        transition={{ duration: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrollY > 50
             ? isDarkMode
-              ? 'bg-slate-900/95 backdrop-blur-xl shadow-xl shadow-blue-500/10'
-              : 'bg-white/95 backdrop-blur-xl shadow-xl shadow-blue-500/5'
+              ? 'bg-slate-900/90 backdrop-blur-2xl shadow-2xl shadow-blue-500/20 border-b border-blue-500/10'
+              : 'bg-white/90 backdrop-blur-2xl shadow-2xl shadow-blue-500/10 border-b border-blue-100'
+            : isDarkMode
+            ? 'bg-transparent'
             : 'bg-transparent'
         }`}
       >
@@ -256,24 +260,24 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
           </div>
         </div>
 
-        {/* Navigation Bar - Fixed, no horizontal scroll */}
+        {/* Navigation Bar - Compact, no horizontal scroll */}
         <div className={`hidden lg:block border-t ${
-          isDarkMode ? 'border-blue-500/20 bg-slate-900/50' : 'border-blue-100 bg-white/50'
+          isDarkMode ? 'border-blue-500/10 bg-slate-900/70' : 'border-blue-100 bg-white/70'
         } backdrop-blur-xl`}>
           <div className="container mx-auto px-6">
-            <div className="flex items-center gap-1 flex-wrap">
+            <div className="flex items-center gap-0.5 overflow-x-auto scrollbar-hide">
               {navigationStructure.map((section) => (
                 <div key={section.id} className="relative group">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={() => section.subsections ? setExpandedMenu(expandedMenu === section.id ? null : section.id) : handleNavigate(section.id)}
-                    className={`px-4 py-3 font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+                    className={`px-3 py-2.5 text-sm font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 rounded-lg ${
                       activeSection === section.id
                         ? isDarkMode
-                          ? 'text-blue-300 bg-blue-500/10'
+                          ? 'text-blue-300 bg-blue-500/15'
                           : 'text-blue-600 bg-blue-50'
                         : isDarkMode
-                        ? 'text-slate-300 hover:bg-blue-500/5'
+                        ? 'text-slate-300 hover:bg-blue-500/10'
                         : 'text-slate-600 hover:bg-blue-50'
                     }`}
                   >

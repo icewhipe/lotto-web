@@ -4,12 +4,12 @@ import { useAuth } from './contexts/AuthContext'
 import LoginPage from './components/LoginPage'
 import RegisterPage from './components/RegisterPage'
 import Dashboard from './components/Dashboard'
-import PageLoader from './components/PageLoader'
-import UnderConstruction from './components/UnderConstruction'
+import LiquidGlassTransition from './components/site/LiquidGlassTransition'
 import FullSite from './components/site/FullSite'
 
 function App() {
-  const [showFullSite, setShowFullSite] = useState(true) // Show new glassmorphic site by default
+  const [showTransition, setShowTransition] = useState(true) // Show liquid glass transition first
+  const [showFullSite, setShowFullSite] = useState(false) // Will show after transition
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -70,16 +70,29 @@ function App() {
     )
   }
 
-  // Show Full Site (glassmorphic design)
+  // Show Liquid Glass Transition first, then Full Site
+  if (showTransition) {
+    return (
+      <AnimatePresence mode="wait">
+        <LiquidGlassTransition 
+          onComplete={() => {
+            setShowTransition(false)
+            setShowFullSite(true)
+          }}
+        />
+      </AnimatePresence>
+    )
+  }
+
+  // Show Full Site (liquid glass design)
   if (showFullSite) {
     return (
       <AnimatePresence mode="wait">
         <motion.div
           key="fullsite"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 1, ease: [0.2, 0.9, 0.2, 1] }}
         >
           <FullSite 
             onNavigateToDiary={() => setShowLogin(true)}
