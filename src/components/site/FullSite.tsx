@@ -206,7 +206,7 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
                   ЛПТТ
                 </h1>
                 <p className={`text-xs ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`}>
-                  Ленинградский политехнический
+                  Лискинский промышленно-транспортный
                 </p>
               </div>
             </motion.button>
@@ -439,7 +439,7 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
                 </p>
                 <p className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
-                  Ленинградская область
+                  г. Лиски, ул. Лысенко, 1А
                 </p>
               </div>
             </div>

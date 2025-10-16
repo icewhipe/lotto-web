@@ -9,15 +9,15 @@ export default function LiquidGlassTransition({ onComplete }: LiquidGlassTransit
   const [waves, setWaves] = useState<Array<{ id: number; delay: number }>>([])
 
   useEffect(() => {
-    // Generate liquid waves - increased from 8 to 12 for smoother effect
+    // Generate liquid waves - smoother with slower timing
     const newWaves = Array.from({ length: 12 }, (_, i) => ({
       id: i,
-      delay: i * 0.08,
+      delay: i * 0.1,
     }))
     setWaves(newWaves)
 
-    // Complete transition - optimized timing
-    setTimeout(onComplete, 2200)
+    // Complete transition - slower for smoother feel
+    setTimeout(onComplete, 2600)
   }, [onComplete])
 
   return (
@@ -54,12 +54,12 @@ export default function LiquidGlassTransition({ onComplete }: LiquidGlassTransit
           animate={{
             y: '-100%',
             opacity: 0,
-            scaleY: [1, 1.2, 0.9, 1],
+            scaleY: [1, 1.15, 0.95, 1],
           }}
           transition={{
-            duration: 2.2,
+            duration: 2.6,
             delay: wave.delay,
-            ease: [0.2, 0.9, 0.2, 1],
+            ease: [0.25, 0.9, 0.25, 1],
           }}
           className="absolute inset-x-0 h-[220px]"
           style={{
@@ -97,9 +97,9 @@ export default function LiquidGlassTransition({ onComplete }: LiquidGlassTransit
               rotate: [0, 180, 360],
             }}
             transition={{
-              duration: 1.8,
-              delay: Math.random() * 0.6,
-              ease: [0.34, 1.56, 0.64, 1], // Elastic easing
+              duration: 2.2,
+              delay: Math.random() * 0.7,
+              ease: [0.3, 1.3, 0.7, 1], // Softer elastic
             }}
             className="absolute rounded-full"
             style={{
@@ -142,21 +142,21 @@ export default function LiquidGlassTransition({ onComplete }: LiquidGlassTransit
         />
       ))}
 
-      {/* Text fade out - enhanced with morphing */}
+      {/* Text fade out - reduced blur */}
       <motion.div
         initial={{ opacity: 1, y: 0 }}
-        animate={{ opacity: 0, y: -60, scale: 0.95 }}
-        transition={{ duration: 1, delay: 0.4, ease: [0.2, 0.9, 0.2, 1] }}
+        animate={{ opacity: 0, y: -60, scale: 0.96 }}
+        transition={{ duration: 1.2, delay: 0.5, ease: [0.2, 0.9, 0.2, 1] }}
         className="absolute inset-0 flex items-center justify-center"
       >
         <div className="text-center">
           <motion.div
             animate={{
-              scale: [1, 1.08, 0.98],
-              filter: ['blur(0px)', 'blur(8px)', 'blur(25px)'],
-              opacity: [1, 0.8, 0],
+              scale: [1, 1.05, 0.98],
+              filter: ['blur(0px)', 'blur(3px)', 'blur(10px)'],
+              opacity: [1, 0.85, 0],
             }}
-            transition={{ duration: 1.6, ease: 'easeOut' }}
+            transition={{ duration: 1.8, ease: 'easeOut' }}
             className="text-6xl font-black bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent"
           >
             ЛПТТ

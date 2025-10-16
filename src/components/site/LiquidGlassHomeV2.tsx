@@ -151,23 +151,21 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
           }`}
         />
 
-        {/* Flowing particles */}
-        {[...Array(15)].map((_, i) => (
+        {/* Subtle ambient particles (minimal) */}
+        {[...Array(5)].map((_, i) => (
           <motion.div
             key={i}
-            className={`absolute w-2 h-2 rounded-full bg-gradient-to-r ${statsData[i % 4].color}`}
+            className={`absolute w-1 h-1 rounded-full bg-gradient-to-r ${statsData[i % 4].color}`}
             style={{
-              left: `${20 + i * 6}%`,
-              top: `${10 + (i * 7) % 80}%`,
+              left: `${20 + i * 15}%`,
+              top: `${20 + (i * 15) % 60}%`,
             }}
             animate={{
-              y: [-30, 30, -30],
-              x: [-20, 20, -20],
-              opacity: [0.2, 0.6, 0.2],
-              scale: [1, 1.5, 1],
+              y: [-10, 10, -10],
+              opacity: [0.1, 0.3, 0.1],
             }}
             transition={{
-              duration: 4 + i * 0.5,
+              duration: 8 + i,
               repeat: Infinity,
               ease: 'easeInOut',
             }}
@@ -175,8 +173,8 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
         ))}
       </div>
 
-      {/* Hero Section - Compact & Raised */}
-      <section className="relative min-h-[70vh] flex items-center pt-24 pb-12">
+      {/* Hero Section - Compact & Raised Higher */}
+      <section className="relative min-h-[65vh] flex items-center pt-16 pb-8">
         <div className="container mx-auto px-6">
           <div className="max-w-7xl mx-auto">
             {/* Badges Row - Location + Enrollment */}
@@ -222,12 +220,12 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
               </motion.div>
             </motion.div>
 
-            {/* Main Heading - Compact Bold */}
+            {/* Main Heading - Compact Bold & Higher */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className={`text-6xl lg:text-7xl font-black leading-[1.05] mb-5 ${
+              className={`text-5xl lg:text-6xl font-black leading-[1.1] mb-4 ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}
             >
@@ -248,12 +246,12 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
               </span>
             </motion.h1>
 
-            {/* Stats Row - 4 badges above fold */}
+            {/* Stats Row - 4 badges above fold - More compact */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 max-w-4xl"
+              className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-5 max-w-3xl"
             >
               {statsData.map((stat, index) => (
                 <motion.div
@@ -278,15 +276,15 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
                     style={{ backgroundSize: '200% 200%' }}
                   />
 
-                  <div className="relative flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg flex-shrink-0`}>
-                      <stat.icon className="w-5 h-5 text-white" />
+                  <div className="relative flex items-center gap-2.5">
+                    <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg flex-shrink-0`}>
+                      <stat.icon className="w-4.5 h-4.5 text-white" />
                     </div>
                     <div className="min-w-0">
-                      <p className={`text-2xl font-black ${isDark ? 'text-white' : 'text-slate-900'} leading-tight`}>
+                      <p className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'} leading-tight`}>
                         {stat.value}
                       </p>
-                      <p className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'} leading-tight truncate`}>
+                      <p className={`text-[11px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'} leading-tight truncate`}>
                         {stat.label}
                       </p>
                     </div>
@@ -295,18 +293,18 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
               ))}
             </motion.div>
 
-            {/* CTA Buttons Row */}
+            {/* CTA Buttons Row - More compact */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-3 mb-6"
+              className="flex flex-col sm:flex-row gap-2.5 mb-4"
             >
               <motion.button
-                whileHover={{ scale: 1.05, y: -3 }}
+                whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => onNavigate('applicants', 'application-screen')}
-                className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-base shadow-2xl shadow-blue-500/50 overflow-hidden"
+                className="group relative px-7 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-bold text-sm shadow-xl shadow-blue-500/40 overflow-hidden"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Подать документы
@@ -321,14 +319,14 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.05, y: -3 }}
+                whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onNavigateToDiary}
-                className={`px-8 py-4 rounded-2xl font-bold text-base backdrop-blur-xl ${
+                className={`px-7 py-3.5 rounded-xl font-bold text-sm backdrop-blur-xl ${
                   isDark
                     ? 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
                     : 'bg-white/70 border border-white/30 text-slate-900 hover:bg-white/90'
-                } shadow-xl transition-all`}
+                } shadow-lg transition-all`}
               >
                 Электронный дневник
               </motion.button>

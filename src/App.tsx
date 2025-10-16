@@ -84,15 +84,15 @@ function App() {
     )
   }
 
-  // Show Full Site (liquid glass design)
+  // Show Full Site (liquid glass design)  
   if (showFullSite) {
     return (
       <AnimatePresence mode="wait">
         <motion.div
           key="fullsite"
-          initial={{ opacity: 0, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 1, ease: [0.2, 0.9, 0.2, 1] }}
+          initial={{ opacity: 0, filter: 'blur(5px)', scale: 0.98 }}
+          animate={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
+          transition={{ duration: 1.2, ease: [0.25, 0.9, 0.25, 1] }}
         >
           <FullSite 
             onNavigateToDiary={() => setShowLogin(true)}
