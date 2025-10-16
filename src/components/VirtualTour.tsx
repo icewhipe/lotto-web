@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
-import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react'
+import { Play, Pause, Volume2, VolumeX, Maximize, X } from 'lucide-react'
 
 const tourSpots = [
   {
@@ -54,6 +54,7 @@ export default function VirtualTour() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
   const [selectedSpot, setSelectedSpot] = useState(tourSpots[0])
+  const [isVideoOpen, setIsVideoOpen] = useState(false)
 
   return (
     <section id="virtual-tour" className="section-padding" ref={ref}>
@@ -183,7 +184,10 @@ export default function VirtualTour() {
                   </div>
                 </div>
 
-                <button className="p-2 hover:bg-white/50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">
+                <button 
+                  onClick={() => setIsVideoOpen(true)}
+                  className="p-2 hover:bg-white/50 dark:hover:bg-gray-800/50 rounded-lg transition-colors"
+                >
                   <Maximize className="w-5 h-5" />
                 </button>
               </div>
@@ -229,6 +233,66 @@ export default function VirtualTour() {
           </div>
         </motion.div>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {isVideoOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsVideoOpen(false)}
+            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
+          >
+            <button
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-10"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-6xl p-4"
+            >
+              <div className={`aspect-video rounded-3xl bg-gradient-to-br ${selectedSpot.gradient} flex items-center justify-center overflow-hidden relative`}>
+                <motion.div
+                  initial={{ scale: 1.2 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center text-white p-12"
+                >
+                  <div className="text-9xl mb-6">{selectedSpot.icon}</div>
+                  <h3 className="text-4xl font-bold mb-3">{selectedSpot.title}</h3>
+                  <p className="text-2xl opacity-90">{selectedSpot.description}</p>
+                  <p className="mt-6 text-white/60">Видео скоро будет добавлено</p>
+                </motion.div>
+
+                {/* Play Button */}
+                <motion.button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setIsPlaying(!isPlaying)
+                  }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="absolute inset-0 m-auto w-24 h-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group hover:bg-white/30 transition-colors"
+                >
+                  {isPlaying ? (
+                    <Pause className="w-12 h-12 text-white" />
+                  ) : (
+                    <Play className="w-12 h-12 text-white ml-1" />
+                  )}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

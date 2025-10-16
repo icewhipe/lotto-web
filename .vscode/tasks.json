@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🚀 Start All (Backend + Frontend)",
+      "type": "shell",
+      "command": "npm start",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "runOptions": {
+        "runOn": "default"
+      }
+    },
+    {
+      "label": "⚡ Quick Start (Concurrently)",
+      "type": "shell",
+      "command": "npm run dev:all",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "🔧 Backend Only",
+      "type": "shell",
+      "command": "npm run dev:backend",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "🎨 Frontend Only",
+      "type": "shell",
+      "command": "npm run dev:frontend",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "🛑 Kill Ports",
+      "type": "shell",
+      "command": "npm run kill:ports",
+      "problemMatcher": []
+    }
+  ]
+}

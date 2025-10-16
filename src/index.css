@@ -2,111 +2,159 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Глобальные стили */
 @layer base {
+  body {
+    @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white;
+    @apply antialiased;
+    /* ЕДИНЫЙ ФОН - НЕ ПЕРЕЛИВАЕТСЯ ПРИ СКРОЛЛЕ */
+    @apply min-h-screen;
+  }
+
   html {
     @apply scroll-smooth;
   }
-  
-  body {
-    @apply font-sans antialiased;
-    @apply bg-white dark:bg-gray-950;
-    @apply text-gray-900 dark:text-gray-50;
-    @apply transition-colors duration-300;
-  }
-
-  ::selection {
-    @apply bg-gradient-to-r from-primary-500 to-purple-600 text-white;
-  }
 }
 
+/* Кастомные компоненты */
 @layer components {
+  /* Glass Effect - унифицированный для всех карточек */
   .glass-effect {
-    @apply bg-white/25 dark:bg-gray-900/25;
-    @apply backdrop-blur-xl backdrop-saturate-150;
-    @apply border border-white/20 dark:border-gray-700/30;
-    @apply shadow-xl shadow-black/10 dark:shadow-black/50;
+    @apply bg-white/70 dark:bg-gray-900/70;
+    @apply backdrop-blur-md;
+    @apply border border-gray-200/50 dark:border-gray-700/50;
+    @apply shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50;
   }
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary-500 to-purple-600;
-    @apply bg-clip-text text-transparent;
-  }
-
-  .btn-primary {
-    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full;
-    @apply bg-gradient-to-r from-primary-500 to-purple-600;
-    @apply text-white font-semibold;
-    @apply shadow-lg shadow-primary-500/40;
-    @apply hover:shadow-xl hover:shadow-primary-500/50;
-    @apply hover:-translate-y-0.5;
-    @apply transition-all duration-300;
-  }
-
-  .btn-secondary {
-    @apply inline-flex items-center gap-2 px-8 py-4 rounded-full;
-    @apply glass-effect;
-    @apply text-gray-900 dark:text-gray-50 font-semibold;
-    @apply hover:-translate-y-0.5;
-    @apply transition-all duration-300;
-  }
-
-  .card-hover {
-    @apply transition-all duration-300;
-    @apply hover:-translate-y-2 hover:shadow-2xl;
-  }
-
-  .section-padding {
-    @apply py-20 md:py-32;
-  }
-
+  /* Container с отступами */
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent;
+  }
+
+  /* Карточка с hover эффектом */
+  .card-hover {
+    @apply transition-all duration-300;
+    @apply hover:scale-[1.02] hover:shadow-xl;
+  }
+
+  /* Кнопки с градиентом по ролям */
+  .btn-director {
+    @apply bg-gradient-to-r from-amber-500 to-yellow-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-zavuch {
+    @apply bg-gradient-to-r from-green-500 to-emerald-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-admin {
+    @apply bg-gradient-to-r from-red-500 to-rose-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-teacher {
+    @apply bg-gradient-to-r from-blue-500 to-cyan-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-student {
+    @apply bg-gradient-to-r from-violet-500 to-purple-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  .btn-parent {
+    @apply bg-gradient-to-r from-pink-500 to-rose-600 text-white;
+    @apply px-6 py-3 rounded-xl font-semibold;
+    @apply hover:shadow-lg transition-all;
+  }
+
+  /* Статистические карточки */
+  .stat-card {
+    @apply glass-effect rounded-2xl p-6;
+    @apply hover:scale-105 transition-transform cursor-pointer;
+  }
+
+  /* Heading унифицированный */
+  .page-heading {
+    @apply text-3xl font-black mb-2;
+    @apply bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300;
+    @apply bg-clip-text text-transparent;
+  }
+
+  /* Scrollbar стилизация */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-600;
+  }
 }
 
+/* Утилиты */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  /* Анимация wave */
+  @keyframes wave {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(20deg);
+    }
+    75% {
+      transform: rotate(-20deg);
+    }
   }
 
-  .animation-delay-200 {
-    animation-delay: 200ms;
+  .animate-wave {
+    animation: wave 1s ease-in-out infinite;
+    transform-origin: 70% 70%;
+    display: inline-block;
   }
 
-  .animation-delay-400 {
-    animation-delay: 400ms;
+  /* Gradient borders */
+  .border-gradient {
+    border-image: linear-gradient(to right, #8b5cf6, #a855f7) 1;
   }
 
-  .animation-delay-600 {
-    animation-delay: 600ms;
+  /* Truncate text */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
   }
-}
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
 
-::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-900;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-primary-500 to-purple-600 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply from-primary-600 to-purple-700;
-}
-
-/* Smooth animations for reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 }

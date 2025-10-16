@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { useInView } from '../hooks/useInView'
-import { Camera, Building2, Users, GraduationCap, Trophy, BookOpen } from 'lucide-react'
+import { Camera, Building2, Users, GraduationCap, Trophy, BookOpen, X, ArrowLeft, ArrowRight } from 'lucide-react'
 
 const galleryCategories = [
   { id: 'all', name: 'Все фото', icon: Camera },
@@ -81,10 +81,23 @@ export default function Gallery() {
   const ref = useRef(null)
   const isInView = useInView(ref, { threshold: 0.05 })
   const [activeCategory, setActiveCategory] = useState('all')
+  const [selectedImage, setSelectedImage] = useState<number | null>(null)
 
   const filteredItems = activeCategory === 'all' 
     ? galleryItems 
     : galleryItems.filter(item => item.category === activeCategory)
+
+  const handlePrevImage = () => {
+    if (selectedImage !== null && selectedImage > 0) {
+      setSelectedImage(selectedImage - 1)
+    }
+  }
+
+  const handleNextImage = () => {
+    if (selectedImage !== null && selectedImage < galleryItems.length - 1) {
+      setSelectedImage(selectedImage + 1)
+    }
+  }
 
   return (
     <section id="gallery" className="section-padding bg-gray-50 dark:bg-gray-900/50" ref={ref}>
@@ -146,6 +159,7 @@ export default function Gallery() {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ delay: index * 0.05, duration: 0.4 }}
               whileHover={{ y: -8, scale: 1.02 }}
+              onClick={() => setSelectedImage(galleryItems.findIndex(i => i.id === item.id))}
               className="glass-effect rounded-3xl overflow-hidden cursor-pointer group"
             >
               {/* Image Placeholder */}
@@ -194,6 +208,86 @@ export default function Gallery() {
           </p>
         </motion.div>
       </div>
+
+      {/* Full-screen Image Modal */}
+      <AnimatePresence>
+        {selectedImage !== null && (
+          <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            {/* Blur backdrop */}
+            <div className="absolute inset-0 backdrop-blur-xl" style={{ backgroundColor: 'rgba(255,255,255,0.4)' }} />
+            <div className="absolute inset-0 backdrop-blur-xl dark:backdrop-blur-2xl" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }} />
+            
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-20"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+
+            {/* Previous button */}
+            {selectedImage > 0 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handlePrevImage()
+                }}
+                className="absolute left-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-20"
+              >
+                <ArrowLeft className="w-6 h-6 text-white" />
+              </button>
+            )}
+
+            {/* Next button */}
+            {selectedImage < galleryItems.length - 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleNextImage()
+                }}
+                className="absolute right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm transition-colors z-20"
+              >
+                <ArrowRight className="w-6 h-6 text-white" />
+              </button>
+            )}
+
+            <motion.div
+              key={selectedImage}
+              initial={{ scale: 0.98, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.98, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-6xl w-full z-10"
+            >
+              <div className={`aspect-video rounded-3xl bg-gradient-to-br ${galleryItems[selectedImage].gradient} flex items-center justify-center overflow-hidden relative`}>
+                <motion.div
+                  initial={{ scale: 1.2 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  {(() => {
+                    const Icon = galleryItems[selectedImage].icon
+                    return <Icon className="w-32 h-32 text-white/90" />
+                  })()}
+                </motion.div>
+
+                <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
+                  <h3 className="text-3xl font-bold text-white mb-2">
+                    {galleryItems[selectedImage].title}
+                  </h3>
+                  <p className="text-white/80 text-sm">
+                    {selectedImage + 1} / {galleryItems.length}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

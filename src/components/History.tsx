@@ -135,13 +135,13 @@ export default function History() {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 1.4 + index * 0.1, type: 'spring' }}
-              className="glass-effect rounded-2xl p-6 text-center"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 text-center border-2 border-violet-200/50 dark:border-violet-800/50 hover:border-violet-400 dark:hover:border-violet-600 shadow-lg hover:shadow-xl transition-all"
               whileHover={{ y: -5, scale: 1.05 }}
             >
               <div className={`text-3xl md:text-4xl font-black bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-2`}>
                 {stat.number}
               </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                 {stat.label}
               </div>
             </motion.div>

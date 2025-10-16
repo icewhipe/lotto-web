@@ -1,46 +1,38 @@
 import { useState, useEffect } from 'react'
-import Navbar from './components/Navbar'
-import SearchBar from './components/SearchBar'
-import Hero from './components/Hero'
-import History from './components/History'
-import About from './components/About'
-import Advantages from './components/Advantages'
-import Programs from './components/Programs'
-import Gallery from './components/Gallery'
-import Achievements from './components/Achievements'
-import Staff from './components/Staff'
-import Reviews from './components/Reviews'
-import News from './components/News'
-import Events from './components/Events'
-import VirtualTour from './components/VirtualTour'
-import Partners from './components/Partners'
-import FAQ from './components/FAQ'
-import Admissions from './components/Admissions'
-import Documents from './components/Documents'
-import FeedbackForm from './components/FeedbackForm'
-import Contacts from './components/Contacts'
-import Footer from './components/Footer'
-import BackToTop from './components/BackToTop'
-import ThemeToggle from './components/ThemeToggle'
-import ChatBot from './components/ChatBot'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from './contexts/AuthContext'
+import LoginPage from './components/LoginPage'
+import RegisterPage from './components/RegisterPage'
+import Dashboard from './components/Dashboard'
+import PageLoader from './components/PageLoader'
+import UnderConstruction from './components/UnderConstruction'
+import FullSite from './components/site/FullSite'
 
 function App() {
-  const [isDark, setIsDark] = useState(false)
+  const [showFullSite, setShowFullSite] = useState(true) // Show new glassmorphic site by default
+  const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
-    // Check for saved theme preference or default to light mode
+    // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      setIsDark(true)
+    const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark)
+    setIsDarkMode(shouldBeDark)
+    
+    if (shouldBeDark) {
       document.documentElement.classList.add('dark')
     }
   }, [])
 
   const toggleTheme = () => {
-    setIsDark(!isDark)
-    if (!isDark) {
+    const newIsDark = !isDarkMode
+    setIsDarkMode(newIsDark)
+    
+    if (newIsDark) {
       document.documentElement.classList.add('dark')
       localStorage.setItem('theme', 'dark')
     } else {
@@ -49,33 +41,72 @@ function App() {
     }
   }
 
+  // Show Dashboard if authenticated
+  if (isAuthenticated) {
+    return <Dashboard />
+  }
+
+  // Show Register Page if register button clicked
+  if (showRegister) {
+    return <RegisterPage onBack={() => {
+      setShowRegister(false)
+      setShowLogin(true)
+    }} />
+  }
+
+  // Show Login Page if login button clicked
+  if (showLogin) {
+    return (
+      <LoginPage 
+        onBack={() => {
+          setShowLogin(false)
+          setShowFullSite(true)
+        }} 
+        onRegisterClick={() => {
+          setShowLogin(false)
+          setShowRegister(true)
+        }}
+      />
+    )
+  }
+
+  // Show Full Site (glassmorphic design)
+  if (showFullSite) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key="fullsite"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <FullSite 
+            onNavigateToDiary={() => setShowLogin(true)}
+            isDarkMode={isDarkMode}
+            onToggleTheme={toggleTheme}
+          />
+        </motion.div>
+      </AnimatePresence>
+    )
+  }
+
+  // Show construction page (fallback)
   return (
-    <div className="min-h-screen overflow-x-hidden">
-      <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
-      <SearchBar />
-      <Navbar />
-      <Hero />
-      <History />
-      <About />
-      <Advantages />
-      <Programs />
-      <Gallery />
-      <VirtualTour />
-      <Achievements />
-      <Staff />
-      <Reviews />
-      <News />
-      <Events />
-      <Partners />
-      <FAQ />
-      <Admissions />
-      <Documents />
-      <FeedbackForm />
-      <Contacts />
-      <Footer />
-      <BackToTop />
-      <ChatBot />
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key="construction"
+        initial={{ opacity: 1 }}
+        exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }}
+        transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+      >
+        <PageLoader />
+        <UnderConstruction 
+          onLoginClick={() => setShowLogin(true)}
+          onNavigateToSite={() => setShowFullSite(true)}
+        />
+      </motion.div>
+    </AnimatePresence>
   )
 }
 
