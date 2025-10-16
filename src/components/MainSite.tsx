@@ -62,22 +62,26 @@ export default function MainSite({ onNavigateToDiary }: MainSiteProps) {
       >
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
+            {/* Logo - Clean minimal */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3 cursor-pointer"
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-3 cursor-pointer group"
             >
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center ${isDark ? 'shadow-lg shadow-blue-500/50' : 'shadow-lg'}`}>
-                <GraduationCap className="w-7 h-7 text-white" />
-              </div>
-              <div>
-                <h1 className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  ЛПТТ
-                </h1>
-                <p className={`text-xs ${isDark ? 'text-blue-300' : 'text-blue-600'}`}>
-                  Ленинградский политехнический техникум
-                </p>
-              </div>
+              <motion.div 
+                className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-xl ${
+                  isDark ? 'shadow-violet-500/50' : 'shadow-violet-500/30'
+                }`}
+                whileHover={{ rotate: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <GraduationCap className="w-8 h-8 text-white" />
+              </motion.div>
+              <h1 className={`text-3xl font-black tracking-tight ${
+                isDark ? 'text-white' : 'text-slate-900'
+              } group-hover:bg-gradient-to-r group-hover:from-violet-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
+                ЛПТТ
+              </h1>
             </motion.div>
 
             {/* Desktop Navigation */}
