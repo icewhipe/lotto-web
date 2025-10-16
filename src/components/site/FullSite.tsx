@@ -27,10 +27,7 @@ import { navigationStructure } from '../../data/navigationStructure'
 
 // Import section components
 import { lazyLoadComponent } from '../../utils/lazyLoadComponent'
-import LiquidGlassHomeV2 from './LiquidGlassHomeV2' // Home не lazy load - нужен сразу
-import EducationalProjects from './sections/EducationalProjects'
-import PhotoVideoGallery from './sections/PhotoVideoGallery'
-import Achievements from './sections/Achievements'
+import LiquidGlassHome from './LiquidGlassHome' // Old design with blue theme
 
 // Lazy load остальные секции для лучшей производительности
 const NewsSection = lazyLoadComponent(() => import('./sections/NewsSection'), 'Загрузка новостей...')
@@ -89,16 +86,9 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
   }
 
   const renderContent = () => {
-    // Home - Use new Liquid Glass Home V2 with new sections
+    // Home - Use old Liquid Glass design with blue theme
     if (activeSection === 'home') {
-      return (
-        <>
-          <LiquidGlassHomeV2 isDark={isDarkMode} onNavigate={handleNavigate} onNavigateToDiary={onNavigateToDiary} />
-          <PhotoVideoGallery isDark={isDarkMode} onNavigate={handleNavigate} />
-          <EducationalProjects isDark={isDarkMode} />
-          <Achievements isDark={isDarkMode} />
-        </>
-      )
+      return <LiquidGlassHome isDark={isDarkMode} onNavigate={handleNavigate} onNavigateToDiary={onNavigateToDiary} />
     }
 
     // Press Center

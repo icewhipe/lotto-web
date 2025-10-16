@@ -110,8 +110,8 @@ export default function LiquidGlassHome({ isDark, onNavigate, onNavigateToDiary 
           }}
           className={`absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] rounded-full blur-3xl ${
             isDark
-              ? 'bg-gradient-to-br from-violet-500/10 to-purple-500/10'
-              : 'bg-gradient-to-br from-violet-500/5 to-purple-500/5'
+              ? 'bg-gradient-to-br from-indigo-500/10 to-blue-600/10'
+              : 'bg-gradient-to-br from-indigo-500/5 to-blue-600/5'
           }`}
         />
 
