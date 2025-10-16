@@ -5,7 +5,7 @@ import LoginPage from './components/LoginPage'
 import RegisterPage from './components/RegisterPage'
 import Dashboard from './components/Dashboard'
 import LiquidGlassTransition from './components/site/LiquidGlassTransition'
-import FullMainSite from './components/FullMainSite'
+import ImprovedMainSite from './components/ImprovedMainSite'
 
 function App() {
   const [showTransition, setShowTransition] = useState(true) // Show liquid glass transition first
@@ -95,7 +95,7 @@ function App() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0 }}
         >
-          <FullMainSite 
+          <ImprovedMainSite 
             onNavigateToDiary={() => setShowLogin(true)}
           />
         </motion.div>
@@ -103,9 +103,9 @@ function App() {
     )
   }
 
-  // Fallback - should never reach here, but just in case show Full Main Site
+  // Fallback - should never reach here, but just in case show Improved Main Site
   return (
-    <FullMainSite 
+    <ImprovedMainSite 
       onNavigateToDiary={() => setShowLogin(true)}
     />
   )
