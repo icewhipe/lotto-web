@@ -54,10 +54,10 @@ export default function LiquidGlassHome({ isDark, onNavigate, onNavigateToDiary 
   }, [mouseX, mouseY])
 
   const stats = [
-    { icon: Users, label: 'Студентов', value: '500+', color: 'from-blue-500 to-cyan-500' },
-    { icon: BookOpen, label: 'Специальностей', value: '10+', color: 'from-violet-500 to-purple-500' },
-    { icon: Award, label: 'Лет опыта', value: '50+', color: 'from-orange-500 to-red-500' },
-    { icon: TrendingUp, label: 'Трудоустройство', value: '100%', color: 'from-green-500 to-emerald-500' },
+    { icon: Users, label: 'Студентов', value: '532+', color: 'from-blue-500 to-cyan-500' },
+    { icon: BookOpen, label: 'Специальностей', value: '12+', color: 'from-blue-600 to-indigo-500' },
+    { icon: Award, label: 'Лет опыта', value: '50+', color: 'from-cyan-500 to-blue-600' },
+    { icon: TrendingUp, label: 'Трудоустройство', value: '98%', color: 'from-indigo-500 to-blue-500' },
   ]
 
   const features = [
@@ -65,27 +65,27 @@ export default function LiquidGlassHome({ isDark, onNavigate, onNavigateToDiary 
       icon: Zap,
       title: 'Современные технологии',
       desc: 'Обучение на актуальном оборудовании и программном обеспечении',
-      gradient: 'from-yellow-400 to-orange-500',
+      gradient: 'from-blue-400 to-cyan-500',
     },
     {
       icon: Shield,
       title: 'Гарантия трудоустройства',
-      desc: '100% выпускников находят работу по специальности',
-      gradient: 'from-blue-400 to-cyan-500',
+      desc: '98% выпускников находят работу по специальности',
+      gradient: 'from-cyan-500 to-blue-600',
     },
     {
       icon: Star,
       title: 'Опытные преподаватели',
       desc: 'Практики с многолетним опытом работы в индустрии',
-      gradient: 'from-purple-400 to-pink-500',
+      gradient: 'from-indigo-500 to-blue-500',
     },
   ]
 
   const quickLinks = [
     { icon: Calendar, label: 'Расписание', action: () => onNavigate('students', 'schedule'), color: 'from-blue-500 to-cyan-500' },
-    { icon: GraduationCap, label: 'Специальности', action: () => onNavigate('applicants', 'specialties'), color: 'from-violet-500 to-purple-500' },
-    { icon: Newspaper, label: 'Новости', action: () => onNavigate('press-center', 'news'), color: 'from-orange-500 to-red-500' },
-    { icon: BookOpen, label: 'Дневник', action: onNavigateToDiary, color: 'from-green-500 to-emerald-500' },
+    { icon: GraduationCap, label: 'Специальности', action: () => onNavigate('applicants', 'specialties'), color: 'from-cyan-500 to-blue-600' },
+    { icon: Newspaper, label: 'Новости', action: () => onNavigate('press-center', 'news'), color: 'from-indigo-500 to-blue-500' },
+    { icon: BookOpen, label: 'Дневник', action: onNavigateToDiary, color: 'from-blue-600 to-indigo-600' },
   ]
 
   return (
