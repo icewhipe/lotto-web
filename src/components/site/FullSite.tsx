@@ -26,16 +26,18 @@ import {
 import { navigationStructure } from '../../data/navigationStructure'
 
 // Import section components
-import HomeSection from './sections/HomeSection'
-import LiquidGlassHomeV2 from './LiquidGlassHomeV2'
-import NewsSection from './sections/NewsSection'
-import PhotoGallerySection from './sections/PhotoGallerySection'
-import VideoGallerySection from './sections/VideoGallerySection'
-import EventsSection from './sections/EventsSection'
-import SpecialtiesSection from './sections/SpecialtiesSection'
-import ApplicationScreen from './sections/ApplicationScreen'
-import ScheduleSection from './sections/ScheduleSection'
-import ContactsSection from './sections/ContactsSection'
+import { lazyLoadComponent } from '../../utils/lazyLoadComponent'
+import LiquidGlassHomeV2 from './LiquidGlassHomeV2' // Home не lazy load - нужен сразу
+
+// Lazy load остальные секции для лучшей производительности
+const NewsSection = lazyLoadComponent(() => import('./sections/NewsSection'), 'Загрузка новостей...')
+const PhotoGallerySection = lazyLoadComponent(() => import('./sections/PhotoGallerySection'), 'Загрузка галереи...')
+const VideoGallerySection = lazyLoadComponent(() => import('./sections/VideoGallerySection'), 'Загрузка видео...')
+const EventsSection = lazyLoadComponent(() => import('./sections/EventsSection'), 'Загрузка событий...')
+const SpecialtiesSection = lazyLoadComponent(() => import('./sections/SpecialtiesSection'), 'Загрузка специальностей...')
+const ApplicationScreen = lazyLoadComponent(() => import('./sections/ApplicationScreen'), 'Загрузка формы...')
+const ScheduleSection = lazyLoadComponent(() => import('./sections/ScheduleSection'), 'Загрузка расписания...')
+const ContactsSection = lazyLoadComponent(() => import('./sections/ContactsSection'), 'Загрузка контактов...')
 
 interface FullSiteProps {
   onNavigateToDiary: () => void

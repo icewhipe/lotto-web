@@ -1,0 +1,28 @@
+# Robots.txt для ЛПТТ
+
+User-agent: *
+Allow: /
+
+# Запретить доступ к техническим файлам
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://lptt.obrvrn.ru/sitemap.xml
+
+# Основные разделы (для индексации)
+Allow: /
+Allow: /news
+Allow: /gallery
+Allow: /specialties
+Allow: /contacts
+Allow: /about
+
+# Админка - запретить
+User-agent: *
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
