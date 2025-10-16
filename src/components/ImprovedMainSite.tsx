@@ -883,7 +883,7 @@ export default function ImprovedMainSite({ onNavigateToDiary }: ImprovedMainSite
                     </button>
                   </div>
                   <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {filteredVideos.map((video) => (
+                    {filteredVideos.map((video: any) => (
                       <motion.div
                         key={video.id}
                         whileHover={{ scale: 1.05 }}

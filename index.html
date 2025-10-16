@@ -33,7 +33,8 @@
     <meta property="twitter:image" content="https://lptt.obrvrn.ru/twitter-image.jpg" />
     
     <!-- Theme & PWA -->
-    <meta name="theme-color" content="#667eea" />
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -41,10 +42,19 @@
     <!-- Preconnect для производительности -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
     
     <!-- Fonts - оптимизированная загрузка -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS для уменьшения FOUC -->
+    <style>
+      body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+      #root { min-height: 100vh; }
+      * { box-sizing: border-box; }
+    </style>
     
     <!-- Preload критических ресурсов -->
     <link rel="modulepreload" href="/src/main.tsx" />
@@ -69,10 +79,12 @@
       },
       "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+7-47391-4-11-91",
+        "telephone": "+7-47391-4-46-65",
         "contactType": "Приемная комиссия",
-        "email": "lptt@lptt.obrvrn.ru"
+        "email": "lptt@govvrn.ru"
       },
+      "foundingDate": "1958",
+      "numberOfStudents": 532,
       "sameAs": [
         "https://vk.com/lptt",
         "https://t.me/lptt"
