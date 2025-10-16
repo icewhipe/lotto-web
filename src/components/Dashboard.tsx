@@ -12,7 +12,7 @@ import TeacherDashboard from './dashboard/TeacherDashboard'
 import DirectorDashboard from './dashboard/DirectorDashboard'
 import ZavuchDashboard from './dashboard/ZavuchDashboard'
 import AdminPanel from './admin/AdminPanel'
-import InDevelopment from './InDevelopment'
+import UnderDevelopment from './UnderDevelopment'
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('dashboard')
@@ -57,7 +57,7 @@ export default function Dashboard() {
         case 'chat':
           return <StudentChat />
         case 'documents':
-          return <InDevelopment title="Документы в разработке" description="Здесь будут доступны ваши документы: справки, зачётная книжка, расписание сессии." />
+          return <UnderDevelopment isDark={false} sectionName="Документы" onBack={() => setActiveTab('dashboard')} />
         default:
           return <StudentDashboard />
       }
