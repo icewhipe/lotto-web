@@ -454,21 +454,89 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
         </div>
       </section>
 
+      {/* Latest News Preview */}
+      <section className="relative py-12">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <h2 className={`text-3xl font-black mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              Последние новости
+            </h2>
+            <p className={`text-base ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Актуальные события из жизни техникума
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-4 mb-6">
+            {[
+              { title: 'День открытых дверей', date: '15.10.2025', category: 'Мероприятия' },
+              { title: 'Новые специальности 2026', date: '12.10.2025', category: 'Образование' },
+              { title: 'Победа в областном конкурсе', date: '10.10.2025', category: 'Достижения' },
+            ].map((news, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className={`p-5 rounded-2xl backdrop-blur-xl cursor-pointer ${
+                  isDark
+                    ? 'bg-white/5 border border-white/10 hover:bg-white/10'
+                    : 'bg-white/70 border border-white/30 hover:bg-white/90'
+                } shadow-lg hover:shadow-xl transition-all`}
+              >
+                <div className={`text-xs font-bold px-2.5 py-1 rounded-full inline-block mb-3 ${
+                  isDark ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-700'
+                }`}>
+                  {news.category}
+                </div>
+                <h3 className={`text-base font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {news.title}
+                </h3>
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  {news.date}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onNavigate('press-center', 'news')}
+              className={`px-6 py-2.5 rounded-xl font-semibold text-sm ${
+                isDark
+                  ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30'
+                  : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+              } transition-colors`}
+            >
+              Все новости →
+            </motion.button>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
-      <section className="relative py-16">
+      <section className="relative py-12">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-10"
           >
-            <h2 className={`text-4xl font-black mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+            <h2 className={`text-3xl font-black mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
               Почему выбирают ЛПТТ?
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -494,17 +562,17 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
                 />
 
                 {/* Icon */}
-                <div className={`relative w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-lg`}>
-                  <feature.icon className="w-8 h-8 text-white" />
+                <div className={`relative w-14 h-14 mb-4 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-lg`}>
+                  <feature.icon className="w-7 h-7 text-white" />
                 </div>
 
                 {/* Title */}
-                <h3 className={`text-2xl font-black mb-3 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <h3 className={`text-xl font-black mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   {feature.title}
                 </h3>
 
                 {/* Description */}
-                <p className={`text-base ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                   {feature.desc}
                 </p>
 
@@ -517,6 +585,52 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
                   transition={{ duration: 10, repeat: Infinity }}
                   className="absolute top-6 right-6 w-20 h-20 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-2xl"
                 />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="relative py-12">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <h2 className={`text-3xl font-black mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              Наши партнёры
+            </h2>
+            <p className={`text-base ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Сотрудничаем с ведущими предприятиями региона
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              'ООО "Промтех"',
+              'ЗАО "Транслогистика"',
+              'АО "Лискинский завод"',
+              'ООО "ИТ Решения"',
+            ].map((partner, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                className={`p-6 rounded-2xl backdrop-blur-xl ${
+                  isDark
+                    ? 'bg-white/5 border border-white/10'
+                    : 'bg-white/70 border border-white/30'
+                } shadow-lg hover:shadow-xl transition-all flex items-center justify-center`}
+              >
+                <p className={`text-sm font-bold text-center ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  {partner}
+                </p>
               </motion.div>
             ))}
           </div>

@@ -410,71 +410,141 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
         </AnimatePresence>
       </main>
 
-      {/* Footer */}
-      <footer className={`mt-20 py-12 border-t ${
-        isDarkMode ? 'border-blue-500/20 bg-slate-900/50' : 'border-blue-100 bg-slate-50'
-      }`}>
+      {/* Enhanced Footer */}
+      <footer className={`mt-16 py-10 border-t ${
+        isDarkMode ? 'border-blue-500/10 bg-slate-900/70' : 'border-blue-100 bg-slate-50'
+      } backdrop-blur-xl`}>
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* About */}
             <div>
-              <h3 className={`text-lg font-black mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                ЛПТТ
-              </h3>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                Ленинградский политехнический техникум
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                  <GraduationCap className="w-6 h-6 text-white" />
+                </div>
+                <h3 className={`text-base font-black ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  ЛПТТ
+                </h3>
+              </div>
+              <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                Лискинский Промышленно-Транспортный Техникум — современное профессиональное образование с 1958 года
               </p>
             </div>
+
+            {/* Contacts */}
             <div>
-              <h4 className={`font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h4 className={`font-bold mb-4 text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                 Контакты
               </h4>
-              <div className={`space-y-2 text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                <p className="flex items-center gap-2">
+              <div className={`space-y-2.5 text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                <a href="tel:+74739141191" className="flex items-center gap-2 hover:text-blue-500 transition-colors">
                   <Phone className="w-4 h-4" />
-                  +7 (XXX) XXX-XX-XX
-                </p>
-                <p className="flex items-center gap-2">
+                  <span>+7 (47391) 4-11-91</span>
+                </a>
+                <a href="mailto:lptt@lptt.obrvrn.ru" className="flex items-center gap-2 hover:text-blue-500 transition-colors">
                   <Mail className="w-4 h-4" />
-                  info@lptt.ru
-                </p>
-                <p className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  г. Лиски, ул. Лысенко, 1А
+                  <span>lptt@lptt.obrvrn.ru</span>
+                </a>
+                <p className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span>г. Лиски, ул. Лысенко, 1А,<br/>Воронежская область, 397900</span>
                 </p>
               </div>
             </div>
+
+            {/* Quick Links */}
             <div>
-              <h4 className={`font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                Быстрые ссылки
+              <h4 className={`font-bold mb-4 text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                Разделы сайта
               </h4>
               <div className="space-y-2">
                 <button
+                  onClick={() => handleNavigate('applicants', 'specialties')}
+                  className={`block text-sm ${isDarkMode ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-blue-600'} transition-colors text-left`}
+                >
+                  Специальности
+                </button>
+                <button
+                  onClick={() => handleNavigate('press-center', 'news')}
+                  className={`block text-sm ${isDarkMode ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-blue-600'} transition-colors text-left`}
+                >
+                  Новости
+                </button>
+                <button
                   onClick={onNavigateToDiary}
-                  className={`block text-sm ${isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
+                  className={`block text-sm ${isDarkMode ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-blue-600'} transition-colors text-left`}
                 >
                   Электронный дневник
                 </button>
                 <button
                   onClick={() => handleNavigate('applicants', 'application-screen')}
-                  className={`block text-sm ${isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
+                  className={`block text-sm ${isDarkMode ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-blue-600'} transition-colors text-left`}
                 >
-                  Подать заявление
+                  Подать документы
                 </button>
               </div>
             </div>
+
+            {/* Social & Info */}
             <div>
-              <h4 className={`font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                Социальные сети
+              <h4 className={`font-bold mb-4 text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                Мы в соцсетях
               </h4>
-              <div className="flex gap-2">
-                {/* Add social media icons here */}
+              <div className="flex gap-2 mb-4">
+                <motion.a
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  href="https://vk.com/lptt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                    isDarkMode ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-600'
+                  } hover:bg-blue-500 hover:text-white transition-all`}
+                  title="ВКонтакте"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.91 12.68h-1.48c-.52 0-.68-.42-1.61-1.35-.81-.76-1.17-.86-1.37-.86-.28 0-.36.08-.36.48v1.23c0 .33-.1.53-1.01.53-1.46 0-3.08-.88-4.22-2.53-1.7-2.42-2.17-4.24-2.17-4.61 0-.2.08-.39.48-.39h1.48c.36 0 .5.17.63.55.7 2.03 1.89 3.81 2.37 3.81.18 0 .27-.08.27-.54V9.5c-.06-.98-.58-1.06-.58-1.41 0-.17.14-.33.36-.33h2.33c.3 0 .41.16.41.5v2.97c0 .3.13.41.22.41.18 0 .33-.11.66-.44 1.01-1.13 1.73-2.88 1.73-2.88.1-.19.26-.39.66-.39h1.48c.44 0 .54.23.44.55-.16.75-1.8 3.18-1.8 3.18-.14.23-.19.33 0 .59.14.19.59.58.89.92.53.6 1.03 1.11 1.15 1.45.11.39-.08.59-.52.59z"/>
+                  </svg>
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  href="https://t.me/lptt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                    isDarkMode ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-600'
+                  } hover:bg-blue-500 hover:text-white transition-all`}
+                  title="Telegram"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121L7.773 13.98l-2.886-.918c-.63-.196-.64-.63.135-.935l11.274-4.34c.524-.192.984.12.81.914z"/>
+                  </svg>
+                </motion.a>
               </div>
+              <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>
+                Режим работы:<br/>
+                Пн-Пт: 8:00-17:00
+              </p>
             </div>
           </div>
-          <div className={`mt-8 pt-8 border-t text-center text-sm ${
-            isDarkMode ? 'border-blue-500/20 text-slate-500' : 'border-blue-100 text-slate-500'
+
+          {/* Bottom Bar */}
+          <div className={`pt-6 border-t ${
+            isDarkMode ? 'border-blue-500/10' : 'border-blue-100'
           }`}>
-            <p>© 2025 ЛПТТ. Все права защищены.</p>
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className={`text-sm text-center md:text-left ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>
+                © 2025 ЛПТТ - Лискинский Промышленно-Транспортный Техникум. Все права защищены.
+              </p>
+              <div className="flex gap-4 text-xs">
+                <a href="#" className={`${isDarkMode ? 'text-slate-500 hover:text-slate-400' : 'text-slate-500 hover:text-slate-600'} transition-colors`}>
+                  Политика конфиденциальности
+                </a>
+                <span className={isDarkMode ? 'text-slate-700' : 'text-slate-300'}>•</span>
+                <a href="#" className={`${isDarkMode ? 'text-slate-500 hover:text-slate-400' : 'text-slate-500 hover:text-slate-600'} transition-colors`}>
+                  Пользовательское соглашение
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

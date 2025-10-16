@@ -9,10 +9,25 @@
     @apply antialiased;
     /* ЕДИНЫЙ ФОН - НЕ ПЕРЕЛИВАЕТСЯ ПРИ СКРОЛЛЕ */
     @apply min-h-screen;
+    /* Performance optimization */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   html {
     @apply scroll-smooth;
+    /* Performance optimization */
+    scroll-behavior: smooth;
+  }
+
+  /* Optimize animations performance */
+  * {
+    will-change: auto;
+  }
+  
+  *:hover, *:focus {
+    will-change: transform, opacity;
   }
 }
 
