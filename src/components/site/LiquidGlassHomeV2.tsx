@@ -35,7 +35,6 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
 
   const y1 = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
   const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
-  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
 
   // Mouse position for liquid effect
   const mouseX = useMotionValue(0)

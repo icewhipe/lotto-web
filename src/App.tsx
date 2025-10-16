@@ -76,6 +76,7 @@ function App() {
       <AnimatePresence mode="wait">
         <LiquidGlassTransition 
           onComplete={() => {
+            sessionStorage.setItem('hasSeenTransition', 'true')
             setShowTransition(false)
             setShowFullSite(true)
           }}
@@ -104,22 +105,13 @@ function App() {
     )
   }
 
-  // Show construction page (fallback)
+  // Fallback - should never reach here, but just in case show Full Site
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key="construction"
-        initial={{ opacity: 1 }}
-        exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }}
-        transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
-      >
-        <PageLoader />
-        <UnderConstruction 
-          onLoginClick={() => setShowLogin(true)}
-          onNavigateToSite={() => setShowFullSite(true)}
-        />
-      </motion.div>
-    </AnimatePresence>
+    <FullSite 
+      onNavigateToDiary={() => setShowLogin(true)}
+      isDarkMode={isDarkMode}
+      onToggleTheme={toggleTheme}
+    />
   )
 }
 
