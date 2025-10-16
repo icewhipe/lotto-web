@@ -2,9 +2,9 @@ import { motion } from 'framer-motion'
 import { ArrowRight, GraduationCap, Briefcase, Award, Sparkles, Rocket } from 'lucide-react'
 
 const stats = [
-  { number: '65+', label: 'лет опыта', icon: Award },
-  { number: '1000+', label: 'студентов', icon: GraduationCap },
-  { number: '15+', label: 'специальностей', icon: Briefcase },
+  { number: '50+', label: 'лет опыта', icon: Award },
+  { number: '532+', label: 'студентов', icon: GraduationCap },
+  { number: '12+', label: 'специальностей', icon: Briefcase },
 ]
 
 const floatingCards = [
@@ -19,7 +19,7 @@ export default function Hero() {
   // const y2 = useTransform(scrollY, [0, 500], [0, -150])
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28">
+    <section id="home" className="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-8">
       {/* Enhanced Background - Improved Light Theme */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-violet-50/20 to-purple-50/20 dark:from-gray-950 dark:via-purple-950/30 dark:to-cyan-950/30" />
       
@@ -76,7 +76,7 @@ export default function Hero() {
               >
                 <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <span className="text-sm font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
-                  Аккредитация 2024
+                  г. Лиски, ул. Лысенко, 1А
                 </span>
               </motion.div>
             </div>

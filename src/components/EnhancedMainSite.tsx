@@ -14,7 +14,6 @@ import {
   Award,
   Mail,
   Phone,
-  MapPin,
   Facebook,
   Instagram,
   Youtube,
@@ -24,6 +23,8 @@ import {
   Target,
 } from 'lucide-react'
 import Hero from './Hero'
+import { navigationStructure } from '../data/navigationStructure'
+import UnderDevelopment from './UnderDevelopment'
 
 interface EnhancedMainSiteProps {
   onNavigateToDiary: () => void
@@ -31,6 +32,7 @@ interface EnhancedMainSiteProps {
 
 export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSiteProps) {
   const [activeSection, setActiveSection] = useState('home')
+  const [activeSubsection, setActiveSubsection] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isDark, setIsDark] = useState(false)
   const [scrollY, setScrollY] = useState(0)
@@ -43,43 +45,18 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navigation = [
-    { id: 'home', label: 'Главная' },
-    { 
-      id: 'about', 
-      label: 'О техникуме',
-      submenu: [
-        { id: 'history', label: 'История' },
-        { id: 'team', label: 'Руководство' },
-        { id: 'achievements', label: 'Достижения' }
-      ]
-    },
-    { 
-      id: 'applicant', 
-      label: 'Абитуриенту',
-      submenu: [
-        { id: 'specialties', label: 'Специальности' },
-        { id: 'admission', label: 'Приём' },
-        { id: 'docs', label: 'Документы' }
-      ]
-    },
-    { 
-      id: 'student', 
-      label: 'Студенту',
-      submenu: [
-        { id: 'schedule', label: 'Расписание' },
-        { id: 'library', label: 'Библиотека' },
-        { id: 'events', label: 'Мероприятия' }
-      ]
-    },
-    { id: 'news', label: 'Новости' },
-    { id: 'contacts', label: 'Контакты' },
-  ]
+  const handleNavigate = (section: string, subsection?: string) => {
+    setActiveSection(section)
+    setActiveSubsection(subsection || null)
+    setMobileMenuOpen(false)
+    setDropdownOpen(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const stats = [
-    { icon: Award, value: '65+', label: 'лет опыта', color: 'from-violet-500 to-purple-600' },
-    { icon: Users, value: '1000+', label: 'студентов', color: 'from-blue-500 to-cyan-600' },
-    { icon: BookOpen, value: '15+', label: 'специальностей', color: 'from-pink-500 to-rose-600' },
+    { icon: Award, value: '50+', label: 'лет опыта', color: 'from-violet-500 to-purple-600' },
+    { icon: Users, value: '532+', label: 'студентов', color: 'from-blue-500 to-cyan-600' },
+    { icon: BookOpen, value: '12+', label: 'специальностей', color: 'from-pink-500 to-rose-600' },
     { icon: TrendingUp, value: '98%', label: 'трудоустройство', color: 'from-green-500 to-emerald-600' },
   ]
 
@@ -114,7 +91,7 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
     <div className={`min-h-screen transition-colors duration-500 ${
       isDark ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' : 'bg-white'
     }`}>
-      {/* Enhanced Header with Sticky Navbar */}
+      {/* Two-Story Header: Logo on top, Navbar below */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -126,7 +103,8 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
             : 'bg-transparent'
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        {/* Top Row: Logo + Actions */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 border-b border-violet-500/10">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <motion.div
@@ -143,11 +121,16 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
               >
                 <GraduationCap className="w-8 h-8 text-white" />
               </motion.div>
-              <h1 className={`text-3xl font-black tracking-tight ${
-                isDark ? 'text-white' : 'text-slate-900'
-              } group-hover:bg-gradient-to-r group-hover:from-violet-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
-                ЛПТТ
-              </h1>
+              <div>
+                <h1 className={`text-3xl font-black tracking-tight ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                } group-hover:bg-gradient-to-r group-hover:from-violet-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
+                  ЛПТТ
+                </h1>
+                <p className={`text-[10px] font-semibold ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
+                  Лискинский Промышленно-Транспортный Техникум
+                </p>
+              </div>
             </motion.div>
 
             {/* Desktop Actions */}
@@ -209,76 +192,112 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
           </div>
         </div>
 
-        {/* Enhanced Navbar - Below header, scrolls into view */}
-        <div className={`hidden lg:block border-t ${
-          isDark ? 'border-violet-500/20 bg-slate-900/90' : 'border-violet-100 bg-white/90'
+        {/* Second Row: Full Navigation from navigationStructure */}
+        <div className={`${
+          isDark ? 'bg-slate-900/90' : 'bg-white/90'
         } backdrop-blur-xl`}>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="flex items-center justify-center gap-2 py-3">
-              {navigation.map((item) => (
-                <div 
-                  key={item.id} 
-                  className="relative"
-                  onMouseEnter={() => item.submenu && setDropdownOpen(item.id)}
-                  onMouseLeave={() => setDropdownOpen(null)}
-                >
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`px-4 py-2 rounded-xl font-semibold transition-all flex items-center gap-1 ${
-                      activeSection === item.id
-                        ? isDark
-                          ? 'bg-violet-500/20 text-violet-300'
-                          : 'bg-violet-50 text-violet-600'
-                        : isDark
-                        ? 'text-slate-300 hover:bg-violet-500/10'
-                        : 'text-slate-600 hover:bg-violet-50'
-                    }`}
+            <nav className="flex items-center justify-between gap-1 py-2 overflow-x-auto scrollbar-hide">
+              <div className="flex items-center gap-1">
+                {navigationStructure.map((section) => (
+                  <div 
+                    key={section.id} 
+                    className="relative"
+                    onMouseEnter={() => section.subsections && setDropdownOpen(section.id)}
+                    onMouseLeave={() => setDropdownOpen(null)}
+                    style={{ zIndex: dropdownOpen === section.id ? 60 : 1 }}
                   >
-                    {item.label}
-                    {item.submenu && (
-                      <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen === item.id ? 'rotate-180' : ''}`} />
-                    )}
-                  </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => section.subsections ? {} : handleNavigate(section.id)}
+                      className={`px-3 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-1 whitespace-nowrap ${
+                        activeSection === section.id
+                          ? isDark
+                            ? 'bg-violet-500/20 text-violet-300'
+                            : 'bg-violet-50 text-violet-600'
+                          : isDark
+                          ? 'text-slate-300 hover:bg-violet-500/10'
+                          : 'text-slate-600 hover:bg-violet-50'
+                      }`}
+                    >
+                      {section.label}
+                      {section.subsections && (
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${dropdownOpen === section.id ? 'rotate-180' : ''}`} />
+                      )}
+                    </motion.button>
 
-                  {/* Dropdown Menu */}
-                  <AnimatePresence>
-                    {item.submenu && dropdownOpen === item.id && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className={`absolute top-full left-0 mt-2 w-56 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl ${
-                          isDark ? 'bg-slate-800/95 border border-violet-500/30' : 'bg-white/95 border border-violet-200'
-                        }`}
-                      >
-                        {item.submenu.map((subItem, idx) => (
-                          <motion.button
-                            key={subItem.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.05 }}
-                            whileHover={{ x: 8, backgroundColor: isDark ? 'rgba(139, 92, 246, 0.15)' : 'rgba(139, 92, 246, 0.08)' }}
-                            onClick={() => setActiveSection(subItem.id)}
-                            className={`w-full text-left px-5 py-3 transition-all ${
-                              isDark ? 'text-slate-300 hover:text-violet-300' : 'text-slate-700 hover:text-violet-700'
-                            }`}
-                          >
-                            <span className="flex items-center gap-2">
-                              <span className={`w-1.5 h-1.5 rounded-full ${
-                                isDark ? 'bg-violet-400' : 'bg-violet-500'
-                              }`} />
-                              {subItem.label}
-                            </span>
-                          </motion.button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
+                    {/* Mega Dropdown Menu */}
+                    <AnimatePresence>
+                      {section.subsections && dropdownOpen === section.id && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                          transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                          className={`absolute top-full left-0 mt-2 min-w-[280px] max-w-md rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl border ${
+                            isDark ? 'bg-slate-800/98 border-violet-500/30' : 'bg-white/98 border-violet-200'
+                          }`}
+                          style={{ 
+                            backdropFilter: 'blur(20px) saturate(180%)',
+                            WebkitBackdropFilter: 'blur(20px) saturate(180%)'
+                          }}
+                        >
+                          <div className="py-2 max-h-[70vh] overflow-y-auto">
+                            {section.subsections.map((subsection, idx) => (
+                              <motion.button
+                                key={subsection.id}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.04, duration: 0.2 }}
+                                whileHover={{ x: 8 }}
+                                onClick={() => handleNavigate(section.id, subsection.id)}
+                                className={`w-full text-left px-5 py-2.5 transition-all text-sm font-medium ${
+                                  activeSubsection === subsection.id
+                                    ? isDark
+                                      ? 'bg-violet-500/25 text-violet-300'
+                                      : 'bg-violet-100 text-violet-700'
+                                    : isDark
+                                    ? 'text-slate-300 hover:bg-violet-500/15 hover:text-violet-300'
+                                    : 'text-slate-700 hover:bg-violet-50 hover:text-violet-700'
+                                }`}
+                              >
+                                <span className="flex items-center gap-2">
+                                  <span className={`w-1.5 h-1.5 rounded-full transition-all ${
+                                    activeSubsection === subsection.id 
+                                      ? 'bg-violet-500 scale-100' 
+                                      : 'bg-transparent scale-0'
+                                  }`} />
+                                  {subsection.label}
+                                </span>
+                              </motion.button>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+
+              {/* Diary button in navbar */}
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onNavigateToDiary}
+                className="group relative px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-lg font-bold text-sm shadow-lg hover:shadow-xl hover:shadow-violet-500/50 transition-all overflow-hidden whitespace-nowrap flex-shrink-0"
+              >
+                <span className="relative z-10 flex items-center gap-1.5">
+                  <LogIn className="w-4 h-4" />
+                  Электронный дневник
+                </span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-600 to-violet-600"
+                  initial={{ x: '100%' }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </motion.button>
             </nav>
           </div>
         </div>
@@ -324,13 +343,13 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
               } backdrop-blur-xl`}
             >
               <div className="container mx-auto px-4 py-4 space-y-2">
-                {navigation.map((item) => (
-                  <div key={item.id}>
+                {navigationStructure.map((section) => (
+                  <div key={section.id}>
                     <motion.button
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => setActiveSection(item.id)}
+                      onClick={() => section.subsections ? {} : handleNavigate(section.id)}
                       className={`w-full text-left px-4 py-3 rounded-xl font-semibold ${
-                        activeSection === item.id
+                        activeSection === section.id
                           ? isDark
                             ? 'bg-violet-500/20 text-violet-300'
                             : 'bg-violet-50 text-violet-600'
@@ -339,14 +358,14 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
                           : 'text-slate-600'
                       }`}
                     >
-                      {item.label}
+                      {section.label}
                     </motion.button>
-                    {item.submenu && (
+                    {section.subsections && (
                       <div className="ml-4 mt-1 space-y-1">
-                        {item.submenu.map((sub) => (
+                        {section.subsections.map((sub) => (
                           <button
                             key={sub.id}
-                            onClick={() => setActiveSection(sub.id)}
+                            onClick={() => handleNavigate(section.id, sub.id)}
                             className={`block w-full text-left px-4 py-2 rounded-lg text-sm ${
                               isDark ? 'text-slate-400 hover:bg-violet-500/10' : 'text-slate-500 hover:bg-violet-50'
                             }`}
@@ -500,29 +519,37 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
             </motion.div>
           ) : (
             <motion.div
-              key={activeSection}
+              key={`${activeSection}-${activeSubsection}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="container mx-auto px-6 py-20 text-center"
+              transition={{ duration: 0.4 }}
             >
-              <h2 className={`text-4xl font-black mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                {navigation.find(n => n.id === activeSection)?.label}
-              </h2>
-              <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>
-                Контент раздела в разработке...
-              </p>
+              <UnderDevelopment
+                isDark={isDark}
+                sectionName={
+                  navigationStructure.find(s => s.id === activeSection)?.label || 
+                  'Раздел'
+                }
+                onBack={() => handleNavigate('home')}
+              />
             </motion.div>
           )}
         </AnimatePresence>
       </main>
 
-      {/* Enhanced Footer */}
-      <footer className={`mt-20 border-t ${
-        isDark ? 'border-violet-500/20 bg-slate-900/50' : 'border-violet-100 bg-violet-50/30'
-      } backdrop-blur-xl`}>
-        <div className="container mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      {/* Premium Footer - Beautiful design for all */}
+      <footer className={`relative mt-20 overflow-hidden ${
+        isDark ? 'bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900' : 'bg-gradient-to-br from-violet-50 via-purple-50 to-pink-50'
+      }`}>
+        {/* Gradient Orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative container mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
             {/* About */}
             <div>
               <div className="flex items-center gap-3 mb-4">
@@ -533,78 +560,158 @@ export default function EnhancedMainSite({ onNavigateToDiary }: EnhancedMainSite
                   ЛПТТ
                 </h3>
               </div>
-              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                Ленинградский политехнический техникум — 65+ лет качественного профессионального образования
+              <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                Лискинский Промышленно-Транспортный Техникум — 50+ лет качественного профессионального образования. г. Лиски, ул. Лысенко, 1А
               </p>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h4 className={`font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Быстрые ссылки
+            {/* For Students */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <h4 className={`font-bold text-sm mb-4 flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <Users className="w-4 h-4" />
+                Студентам
               </h4>
               <div className="space-y-2">
-                {['О техникуме', 'Абитуриенту', 'Студенту', 'Новости'].map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    className={`block text-sm ${
+                {[
+                  { label: 'Расписание', onClick: () => handleNavigate('students', 'schedule') },
+                  { label: 'Электронный дневник', onClick: onNavigateToDiary },
+                  { label: 'Библиотека', onClick: () => handleNavigate('students', 'e-resources') },
+                  { label: 'Спортклуб', onClick: () => handleNavigate('students', 'sport-club') },
+                ].map((link) => (
+                  <motion.button
+                    key={link.label}
+                    onClick={link.onClick}
+                    whileHover={{ x: 5 }}
+                    className={`block w-full text-left text-sm ${
                       isDark ? 'text-slate-400 hover:text-violet-400' : 'text-slate-600 hover:text-violet-600'
-                    } transition-colors`}
+                    } transition-all`}
                   >
-                    {link}
-                  </a>
+                    → {link.label}
+                  </motion.button>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
-            {/* Contacts */}
-            <div>
-              <h4 className={`font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Контакты
+            {/* For Teachers */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <h4 className={`font-bold text-sm mb-4 flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                <BookOpen className="w-4 h-4" />
+                Преподавателям
               </h4>
-              <div className={`space-y-2 text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                <a href="tel:+7123456789" className="flex items-center gap-2 hover:text-violet-500 transition-colors">
-                  <Phone className="w-4 h-4" />
-                  +7 (123) 456-78-90
-                </a>
-                <a href="mailto:info@lptt.ru" className="flex items-center gap-2 hover:text-violet-500 transition-colors">
-                  <Mail className="w-4 h-4" />
-                  info@lptt.ru
-                </a>
-                <p className="flex items-start gap-2">
-                  <MapPin className="w-4 h-4 mt-0.5" />
-                  Ленинградская область, г. Кировск
-                </p>
+              <div className="space-y-2">
+                {[
+                  { label: 'Воспитательная работа', onClick: () => handleNavigate('teachers', 'educational-work') },
+                  { label: 'Дневник преподавателя', onClick: () => handleNavigate('teachers', 'teacher-diary') },
+                  { label: 'Проекты', onClick: () => handleNavigate('projects') },
+                  { label: 'Профессионалитет', onClick: () => handleNavigate('professionalism') },
+                ].map((link) => (
+                  <motion.button
+                    key={link.label}
+                    onClick={link.onClick}
+                    whileHover={{ x: 5 }}
+                    className={`block w-full text-left text-sm ${
+                      isDark ? 'text-slate-400 hover:text-violet-400' : 'text-slate-600 hover:text-violet-600'
+                    } transition-all`}
+                  >
+                    → {link.label}
+                  </motion.button>
+                ))}
               </div>
-            </div>
+            </motion.div>
 
-            {/* Social */}
-            <div>
-              <h4 className={`font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                Мы в соцсетях
+            {/* Contacts & Social */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <h4 className={`font-bold text-sm mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Связаться с нами
               </h4>
+              <div className={`space-y-3 text-sm mb-6 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                <motion.a 
+                  href="tel:+74739141191" 
+                  whileHover={{ x: 5 }}
+                  className="flex items-center gap-2 hover:text-violet-500 transition-all"
+                >
+                  <Phone className="w-4 h-4" />
+                  +7 (47391) 4-11-91
+                </motion.a>
+                <motion.a 
+                  href="mailto:lptt@lptt.obrvrn.ru" 
+                  whileHover={{ x: 5 }}
+                  className="flex items-center gap-2 hover:text-violet-500 transition-all"
+                >
+                  <Mail className="w-4 h-4" />
+                  lptt@lptt.obrvrn.ru
+                </motion.a>
+              </div>
+
+              <h5 className={`font-bold text-xs mb-3 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                Мы в соцсетях
+              </h5>
               <div className="flex gap-2">
-                {[Facebook, Instagram, Youtube].map((Icon, idx) => (
+                {[
+                  { Icon: Facebook, href: 'https://facebook.com/lptt', color: 'from-blue-600 to-blue-500' },
+                  { Icon: Instagram, href: 'https://instagram.com/lptt', color: 'from-pink-600 to-rose-500' },
+                  { Icon: Youtube, href: 'https://youtube.com/lptt', color: 'from-red-600 to-red-500' }
+                ].map(({ Icon, href, color }, idx) => (
                   <motion.a
                     key={idx}
-                    href="#"
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      isDark ? 'bg-violet-500/20 text-violet-300' : 'bg-violet-100 text-violet-600'
-                    } hover:bg-violet-500 hover:text-white transition-all`}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.15, y: -3 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`w-11 h-11 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center text-white shadow-lg hover:shadow-xl transition-all`}
                   >
                     <Icon className="w-5 h-5" />
                   </motion.a>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <div className={`pt-6 border-t text-center text-sm ${
-            isDark ? 'border-violet-500/20 text-slate-500' : 'border-violet-100 text-slate-500'
-          }`}>
-            <p>© 2025 ЛПТТ. Все права защищены.</p>
+          {/* Divider with animated gradient */}
+          <div className={`relative h-px mb-8 ${isDark ? 'bg-violet-500/20' : 'bg-violet-200'}`}>
+            <motion.div
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-violet-500 to-transparent h-px"
+            />
+          </div>
+
+          {/* Bottom Row */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-600'}`}
+            >
+              © 2025 <span className="font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">ЛПТТ</span> — Лискинский Промышленно-Транспортный Техникум. Все права защищены.
+            </motion.p>
+            
+            <div className="flex gap-4 text-xs">
+              <motion.a href="#" whileHover={{ scale: 1.05 }} className={`${isDark ? 'text-slate-500 hover:text-violet-400' : 'text-slate-500 hover:text-violet-600'} transition-colors`}>
+                Политика конфиденциальности
+              </motion.a>
+              <span className={isDark ? 'text-slate-700' : 'text-slate-300'}>•</span>
+              <motion.a href="#" whileHover={{ scale: 1.05 }} className={`${isDark ? 'text-slate-500 hover:text-violet-400' : 'text-slate-500 hover:text-violet-600'} transition-colors`}>
+                Карта сайта
+              </motion.a>
+            </div>
           </div>
         </div>
       </footer>
