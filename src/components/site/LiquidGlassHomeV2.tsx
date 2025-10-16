@@ -172,8 +172,8 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
         ))}
       </div>
 
-      {/* Hero Section - Compact & Raised Higher */}
-      <section className="relative min-h-[65vh] flex items-center pt-16 pb-8">
+      {/* Hero Section - Raised Much Higher */}
+      <section className="relative min-h-[55vh] flex items-center pt-8 pb-8">
         <div className="container mx-auto px-6">
           <div className="max-w-7xl mx-auto">
             {/* Badges Row - Location + Enrollment */}
@@ -219,12 +219,12 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
               </motion.div>
             </motion.div>
 
-            {/* Main Heading - Compact Bold & Higher */}
+            {/* Main Heading - Raised & More Prominent */}
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className={`text-5xl lg:text-6xl font-black leading-[1.1] mb-4 ${
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className={`text-6xl lg:text-7xl font-black leading-[1.05] mb-6 ${
                 isDark ? 'text-white' : 'text-slate-900'
               }`}
             >
@@ -635,6 +635,15 @@ export default function LiquidGlassHomeV2({ isDark, onNavigate, onNavigateToDiar
           </div>
         </div>
       </section>
+
+      {/* Import new sections dynamically */}
+      {typeof window !== 'undefined' && (
+        <>
+          {/* Achievements Section will be imported */}
+          {/* Educational Projects Section will be imported */}
+          {/* Photo/Video Gallery Section will be imported */}
+        </>
+      )}
     </div>
   )
 }

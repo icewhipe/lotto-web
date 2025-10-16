@@ -202,12 +202,9 @@ export default function FullSite({ onNavigateToDiary, isDarkMode, onToggleTheme 
                 <GraduationCap className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className={`text-xl font-black ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                <h1 className={`text-2xl font-black ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                   ЛПТТ
                 </h1>
-                <p className={`text-xs ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`}>
-                  Лискинский промышленно-транспортный
-                </p>
               </div>
             </motion.button>
 
