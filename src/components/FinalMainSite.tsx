@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import { navigationStructure } from '../data/navigationStructure'
 import { rafThrottle } from '../utils/performance'
+import Calendar from './Calendar'
 
 interface FinalMainSiteProps {
   onNavigateToDiary: () => void
@@ -47,6 +48,8 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
   const [videoPlayerOpen, setVideoPlayerOpen] = useState(false)
   const [currentVideo, setCurrentVideo] = useState('')
   const [showCalendar, setShowCalendar] = useState(false)
+  const [expandedAnnouncement, setExpandedAnnouncement] = useState<number | null>(null)
+  const [expandedEvent, setExpandedEvent] = useState<number | null>(null)
 
   const handleScroll = useCallback(
     rafThrottle(() => {
@@ -88,48 +91,48 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
   }, [shouldReduceMotion])
 
   const banners = [
-    { id: 1, title: '💻 IT-Куб', subtitle: 'Цифровое образование будущего', gradient: 'from-blue-600 via-cyan-500 to-blue-400', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=400&fit=crop' },
-    { id: 2, title: '🧠 Профессионалитет', subtitle: 'Федеральный проект развития', gradient: 'from-indigo-600 via-blue-500 to-cyan-400', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=400&fit=crop' },
-    { id: 3, title: '🇷🇺 80 лет Победы', subtitle: 'Помним. Гордимся. Наследуем', gradient: 'from-red-600 via-orange-500 to-yellow-400', image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop' },
-    { id: 4, title: '🎓 Приёмная кампания 2025', subtitle: 'Стань частью команды ЛПТТ!', gradient: 'from-green-600 via-emerald-500 to-teal-400', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&h=400&fit=crop' },
+    { id: 1, title: 'IT-Куб', subtitle: 'Цифровое образование будущего', gradient: 'from-blue-600 via-cyan-500 to-blue-400', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=400&fit=crop' },
+    { id: 2, title: 'Профессионалитет', subtitle: 'Федеральный проект развития', gradient: 'from-indigo-600 via-blue-500 to-cyan-400', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=400&fit=crop' },
+    { id: 3, title: '80 лет Победы', subtitle: 'Помним. Гордимся. Наследуем', gradient: 'from-red-600 via-orange-500 to-yellow-400', image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop' },
+    { id: 4, title: 'Приёмная кампания 2025', subtitle: 'Стань частью команды ЛПТТ!', gradient: 'from-green-600 via-emerald-500 to-teal-400', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&h=400&fit=crop' },
   ]
 
   const mainNews = [
-    { id: 1, title: '🏆 Техникум победил в региональном конкурсе профмастерства', date: '15.01.2025', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=610&h=407&fit=crop' },
-    { id: 2, title: '💻 Открытие нового IT-Куба с современным оборудованием', date: '12.01.2025', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=610&h=407&fit=crop' },
-    { id: 3, title: '🎉 День открытых дверей 2025 - встречаем абитуриентов', date: '10.01.2025', image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=610&h=407&fit=crop' },
-    { id: 4, title: '📚 Новые специальности на 2025-2026 учебный год', date: '08.01.2025', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=610&h=407&fit=crop' },
+    { id: 1, title: 'Техникум победил в региональном конкурсе профмастерства', date: '15.01.2025', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=610&h=407&fit=crop' },
+    { id: 2, title: 'Открытие нового IT-Куба с современным оборудованием', date: '12.01.2025', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=610&h=407&fit=crop' },
+    { id: 3, title: 'День открытых дверей 2025 - встречаем абитуриентов', date: '10.01.2025', image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=610&h=407&fit=crop' },
+    { id: 4, title: 'Новые специальности на 2025-2026 учебный год', date: '08.01.2025', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=610&h=407&fit=crop' },
   ]
 
   const regularNews = [
-    { id: 1, title: '🤝 Студенты приняли участие в молодёжном форуме', date: '14.01.2025', image: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=290&h=193&fit=crop' },
-    { id: 2, title: '⚽ Спортивные достижения наших студентов', date: '13.01.2025', image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=290&h=193&fit=crop' },
-    { id: 3, title: '📖 Конференция преподавателей', date: '11.01.2025', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=290&h=193&fit=crop' },
-    { id: 4, title: '❤️ Волонтёрская акция помощи', date: '09.01.2025', image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=290&h=193&fit=crop' },
+    { id: 1, title: 'Студенты приняли участие в молодёжном форуме', date: '14.01.2025', image: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=290&h=193&fit=crop' },
+    { id: 2, title: 'Спортивные достижения наших студентов', date: '13.01.2025', image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=290&h=193&fit=crop' },
+    { id: 3, title: 'Конференция преподавателей', date: '11.01.2025', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=290&h=193&fit=crop' },
+    { id: 4, title: 'Волонтёрская акция помощи', date: '09.01.2025', image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=290&h=193&fit=crop' },
   ]
 
   const timeline = [
-    { year: '1930', icon: '🏭', title: 'Основание', desc: 'Фабрично-заводская школа' },
-    { year: '1940', icon: '🚂', title: 'Железнодорожное училище №3', desc: 'Новый этап развития' },
-    { year: '1963', icon: '⚙️', title: 'Техническое училище №6', desc: 'Расширение специальностей' },
-    { year: '1984', icon: '🎓', title: 'СПТУ №6', desc: 'Профессиональное образование' },
-    { year: '1992', icon: '📚', title: 'Профессиональный лицей №6', desc: 'Повышение статуса' },
-    { year: '2010', icon: '🏫', title: 'Промышленно-транспортный техникум', desc: 'Современное образование' },
-    { year: '2015', icon: '🌟', title: 'ГБПОУ ВО ЛПТТ им. А.К. Лысенко', desc: 'Актуальный статус' },
+    { year: '1930', title: 'Основание', desc: 'Фабрично-заводская школа' },
+    { year: '1940', title: 'Железнодорожное училище №3', desc: 'Новый этап развития' },
+    { year: '1963', title: 'Техническое училище №6', desc: 'Расширение специальностей' },
+    { year: '1984', title: 'СПТУ №6', desc: 'Профессиональное образование' },
+    { year: '1992', title: 'Профессиональный лицей №6', desc: 'Повышение статуса' },
+    { year: '2010', title: 'Промышленно-транспортный техникум', desc: 'Современное образование' },
+    { year: '2015', title: 'ГБПОУ ВО ЛПТТ им. А.К. Лысенко', desc: 'Актуальный статус' },
   ]
 
   const events = [
-    { id: 1, title: '🏃 Спортивный турнир "Кубок ЛПТТ"', date: '20.01.2025', image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&h=250&fit=crop' },
-    { id: 2, title: '🎤 Конкурс талантов "Студенческая весна"', date: '22.01.2025', image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=250&fit=crop' },
-    { id: 3, title: '🔬 Научная конференция молодых специалистов', date: '25.01.2025', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
-    { id: 4, title: '💼 День карьеры с работодателями', date: '27.01.2025', image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=250&fit=crop' },
-    { id: 5, title: '🎭 Культурный вечер "Традиции народов"', date: '29.01.2025', image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=250&fit=crop' },
-    { id: 6, title: '🛠️ Мастер-классы от профессионалов', date: '31.01.2025', image: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=400&h=250&fit=crop' },
+    { id: 1, title: 'Спортивный турнир "Кубок ЛПТТ"', date: '20.01.2025', description: 'Ежегодный спортивный турнир между группами техникума. Соревнования по волейболу, баскетболу, настольному теннису.', image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&h=250&fit=crop' },
+    { id: 2, title: 'Конкурс талантов "Студенческая весна"', date: '22.01.2025', description: 'Творческий конкурс для студентов. Вокал, танцы, оригинальный жанр. Призы и дипломы победителям.', image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=250&fit=crop' },
+    { id: 3, title: 'Научная конференция молодых специалистов', date: '25.01.2025', description: 'Презентация научных проектов студентов. Участие преподавателей и работодателей.', image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+    { id: 4, title: 'День карьеры с работодателями', date: '27.01.2025', description: 'Встреча с потенциальными работодателями региона. Презентация вакансий, стажировок.', image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=250&fit=crop' },
+    { id: 5, title: 'Культурный вечер "Традиции народов"', date: '29.01.2025', description: 'Знакомство с культурой разных народов России. Национальная кухня, костюмы, танцы.', image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=250&fit=crop' },
+    { id: 6, title: 'Мастер-классы от профессионалов', date: '31.01.2025', description: 'Практические занятия от ведущих специалистов отрасли. Новые технологии и методы работы.', image: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=400&h=250&fit=crop' },
   ]
 
   const videos = Array.from({ length: 8 }, (_, i) => ({
     id: i + 1,
-    title: `🎬 Видео ${i + 1}`,
+    title: `Видео ${i + 1}`,
     date: `${15 - i}.01.2025`,
     thumbnail: `https://images.unsplash.com/photo-${[
       '1562774053-701939374585',
@@ -197,8 +200,8 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
         animate={{ y: scrollY > 100 ? -200 : 0 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className={`fixed top-0 left-0 right-0 z-50 ${
-          isDark ? 'bg-slate-900/98' : 'bg-white/98'
-        } backdrop-blur-2xl shadow-lg border-b ${isDark ? 'border-blue-500/20' : 'border-blue-200'}`}
+          isDark ? 'bg-slate-900/95' : 'bg-white/95'
+        } backdrop-blur-xl shadow-lg border-b ${isDark ? 'border-blue-500/20' : 'border-blue-200'}`}
       >
         {/* Floor 1: Logo + Contacts + Actions */}
         <div className="w-full border-b border-blue-100 dark:border-blue-500/10">
@@ -244,12 +247,15 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
               <div className="flex items-center gap-3">
                 {/* Search */}
                 <div className="relative">
+                  <AnimatePresence>
                   {searchOpen ? (
                     <motion.input
                       initial={{ width: 0, opacity: 0 }}
                       animate={{ width: 200, opacity: 1 }}
+                      exit={{ width: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
                       type="text"
-                      placeholder="Поиск... 🔍"
+                      placeholder="Поиск..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onBlur={() => !searchQuery && setSearchOpen(false)}
@@ -272,6 +278,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                       <Search className="w-5 h-5" />
                     </motion.button>
                   )}
+                  </AnimatePresence>
                 </div>
 
                 {/* Theme */}
@@ -535,7 +542,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                       whileTap={{ scale: 0.95 }}
                       className="px-10 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all"
                     >
-                      🎓 Поступить в техникум
+                      Поступить в техникум
                     </motion.button>
                     <motion.button
                       whileHover={{ scale: 1.05, y: -3 }}
@@ -544,7 +551,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                       className="px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-cyan-500/50 transition-all flex items-center gap-2"
                     >
                       <LogIn className="w-5 h-5" />
-                      📚 Электронный дневник
+                      Электронный дневник
                     </motion.button>
                   </div>
 
@@ -698,7 +705,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                             </div>
                             <div className="p-3">
                               <p className={`text-xs mb-1 ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
-                                📅 {news.date}
+                                {news.date}
                               </p>
                               <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                                 {news.title}
@@ -738,7 +745,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                         className="w-32 h-40 mx-auto rounded-2xl object-cover mb-4 shadow-lg"
                       />
                       <p className={`text-sm font-bold mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                        👤 Директор
+                        Директор
                       </p>
                       <button className={`text-lg font-bold ${isDark ? 'text-white hover:text-blue-400' : 'text-slate-900 hover:text-blue-600'} transition-colors`}>
                         Бровченко Нелли Анатольевна
@@ -764,28 +771,46 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                       📍 Этапы развития
                     </h3>
                     <div className="grid md:grid-cols-7 gap-4">
-                      {timeline.map((item, idx) => (
+                        {timeline.map((item, idx) => (
                         <motion.div
                           key={idx}
                           initial={{ opacity: 0, y: 30 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ delay: idx * 0.1 }}
-                          whileHover={{ y: -10, scale: 1.05 }}
-                          className={`p-4 rounded-2xl text-center ${
-                            isDark ? 'bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30' : 'bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200'
-                          } shadow-lg`}
+                          className="relative"
                         >
-                          <div className="text-4xl mb-2">{item.icon}</div>
-                          <div className={`text-2xl font-black mb-1 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                            {item.year}
-                          </div>
-                          <div className={`text-xs font-bold mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            {item.title}
-                          </div>
-                          <div className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                            {item.desc}
-                          </div>
+                          {/* Timeline connector */}
+                          {idx < timeline.length - 1 && (
+                            <div className={`absolute top-1/2 left-full w-full h-0.5 ${
+                              isDark ? 'bg-gradient-to-r from-blue-500/50 to-transparent' : 'bg-gradient-to-r from-blue-400/50 to-transparent'
+                            }`} />
+                          )}
+                          
+                          <motion.div
+                            whileHover={{ y: -10, scale: 1.05 }}
+                            className={`relative p-6 rounded-2xl text-center ${
+                              isDark ? 'bg-slate-800/50 backdrop-blur-sm border border-blue-500/30' : 'bg-white/80 backdrop-blur-sm border border-blue-200'
+                            } shadow-lg overflow-hidden`}
+                          >
+                            {/* Background accent */}
+                            <div className={`absolute inset-0 opacity-10 ${
+                              isDark ? 'bg-gradient-to-br from-blue-500 to-cyan-500' : 'bg-gradient-to-br from-blue-400 to-cyan-400'
+                            }`} />
+                            
+                            {/* Content */}
+                            <div className="relative z-10">
+                              <div className={`text-3xl font-black mb-2 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent`}>
+                                {item.year}
+                              </div>
+                              <div className={`text-sm font-bold mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                                {item.title}
+                              </div>
+                              <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                                {item.desc}
+                              </div>
+                            </div>
+                          </motion.div>
                         </motion.div>
                       ))}
                     </div>
@@ -806,9 +831,9 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                   </div>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
-                      { date: '15.01.2025', title: '📝 Начало приёмной кампании', desc: 'Подача документов для поступления на 2025-2026 учебный год открыта!' },
-                      { date: '14.01.2025', title: '🎓 Расписание экзаменов', desc: 'Опубликовано расписание вступительных испытаний для абитуриентов.' },
-                      { date: '13.01.2025', title: '🏆 Конкурс профмастерства', desc: 'Приглашаем студентов принять участие в региональном чемпионате.' }
+                      { id: 1, date: '15.01.2025', title: 'Начало приёмной кампании', desc: 'Подача документов для поступления на 2025-2026 учебный год открыта!' },
+                      { id: 2, date: '14.01.2025', title: 'Расписание экзаменов', desc: 'Опубликовано расписание вступительных испытаний для абитуриентов.' },
+                      { id: 3, date: '13.01.2025', title: 'Конкурс профмастерства', desc: 'Приглашаем студентов принять участие в региональном чемпионате.' }
                     ].map((item, idx) => (
                       <motion.div
                         key={idx}
@@ -817,8 +842,9 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                         viewport={{ once: true }}
                         transition={{ delay: idx * 0.1 }}
                         whileHover={{ y: -8, scale: 1.02 }}
-                        className={`p-8 rounded-3xl min-h-[250px] shadow-2xl ${
-                          isDark ? 'bg-gradient-to-br from-slate-800 to-blue-900/20 border-2 border-blue-500/20' : 'bg-gradient-to-br from-white to-blue-50 border-2 border-blue-200'
+                        onClick={() => setExpandedAnnouncement(expandedAnnouncement === item.id ? null : item.id)}
+                        className={`p-8 rounded-3xl min-h-[250px] shadow-2xl cursor-pointer transition-all ${
+                          isDark ? 'bg-gradient-to-br from-slate-800 to-blue-900/20 border-2 border-blue-500/20 hover:border-blue-500/40' : 'bg-gradient-to-br from-white to-blue-50 border-2 border-blue-200 hover:border-blue-400'
                         }`}
                       >
                         <div className={`text-sm font-bold mb-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
@@ -827,9 +853,25 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                         <h3 className={`text-2xl font-black mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                           {item.title}
                         </h3>
-                        <p className={`text-base leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                          {item.desc}
-                        </p>
+                        <AnimatePresence>
+                          {expandedAnnouncement === item.id ? (
+                            <motion.p
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className={`text-base leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+                            >
+                              {item.desc}
+                            </motion.p>
+                          ) : (
+                            <p className={`text-base leading-relaxed line-clamp-2 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                              {item.desc}
+                            </p>
+                          )}
+                        </AnimatePresence>
+                        <div className={`text-sm font-semibold mt-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                          {expandedAnnouncement === item.id ? 'Скрыть' : 'Подробнее'} →
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -858,33 +900,47 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                   </div>
 
                   <div className="grid md:grid-cols-3 gap-6">
-                    {filteredEvents.map((event: any) => (
-                      <motion.div
-                        key={event.id}
-                        whileHover={{ y: -8, scale: 1.03 }}
-                        className={`rounded-3xl overflow-hidden shadow-2xl ${
-                          isDark ? 'bg-slate-800' : 'bg-white'
-                        }`}
-                      >
-                        <div className="overflow-hidden">
-                          <motion.img
-                            whileHover={{ scale: 1.15 }}
-                            transition={{ duration: 0.4 }}
-                            src={event.image}
-                            alt={event.title}
-                            className="w-full h-48 object-cover"
-                          />
-                        </div>
-                        <div className="p-5">
-                          <p className={`text-sm font-bold mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                            📅 {event.date}
-                          </p>
-                          <h3 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                            {event.title}
-                          </h3>
-                        </div>
-                      </motion.div>
-                    ))}
+                      {filteredEvents.map((event: any) => (
+                        <motion.div
+                          key={event.id}
+                          whileHover={{ y: -8, scale: 1.03 }}
+                          onClick={() => setExpandedEvent(expandedEvent === event.id ? null : event.id)}
+                          className={`rounded-3xl overflow-hidden shadow-2xl cursor-pointer ${
+                            isDark ? 'bg-slate-800/95' : 'bg-white'
+                          }`}
+                        >
+                          <div className="overflow-hidden">
+                            <motion.img
+                              whileHover={{ scale: 1.15 }}
+                              transition={{ duration: 0.4 }}
+                              src={event.image}
+                              alt={event.title}
+                              className="w-full h-48 object-cover"
+                            />
+                          </div>
+                          <div className="p-5">
+                            <p className={`text-sm font-bold mb-2 flex items-center gap-2 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                              <CalendarIcon className="w-4 h-4" />
+                              {event.date}
+                            </p>
+                            <h3 className={`text-lg font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                              {event.title}
+                            </h3>
+                            <AnimatePresence>
+                              {expandedEvent === event.id && event.description && (
+                                <motion.p
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: 'auto' }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+                                >
+                                  {event.description}
+                                </motion.p>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </motion.div>
+                      ))}
                   </div>
                 </div>
               </section>
@@ -927,7 +983,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                         </div>
                         <div className="p-4">
                           <p className={`text-xs mb-1 ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>
-                            📅 {video.date}
+                            {video.date}
                           </p>
                           <h4 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
                             {video.title}
@@ -992,7 +1048,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
             {/* Contacts */}
             <div>
               <h4 className={`font-bold text-lg mb-4 flex items-center gap-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                📞 КОНТАКТЫ
+                КОНТАКТЫ
               </h4>
               <div className={`space-y-3 text-sm ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 <p className="font-semibold flex items-center gap-2">
@@ -1014,7 +1070,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
             {/* Menu */}
             <div>
               <h4 className={`font-bold text-lg mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                📋 МЕНЮ
+                МЕНЮ
               </h4>
               <div className="flex flex-col gap-2 text-sm">
                 {navigationStructure.slice(0, 8).map((section: any) => (
@@ -1034,7 +1090,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
             {/* Social */}
             <div>
               <h4 className={`font-bold text-lg mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                🌐 СОЦИАЛЬНЫЕ СЕТИ
+                СОЦИАЛЬНЫЕ СЕТИ
               </h4>
               <div className="flex gap-3">
                 {[
@@ -1092,6 +1148,23 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
           >
             <ArrowUp className="w-6 h-6" />
           </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Calendar Modal */}
+      <AnimatePresence>
+        {showCalendar && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowCalendar(false)}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4"
+          >
+            <div onClick={(e) => e.stopPropagation()}>
+              <Calendar isDark={isDark} onClose={() => setShowCalendar(false)} />
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
