@@ -43,7 +43,6 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     return savedTheme === 'dark' || (!savedTheme && prefersDark)
   })
-  const [scrollY, setScrollY] = useState(0)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null)
@@ -71,7 +70,6 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
   const handleScroll = useCallback(
     rafThrottle(() => {
       const scroll = window.scrollY
-      setScrollY(scroll)
       setShowScrollTop(scroll > 500)
     }),
     []
@@ -357,7 +355,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
     setIsSearching(true)
     try {
       // Поиск по новостям
-      const newsResponse = await publicAPI.getNews({ search: query, limit: 5 })
+      const newsResponse = await publicAPI.getNews({ limit: 5 })
       const newsResults = newsResponse.data?.items || []
 
       // Поиск по событиям (локально, так как API для событий может не быть)
@@ -393,7 +391,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
   // Debounced search с мемоизацией
   const debouncedSearch = useCallback(
     (() => {
-      let timeoutId: NodeJS.Timeout
+      let timeoutId: number
       return (query: string) => {
         clearTimeout(timeoutId)
         timeoutId = setTimeout(() => {
@@ -1140,7 +1138,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                         трудоустройства
                       </div>
                     </motion.div>
-                  </div>
+                  </motion.div>
                 </div>
               </section>
 
