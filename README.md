@@ -851,6 +851,6 @@ Copyright © 2025 ГБПОУ ВО "Лискинский Промышленно-�
 [![Made with Love](https://img.shields.io/badge/Made_with-💙-blue?style=for-the-badge)](https://lptt.obrvrn.ru)
 [![Student Project](https://img.shields.io/badge/Student-Project-green?style=for-the-badge)](https://lptt.obrvrn.ru)
 
-_Последнее обновление: 16.10.2025_
+_Последнее обновление: 17.10.2025 — v2.5.1 (Repository Audit & Reorganization)_
 
 </div>
