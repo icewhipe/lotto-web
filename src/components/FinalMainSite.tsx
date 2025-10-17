@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import {
   GraduationCap,
@@ -25,7 +25,9 @@ import {
 } from 'lucide-react'
 import { navigationStructure } from '../data/navigationStructure'
 import { rafThrottle } from '../utils/performance'
+import { publicAPI } from '../services/api'
 import Calendar from './Calendar'
+import ApplicationForm from './ApplicationForm'
 
 interface FinalMainSiteProps {
   onNavigateToDiary: () => void
@@ -45,6 +47,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null)
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [currentBanner, setCurrentBanner] = useState(0)
   const [currentMainNews, setCurrentMainNews] = useState(0)
@@ -55,6 +58,14 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
   const [showCalendar, setShowCalendar] = useState(false)
   const [expandedAnnouncement, setExpandedAnnouncement] = useState<number | null>(null)
   const [expandedEvent, setExpandedEvent] = useState<number | null>(null)
+  const [showApplicationForm, setShowApplicationForm] = useState(false)
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [apiData, setApiData] = useState({
+    stats: null as any,
+    news: [] as any[],
+    loading: true
+  })
 
   const handleScroll = useCallback(
     rafThrottle(() => {
@@ -78,6 +89,29 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
       document.documentElement.classList.remove('dark')
     }
   }, [isDark])
+
+  // Загрузка данных с API
+  useEffect(() => {
+    const loadApiData = async () => {
+      try {
+        const [statsResponse, newsResponse] = await Promise.all([
+          publicAPI.getStats(),
+          publicAPI.getNews({ limit: 4 })
+        ])
+        
+        setApiData({
+          stats: statsResponse.data,
+          news: newsResponse.data?.items || [],
+          loading: false
+        })
+      } catch (error) {
+        console.error('Failed to load API data:', error)
+        setApiData(prev => ({ ...prev, loading: false }))
+      }
+    }
+
+    loadApiData()
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -104,12 +138,13 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
     window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' })
   }, [shouldReduceMotion])
 
-  const banners = [
-    { id: 1, title: 'IT-Куб', subtitle: 'Цифровое образование будущего', gradient: 'from-blue-600 via-cyan-500 to-blue-400', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=400&fit=crop' },
-    { id: 2, title: 'Профессионалитет', subtitle: 'Федеральный проект развития', gradient: 'from-indigo-600 via-blue-500 to-cyan-400', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=400&fit=crop' },
-    { id: 3, title: '80 лет Победы', subtitle: 'Помним. Гордимся. Наследуем', gradient: 'from-red-600 via-orange-500 to-yellow-400', image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop' },
-    { id: 4, title: 'Приёмная кампания 2025', subtitle: 'Стань частью команды ЛПТТ!', gradient: 'from-green-600 via-emerald-500 to-teal-400', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&h=400&fit=crop' },
-  ]
+  // Мемоизируем статические данные для оптимизации
+  const banners = useMemo(() => [
+    { id: 1, title: 'IT-Куб', subtitle: 'Цифровое образование будущего', gradient: 'from-blue-600 via-cyan-500 to-blue-400', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=400&fit=crop&q=80' },
+    { id: 2, title: 'Профессионалитет', subtitle: 'Федеральный проект развития', gradient: 'from-indigo-600 via-blue-500 to-cyan-400', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=400&fit=crop&q=80' },
+    { id: 3, title: '80 лет Победы', subtitle: 'Помним. Гордимся. Наследуем', gradient: 'from-red-600 via-orange-500 to-yellow-400', image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop&q=80' },
+    { id: 4, title: 'Приёмная кампания 2025', subtitle: 'Стань частью команды ЛПТТ!', gradient: 'from-green-600 via-emerald-500 to-teal-400', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&h=400&fit=crop&q=80' },
+  ], [])
 
   const mainNews = [
     { id: 1, title: 'Техникум победил в региональном конкурсе профмастерства', date: '15.01.2025', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=610&h=407&fit=crop' },
@@ -183,8 +218,69 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
     ][i]}?w=300&h=300&fit=crop`
   }))
 
-  const firstRow = navigationStructure.slice(0, 6)
-  const secondRow = navigationStructure.slice(6)
+  const firstRow = useMemo(() => navigationStructure.slice(0, 6), [])
+  const secondRow = useMemo(() => navigationStructure.slice(6), [])
+
+  // Поиск с API интеграцией
+  const performSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([])
+      return
+    }
+
+    setIsSearching(true)
+    try {
+      // Поиск по новостям
+      const newsResponse = await publicAPI.getNews({ search: query, limit: 5 })
+      const newsResults = newsResponse.data?.items || []
+
+      // Поиск по событиям (локально, так как API для событий может не быть)
+      const localEventResults = events.filter(e => 
+        e.title.toLowerCase().includes(query.toLowerCase()) ||
+        e.description.toLowerCase().includes(query.toLowerCase())
+      )
+
+      // Поиск по видео (локально)
+      const localVideoResults = videos.filter(v => 
+        v.title.toLowerCase().includes(query.toLowerCase())
+      )
+
+      setSearchResults([
+        ...newsResults.map((item: any) => ({ ...item, type: 'news' })),
+        ...localEventResults.map(item => ({ ...item, type: 'event' })),
+        ...localVideoResults.map(item => ({ ...item, type: 'video' }))
+      ])
+    } catch (error) {
+      console.error('Search error:', error)
+      // Fallback к локальному поиску
+      const localResults = [
+        ...regularNews.filter(n => n.title.toLowerCase().includes(query.toLowerCase())).map(item => ({ ...item, type: 'news' })),
+        ...events.filter(e => e.title.toLowerCase().includes(query.toLowerCase())).map(item => ({ ...item, type: 'event' })),
+        ...videos.filter(v => v.title.toLowerCase().includes(query.toLowerCase())).map(item => ({ ...item, type: 'video' }))
+      ]
+      setSearchResults(localResults)
+    } finally {
+      setIsSearching(false)
+    }
+  }
+
+  // Debounced search с мемоизацией
+  const debouncedSearch = useCallback(
+    (() => {
+      let timeoutId: NodeJS.Timeout
+      return (query: string) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          performSearch(query)
+        }, 300)
+      }
+    })(),
+    []
+  )
+
+  useEffect(() => {
+    debouncedSearch(searchQuery)
+  }, [searchQuery, debouncedSearch])
 
   const filteredNews = searchQuery
     ? regularNews.filter(n => n.title.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -263,23 +359,90 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                 <div className="relative">
                   <AnimatePresence>
                   {searchOpen ? (
-                    <motion.input
+                    <motion.div
                       initial={{ width: 0, opacity: 0 }}
-                      animate={{ width: 200, opacity: 1 }}
+                      animate={{ width: 300, opacity: 1 }}
                       exit={{ width: 0, opacity: 0 }}
                       transition={{ duration: 0.3 }}
-                      type="text"
-                      placeholder="Поиск..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onBlur={() => !searchQuery && setSearchOpen(false)}
-                      autoFocus
-                      className={`px-4 py-2 rounded-xl text-sm font-medium ${
-                        isDark 
-                          ? 'bg-slate-800 text-white border-2 border-blue-500/30' 
-                          : 'bg-white border-2 border-blue-200'
-                      } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                    />
+                      className="relative"
+                    >
+                      <input
+                        type="text"
+                        placeholder="Поиск по сайту..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onBlur={() => !searchQuery && setSearchOpen(false)}
+                        autoFocus
+                        className={`w-full px-4 py-2 pr-10 rounded-xl text-sm font-medium ${
+                          isDark 
+                            ? 'bg-slate-800 text-white border-2 border-blue-500/30' 
+                            : 'bg-white border-2 border-blue-200'
+                        } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                      />
+                      {isSearching && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                        </div>
+                      )}
+                      
+                      {/* Search Results Dropdown */}
+                      {searchQuery && searchResults.length > 0 && (
+                        <div className={`absolute top-full left-0 right-0 mt-2 max-h-96 overflow-y-auto rounded-xl shadow-2xl z-50 ${
+                          isDark ? 'bg-slate-800 border border-blue-500/30' : 'bg-white border border-blue-200'
+                        }`}>
+                          {searchResults.map((result, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, y: -10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: idx * 0.05 }}
+                              className={`p-4 border-b last:border-b-0 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors ${
+                                isDark ? 'border-slate-700' : 'border-gray-200'
+                              }`}
+                              onClick={() => {
+                                if (result.type === 'news') {
+                                  // Переход к новостям
+                                  setActiveSection('news')
+                                } else if (result.type === 'event') {
+                                  // Переход к мероприятиям
+                                  setActiveSection('events')
+                                } else if (result.type === 'video') {
+                                  // Открыть видео
+                                  setCurrentVideo(result.url)
+                                  setVideoPlayerOpen(true)
+                                }
+                                setSearchOpen(false)
+                                setSearchQuery('')
+                              }}
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                                  result.type === 'news' ? 'bg-blue-100 dark:bg-blue-500/20' :
+                                  result.type === 'event' ? 'bg-green-100 dark:bg-green-500/20' :
+                                  'bg-purple-100 dark:bg-purple-500/20'
+                                }`}>
+                                  {result.type === 'news' ? '📰' : result.type === 'event' ? '🎭' : '🎬'}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className={`font-semibold text-sm truncate ${
+                                    isDark ? 'text-white' : 'text-slate-900'
+                                  }`}>
+                                    {result.title}
+                                  </h4>
+                                  <p className={`text-xs mt-1 ${
+                                    isDark ? 'text-slate-400' : 'text-slate-600'
+                                  }`}>
+                                    {result.type === 'news' ? 'Новость' : 
+                                     result.type === 'event' ? 'Мероприятие' : 'Видео'}
+                                    {result.date && ` • ${result.date}`}
+                                  </p>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
                   ) : (
                     <motion.button
                       whileHover={{ scale: 1.1, rotate: 5 }}
@@ -355,8 +518,27 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                 <div
                   key={section.id}
                   className="relative"
-                  onMouseEnter={() => section.subsections && setDropdownOpen(`first-${section.id}`)}
-                  onMouseLeave={() => setDropdownOpen(null)}
+                  onMouseEnter={() => {
+                    if (section.subsections) {
+                      // Очищаем предыдущий таймаут
+                      if (hoverTimeout) {
+                        clearTimeout(hoverTimeout)
+                      }
+                      // Устанавливаем задержку 300ms
+                      const timeout = setTimeout(() => {
+                        setDropdownOpen(`first-${section.id}`)
+                      }, 300)
+                      setHoverTimeout(timeout)
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    // Очищаем таймаут при уходе
+                    if (hoverTimeout) {
+                      clearTimeout(hoverTimeout)
+                      setHoverTimeout(null)
+                    }
+                    setDropdownOpen(null)
+                  }}
                 >
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -411,8 +593,27 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                 <div
                   key={section.id}
                   className="relative"
-                  onMouseEnter={() => section.subsections && setDropdownOpen(`second-${section.id}`)}
-                  onMouseLeave={() => setDropdownOpen(null)}
+                  onMouseEnter={() => {
+                    if (section.subsections) {
+                      // Очищаем предыдущий таймаут
+                      if (hoverTimeout) {
+                        clearTimeout(hoverTimeout)
+                      }
+                      // Устанавливаем задержку 300ms
+                      const timeout = setTimeout(() => {
+                        setDropdownOpen(`second-${section.id}`)
+                      }, 300)
+                      setHoverTimeout(timeout)
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    // Очищаем таймаут при уходе
+                    if (hoverTimeout) {
+                      clearTimeout(hoverTimeout)
+                      setHoverTimeout(null)
+                    }
+                    setDropdownOpen(null)
+                  }}
                 >
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -563,6 +764,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                     <motion.button
                       whileHover={{ scale: 1.05, y: -3 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => setShowApplicationForm(true)}
                       className="px-10 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all"
                     >
                       Поступить в техникум
@@ -588,7 +790,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                     >
                       <Users className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                       <div className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                        532+
+                        {apiData.loading ? '...' : `${apiData.stats?.students || 532}+`}
                       </div>
                       <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         студентов
@@ -603,7 +805,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                     >
                       <Briefcase className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
                       <div className="text-3xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                        12+
+                        {apiData.loading ? '...' : `${apiData.stats?.specialties || 12}+`}
                       </div>
                       <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         специальностей
@@ -618,7 +820,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                     >
                       <Award className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
                       <div className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                        50+
+                        {apiData.loading ? '...' : `${apiData.stats?.yearsOfExperience || 50}+`}
                       </div>
                       <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         лет опыта
@@ -633,7 +835,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                     >
                       <TrendingUp className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
                       <div className="text-3xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                        98%
+                        {apiData.loading ? '...' : `${apiData.stats?.employmentRate || 98}%`}
                       </div>
                       <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         трудоустройства
@@ -1251,6 +1453,16 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
               </button>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Application Form */}
+      <AnimatePresence>
+        {showApplicationForm && (
+          <ApplicationForm 
+            isDark={isDark} 
+            onClose={() => setShowApplicationForm(false)} 
+          />
         )}
       </AnimatePresence>
     </div>
