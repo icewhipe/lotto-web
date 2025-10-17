@@ -35,7 +35,12 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
   const shouldReduceMotion = useReducedMotion()
   const [activeSection, setActiveSection] = useState('home')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(() => {
+    // Проверяем localStorage и системные настройки
+    const savedTheme = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    return savedTheme === 'dark' || (!savedTheme && prefersDark)
+  })
   const [scrollY, setScrollY] = useState(0)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
@@ -64,6 +69,15 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [handleScroll])
+
+  // Инициализация темы
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isDark])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -285,7 +299,16 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  onClick={() => setIsDark(!isDark)}
+                  onClick={() => {
+                    const newIsDark = !isDark
+                    setIsDark(newIsDark)
+                    localStorage.setItem('theme', newIsDark ? 'dark' : 'light')
+                    if (newIsDark) {
+                      document.documentElement.classList.add('dark')
+                    } else {
+                      document.documentElement.classList.remove('dark')
+                    }
+                  }}
                   className={`p-2 rounded-xl ${
                     isDark ? 'hover:bg-blue-500/20 text-slate-300' : 'hover:bg-blue-50 text-slate-700'
                   } transition-all`}
