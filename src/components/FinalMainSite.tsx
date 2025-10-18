@@ -1143,14 +1143,42 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
               </section>
 
               {/* NEWS - Big Left + 4 Right */}
-              <section className="py-20">
+              <motion.section 
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="py-20"
+              >
                 <div className="max-w-[1920px] mx-auto px-6">
-                  <div className="grid lg:grid-cols-2 gap-8">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="grid lg:grid-cols-2 gap-8"
+                  >
                     {/* Main News */}
-                    <div>
-                      <h2 className={`text-4xl font-black mb-8 ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        📰 Главное
-                      </h2>
+                    <motion.div
+                      initial={{ opacity: 0, x: -50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
+                    >
+                      <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.6 }}
+                        className={`text-4xl font-black mb-8 ${isDark ? 'text-white' : 'text-slate-900'}`}
+                      >
+                        <motion.span
+                          animate={{ rotate: [0, 5, 0] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                          📰
+                        </motion.span> Главное
+                      </motion.h2>
                       <div className="relative h-[600px]">
                         <AnimatePresence mode="wait">
                           <motion.div
