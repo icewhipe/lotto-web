@@ -112,6 +112,20 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
     loadApiData()
   }, [])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % 4)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMainNews((prev) => (prev + 1) % 4)
+    }, 6000)
+    return () => clearInterval(interval)
+  }, [])
+
   // Скрытие navbar при скролле
   useEffect(() => {
     const handleScroll = rafThrottle(() => {
@@ -132,131 +146,12 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [lastScrollY])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBanner((prev) => (prev + 1) % 4)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentMainNews((prev) => (prev + 1) % 4)
-    }, 6000)
-    return () => clearInterval(interval)
-  }, [])
-
   const handleNavigate = useCallback((section: string) => {
     setActiveSection(section)
     setMobileMenuOpen(false)
     setDropdownOpen(null)
     window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' })
   }, [shouldReduceMotion])
-
-  // Функция для рендеринга контента разделов
-  const renderSectionContent = (sectionId: string) => {
-    const section = navigationStructure.find(s => s.id === sectionId)
-    if (!section) return null
-
-    return (
-      <div className="max-w-[1920px] mx-auto px-6 py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h1 className={`text-5xl lg:text-6xl font-black mb-6 ${
-            isDark ? 'text-white' : 'text-slate-900'
-          }`}>
-            {section.label}
-          </h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto rounded-full"></div>
-        </motion.div>
-
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Основной контент */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className={`p-8 rounded-3xl shadow-2xl ${
-              isDark ? 'bg-slate-800 border border-blue-500/20' : 'bg-white border border-blue-200'
-            }`}
-          >
-            <h2 className={`text-2xl font-bold mb-6 ${
-              isDark ? 'text-blue-400' : 'text-blue-600'
-            }`}>
-              Информация о разделе
-            </h2>
-            <p className={`text-lg leading-relaxed ${
-              isDark ? 'text-slate-300' : 'text-slate-600'
-            }`}>
-              {getSectionDescription(sectionId)}
-            </p>
-          </motion.div>
-
-          {/* Подразделы */}
-          {section.subsections && (
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className={`p-8 rounded-3xl shadow-2xl ${
-                isDark ? 'bg-slate-800 border border-cyan-500/20' : 'bg-white border border-cyan-200'
-              }`}
-            >
-              <h3 className={`text-xl font-bold mb-6 ${
-                isDark ? 'text-cyan-400' : 'text-cyan-600'
-              }`}>
-                Подразделы
-              </h3>
-              <div className="space-y-3">
-                {section.subsections.map((sub) => (
-                  <motion.button
-                    key={sub.id}
-                    whileHover={{ x: 10, scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleNavigate(sub.id)}
-                    className={`w-full text-left p-4 rounded-xl transition-all ${
-                      isDark 
-                        ? 'bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white' 
-                        : 'bg-gray-50 hover:bg-gray-100 text-slate-700 hover:text-slate-900'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${
-                        isDark ? 'bg-cyan-400' : 'bg-cyan-500'
-                      }`}></div>
-                      <span className="font-medium">{sub.label}</span>
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  // Функция для получения описания раздела
-  const getSectionDescription = (sectionId: string) => {
-    const descriptions: Record<string, string> = {
-      'press-center': 'Пресс-центр техникума - это место, где вы найдете актуальные новости, фотогалерею, видеоматериалы и информацию о мероприятиях.',
-      'professionalism': 'Федеральный проект "Профессионалитет" направлен на модернизацию системы среднего профессионального образования.',
-      'applicants': 'Информация для абитуриентов: специальности, правила поступления, часто задаваемые вопросы и новости.',
-      'students': 'Раздел для студентов: расписание, электронные ресурсы, спортклуб, социальные партнеры и электронный дневник.',
-      'graduates': 'Центр содействия трудоустройству выпускников, вакансии, программы сопровождения и встречи с работодателями.',
-      'projects': 'Образовательные проекты: образовательный кредит, "Код будущего", профминимум, студенческие отряды и наставничество.',
-      'it-cube': 'IT-Куб - центр цифрового образования детей по программам, направленным на ускоренное освоение актуальных и востребованных знаний.',
-      'teachers': 'Раздел для преподавателей: воспитательная работа и электронный дневник.',
-      'driving-school': 'Автошкола техникума предлагает программы обучения вождению различных категорий транспортных средств.',
-      'contacts': 'Контактная информация: адреса, телефоны, контакты контролирующих организаций и телефонный справочник.',
-      'about': 'О техникуме: история, расписания, список групп, газета, музей, дипломы и награды, отзывы и вопросы-ответы.'
-    }
-    return descriptions[sectionId] || 'Информация о разделе будет добавлена в ближайшее время.'
-  }
 
   const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' })
@@ -684,7 +579,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                           <motion.button
                             key={sub.id}
                             whileHover={{ x: 5 }}
-                            onClick={() => handleNavigate(sub.id)}
+                            onClick={() => handleNavigate(section.id)}
                             className={`w-full text-left px-4 py-2 text-sm font-medium ${
                               isDark ? 'text-slate-300 hover:bg-blue-500/15 hover:text-blue-300' : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
                             }`}
@@ -751,7 +646,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                           <motion.button
                             key={sub.id}
                             whileHover={{ x: 5 }}
-                            onClick={() => handleNavigate(sub.id)}
+                            onClick={() => handleNavigate(section.id)}
                             className={`w-full text-left px-4 py-2 text-sm font-medium ${
                               isDark ? 'text-slate-300 hover:bg-blue-500/15 hover:text-blue-300' : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
                             }`}
@@ -852,333 +747,116 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
 
               {/* HERO - Gradient Title, Badges, Buttons */}
               <section className="relative py-20 overflow-hidden">
-                {/* Animated Background Elements */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <motion.div
-                    animate={{ 
-                      rotate: 360,
-                      scale: [1, 1.1, 1],
-                      opacity: [0.3, 0.6, 0.3]
-                    }}
-                    transition={{ 
-                      duration: 20,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                    className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl"
-                  />
-                  <motion.div
-                    animate={{ 
-                      rotate: -360,
-                      scale: [1.1, 1, 1.1],
-                      opacity: [0.4, 0.7, 0.4]
-                    }}
-                    transition={{ 
-                      duration: 25,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                    className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl"
-                  />
-                </div>
-                
-                <div className="max-w-[1920px] mx-auto px-6 text-center relative z-10">
+                <div className="max-w-[1920px] mx-auto px-6 text-center">
                   {/* Title - 2 lines with gradient */}
                   <motion.h1 
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-6xl lg:text-7xl font-black mb-8 leading-tight"
                   >
-                    <motion.span 
-                      initial={{ opacity: 0, x: -50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.8, delay: 0.2 }}
-                      className="block bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 bg-clip-text text-transparent"
-                    >
+                    <span className="block bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 bg-clip-text text-transparent">
                       Лискинский Промышленно-
-                    </motion.span>
-                    <motion.span 
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.8, delay: 0.4 }}
-                      className="block bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 bg-clip-text text-transparent"
-                    >
+                    </span>
+                    <span className="block bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 bg-clip-text text-transparent">
                       Транспортный Техникум
-                    </motion.span>
+                    </span>
                   </motion.h1>
 
                   {/* Buttons */}
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.6 }}
-                    className="flex flex-wrap items-center justify-center gap-4 mb-10"
-                  >
+                  <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
                     <motion.button
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.6, delay: 0.8 }}
-                      whileHover={{ 
-                        scale: 1.05, 
-                        y: -3,
-                        boxShadow: "0 20px 40px rgba(59, 130, 246, 0.4)"
-                      }}
+                      whileHover={{ scale: 1.05, y: -3 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setShowApplicationForm(true)}
-                      className="px-10 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all relative overflow-hidden group"
+                      className="px-10 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all"
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        initial={{ x: "-100%" }}
-                        whileHover={{ x: "100%" }}
-                        transition={{ duration: 0.6 }}
-                      />
-                      <span className="relative z-10">Поступить в техникум</span>
+                      Поступить в техникум
                     </motion.button>
                     <motion.button
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.6, delay: 1.0 }}
-                      whileHover={{ 
-                        scale: 1.05, 
-                        y: -3,
-                        boxShadow: "0 20px 40px rgba(6, 182, 212, 0.4)"
-                      }}
+                      whileHover={{ scale: 1.05, y: -3 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onNavigateToDiary}
-                      className="px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-cyan-500/50 transition-all flex items-center gap-2 relative overflow-hidden group"
+                      className="px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-cyan-500/50 transition-all flex items-center gap-2"
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        initial={{ x: "-100%" }}
-                        whileHover={{ x: "100%" }}
-                        transition={{ duration: 0.6 }}
-                      />
-                      <LogIn className="w-5 h-5 relative z-10" />
-                      <span className="relative z-10">Электронный дневник</span>
+                      <LogIn className="w-5 h-5" />
+                      Электронный дневник
                     </motion.button>
-                  </motion.div>
+                  </div>
 
                   {/* Badges - Different shapes */}
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 1.2 }}
-                    className="flex flex-wrap items-center justify-center gap-4 max-w-5xl mx-auto"
-                  >
+                  <div className="flex flex-wrap items-center justify-center gap-4 max-w-5xl mx-auto">
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.6, delay: 1.4 }}
-                      whileHover={{ 
-                        scale: 1.1, 
-                        rotate: 3,
-                        y: -5,
-                        boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)"
-                      }}
+                      whileHover={{ scale: 1.1, rotate: 3 }}
                       className={`px-6 py-4 rounded-2xl ${
                         isDark ? 'bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-2 border-blue-500/30' : 'bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200'
-                      } shadow-xl relative overflow-hidden group`}
+                      } shadow-xl`}
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        initial={{ scale: 0 }}
-                        whileHover={{ scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      <motion.div
-                        animate={{ rotate: [0, 5, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <Users className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'} relative z-10`} />
-                      </motion.div>
-                      <div className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent relative z-10">
-                        {apiData.loading ? (
-                          <motion.div
-                            animate={{ opacity: [0.5, 1, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                          >
-                            ...
-                          </motion.div>
-                        ) : (
-                          `${apiData.stats?.students || 532}+`
-                        )}
+                      <Users className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                      <div className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                        {apiData.loading ? '...' : `${apiData.stats?.students || 532}+`}
                       </div>
-                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'} relative z-10`}>
+                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         студентов
                       </div>
                     </motion.div>
 
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.6, delay: 1.6 }}
-                      whileHover={{ 
-                        scale: 1.1, 
-                        rotate: -3,
-                        y: -5,
-                        boxShadow: "0 20px 40px rgba(6, 182, 212, 0.3)"
-                      }}
+                      whileHover={{ scale: 1.1, rotate: -3 }}
                       className={`px-6 py-4 rounded-3xl ${
                         isDark ? 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30' : 'bg-gradient-to-br from-cyan-50 to-blue-50 border-2 border-cyan-200'
-                      } shadow-xl relative overflow-hidden group`}
+                      } shadow-xl`}
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        initial={{ scale: 0 }}
-                        whileHover={{ scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      <motion.div
-                        animate={{ rotate: [0, -5, 0] }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <Briefcase className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-cyan-400' : 'text-cyan-600'} relative z-10`} />
-                      </motion.div>
-                      <div className="text-3xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent relative z-10">
-                        {apiData.loading ? (
-                          <motion.div
-                            animate={{ opacity: [0.5, 1, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-                          >
-                            ...
-                          </motion.div>
-                        ) : (
-                          `${apiData.stats?.specialties || 12}+`
-                        )}
+                      <Briefcase className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
+                      <div className="text-3xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                        {apiData.loading ? '...' : `${apiData.stats?.specialties || 12}+`}
                       </div>
-                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'} relative z-10`}>
+                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         специальностей
                       </div>
                     </motion.div>
 
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.6, delay: 1.8 }}
-                      whileHover={{ 
-                        scale: 1.1, 
-                        rotate: 3,
-                        y: -5,
-                        boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)"
-                      }}
+                      whileHover={{ scale: 1.1, rotate: 3 }}
                       className={`px-6 py-4 rounded-xl ${
                         isDark ? 'bg-gradient-to-br from-indigo-500/20 to-blue-500/20 border-2 border-indigo-500/30' : 'bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-200'
-                      } shadow-xl relative overflow-hidden group`}
+                      } shadow-xl`}
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        initial={{ scale: 0 }}
-                        whileHover={{ scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      <motion.div
-                        animate={{ rotate: [0, 5, 0] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <Award className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'} relative z-10`} />
-                      </motion.div>
-                      <div className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent relative z-10">
-                        {apiData.loading ? (
-                          <motion.div
-                            animate={{ opacity: [0.5, 1, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
-                          >
-                            ...
-                          </motion.div>
-                        ) : (
-                          `${apiData.stats?.yearsOfExperience || 50}+`
-                        )}
+                      <Award className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                      <div className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                        {apiData.loading ? '...' : `${apiData.stats?.yearsOfExperience || 50}+`}
                       </div>
-                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'} relative z-10`}>
+                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         лет опыта
                       </div>
                     </motion.div>
 
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.6, delay: 2.0 }}
-                      whileHover={{ 
-                        scale: 1.1, 
-                        rotate: -3,
-                        y: -5,
-                        boxShadow: "0 20px 40px rgba(34, 197, 94, 0.3)"
-                      }}
+                      whileHover={{ scale: 1.1, rotate: -3 }}
                       className={`px-6 py-4 rounded-full ${
                         isDark ? 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/30' : 'bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200'
-                      } shadow-xl relative overflow-hidden group`}
+                      } shadow-xl`}
                     >
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        initial={{ scale: 0 }}
-                        whileHover={{ scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      <motion.div
-                        animate={{ rotate: [0, -5, 0] }}
-                        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <TrendingUp className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-green-400' : 'text-green-600'} relative z-10`} />
-                      </motion.div>
-                      <div className="text-3xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent relative z-10">
-                        {apiData.loading ? (
-                          <motion.div
-                            animate={{ opacity: [0.5, 1, 0.5] }}
-                            transition={{ duration: 1.5, repeat: Infinity, delay: 0.6 }}
-                          >
-                            ...
-                          </motion.div>
-                        ) : (
-                          `${apiData.stats?.employmentRate || 98}%`
-                        )}
+                      <TrendingUp className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+                      <div className="text-3xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                        {apiData.loading ? '...' : `${apiData.stats?.employmentRate || 98}%`}
                       </div>
-                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'} relative z-10`}>
+                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                         трудоустройства
                       </div>
                     </motion.div>
-                  </motion.div>
+                  </div>
                 </div>
               </section>
 
               {/* NEWS - Big Left + 4 Right */}
-              <motion.section 
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="py-20"
-              >
+              <section className="py-20">
                 <div className="max-w-[1920px] mx-auto px-6">
-                  <motion.div 
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="grid lg:grid-cols-2 gap-8"
-                  >
+                  <div className="grid lg:grid-cols-2 gap-8">
                     {/* Main News */}
-                    <motion.div
-                      initial={{ opacity: 0, x: -50 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.4 }}
-                    >
-                      <motion.h2 
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.6 }}
-                        className={`text-4xl font-black mb-8 ${isDark ? 'text-white' : 'text-slate-900'}`}
-                      >
-                        <motion.span
-                          animate={{ rotate: [0, 5, 0] }}
-                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                          📰
-                        </motion.span> Главное
-                      </motion.h2>
+                    <div>
+                      <h2 className={`text-4xl font-black mb-8 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        📰 Главное
+                      </h2>
                       <div className="relative h-[600px]">
                         <AnimatePresence mode="wait">
                           <motion.div
@@ -1580,18 +1258,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                 </div>
               </section>
             </motion.div>
-          ) : (
-            <motion.div
-              key={activeSection}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="min-h-screen"
-            >
-              {renderSectionContent(activeSection)}
-            </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
       </main>
 
