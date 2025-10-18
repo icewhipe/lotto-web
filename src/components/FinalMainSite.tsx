@@ -763,71 +763,204 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                   </motion.h1>
 
                   {/* Buttons */}
-                  <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                    className="flex flex-wrap items-center justify-center gap-4 mb-10"
+                  >
                     <motion.button
-                      whileHover={{ scale: 1.05, y: -3 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.8 }}
+                      whileHover={{ 
+                        scale: 1.05, 
+                        y: -3,
+                        boxShadow: "0 20px 40px rgba(59, 130, 246, 0.4)"
+                      }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setShowApplicationForm(true)}
-                      className="px-10 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all"
+                      className="px-10 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all relative overflow-hidden group"
                     >
-                      Поступить в техникум
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        initial={{ x: "-100%" }}
+                        whileHover={{ x: "100%" }}
+                        transition={{ duration: 0.6 }}
+                      />
+                      <span className="relative z-10">Поступить в техникум</span>
                     </motion.button>
                     <motion.button
-                      whileHover={{ scale: 1.05, y: -3 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 1.0 }}
+                      whileHover={{ 
+                        scale: 1.05, 
+                        y: -3,
+                        boxShadow: "0 20px 40px rgba(6, 182, 212, 0.4)"
+                      }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onNavigateToDiary}
-                      className="px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-cyan-500/50 transition-all flex items-center gap-2"
+                      className="px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-cyan-500/50 transition-all flex items-center gap-2 relative overflow-hidden group"
                     >
-                      <LogIn className="w-5 h-5" />
-                      Электронный дневник
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        initial={{ x: "-100%" }}
+                        whileHover={{ x: "100%" }}
+                        transition={{ duration: 0.6 }}
+                      />
+                      <motion.div
+                        animate={{ rotate: [0, 10, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        className="relative z-10"
+                      >
+                        <LogIn className="w-5 h-5" />
+                      </motion.div>
+                      <span className="relative z-10">Электронный дневник</span>
                     </motion.button>
-                  </div>
+                  </motion.div>
 
                   {/* Badges - Different shapes */}
-                  <div className="flex flex-wrap items-center justify-center gap-4 max-w-5xl mx-auto">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="flex flex-wrap items-center justify-center gap-4 max-w-5xl mx-auto"
+                  >
                     <motion.div
-                      whileHover={{ scale: 1.1, rotate: 3 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                      whileHover={{ 
+                        scale: 1.1, 
+                        rotate: 3,
+                        y: -5,
+                        boxShadow: "0 20px 40px rgba(59, 130, 246, 0.3)"
+                      }}
                       className={`px-6 py-4 rounded-2xl ${
                         isDark ? 'bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-2 border-blue-500/30' : 'bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200'
-                      } shadow-xl`}
+                      } shadow-xl relative overflow-hidden group`}
                     >
-                      <Users className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
-                      <div className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                        {apiData.loading ? '...' : `${apiData.stats?.students || 532}+`}
+                      <motion.div
+                        animate={{ rotate: [0, 5, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Users className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-blue-400' : 'text-blue-600'} relative z-10`} />
+                      </motion.div>
+                      <div className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent relative z-10">
+                        {apiData.loading ? (
+                          <motion.div
+                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          >
+                            ...
+                          </motion.div>
+                        ) : (
+                          `${apiData.stats?.students || 532}+`
+                        )}
                       </div>
-                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'} relative z-10`}>
                         студентов
                       </div>
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        initial={{ scale: 0 }}
+                        whileHover={{ scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
                     </motion.div>
 
                     <motion.div
-                      whileHover={{ scale: 1.1, rotate: -3 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.8 }}
+                      whileHover={{ 
+                        scale: 1.1, 
+                        rotate: -3,
+                        y: -5,
+                        boxShadow: "0 20px 40px rgba(6, 182, 212, 0.3)"
+                      }}
                       className={`px-6 py-4 rounded-3xl ${
                         isDark ? 'bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/30' : 'bg-gradient-to-br from-cyan-50 to-blue-50 border-2 border-cyan-200'
-                      } shadow-xl`}
+                      } shadow-xl relative overflow-hidden group`}
                     >
-                      <Briefcase className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
-                      <div className="text-3xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                        {apiData.loading ? '...' : `${apiData.stats?.specialties || 12}+`}
+                      <motion.div
+                        animate={{ rotate: [0, -5, 0] }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Briefcase className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-cyan-400' : 'text-cyan-600'} relative z-10`} />
+                      </motion.div>
+                      <div className="text-3xl font-black bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent relative z-10">
+                        {apiData.loading ? (
+                          <motion.div
+                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          >
+                            ...
+                          </motion.div>
+                        ) : (
+                          `${apiData.stats?.specialties || 12}+`
+                        )}
                       </div>
-                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'} relative z-10`}>
                         специальностей
                       </div>
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        initial={{ scale: 0 }}
+                        whileHover={{ scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
                     </motion.div>
 
                     <motion.div
-                      whileHover={{ scale: 1.1, rotate: 3 }}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 1.0 }}
+                      whileHover={{ 
+                        scale: 1.1, 
+                        rotate: 3,
+                        y: -5,
+                        boxShadow: "0 20px 40px rgba(99, 102, 241, 0.3)"
+                      }}
                       className={`px-6 py-4 rounded-xl ${
                         isDark ? 'bg-gradient-to-br from-indigo-500/20 to-blue-500/20 border-2 border-indigo-500/30' : 'bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-200'
-                      } shadow-xl`}
+                      } shadow-xl relative overflow-hidden group`}
                     >
-                      <Award className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
-                      <div className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                        {apiData.loading ? '...' : `${apiData.stats?.yearsOfExperience || 50}+`}
+                      <motion.div
+                        animate={{ rotate: [0, 5, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Award className={`w-6 h-6 mx-auto mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'} relative z-10`} />
+                      </motion.div>
+                      <div className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent relative z-10">
+                        {apiData.loading ? (
+                          <motion.div
+                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          >
+                            ...
+                          </motion.div>
+                        ) : (
+                          `${apiData.stats?.yearsOfExperience || 50}+`
+                        )}
                       </div>
-                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                      <div className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-600'} relative z-10`}>
                         лет опыта
                       </div>
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        initial={{ scale: 0 }}
+                        whileHover={{ scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
                     </motion.div>
 
                     <motion.div
@@ -844,7 +977,7 @@ export default function FinalMainSite({ onNavigateToDiary }: FinalMainSiteProps)
                         трудоустройства
                       </div>
                     </motion.div>
-                  </div>
+                  </motion.div>
                 </div>
               </section>
 
