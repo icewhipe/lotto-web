@@ -6,11 +6,11 @@
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)](https://github.com/icewhipe/lotto-web)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.0.0-blue?style=flat-square)](package.json)
+[![Version](https://img.shields.io/badge/version-2.6.0-blue?style=flat-square)](package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
 
-**Современная образовательная платформа для управления учебным процессом**
+**Современная образовательная платформа с AI-оптимизацией и непрерывным улучшением**
 
 [🌐 Официальный сайт](https://lptt.obrvrn.ru) • [📚 Документация](docs/) • [🐛 Сообщить о баге](https://github.com/icewhipe/lotto-web/issues)
 
@@ -743,12 +743,15 @@ lsof -ti:3000 | xargs kill -9
 
 ## 🗺️ Roadmap
 
-### v2.1 (Q1 2025) 🎯
+### v2.6.1 (Q1 2025) 🎯
 
+- [x] 🤖 AI Continuous Mode v2 - Автономные улучшения
+- [x] 🎨 Улучшенная темная тема с плавными переходами
+- [x] 🔍 Интегрированный поиск с API
+- [x] 📝 Функциональная форма поступления
+- [x] ⚡ Оптимизация производительности
 - [ ] 📱 PWA поддержка
 - [ ] 📴 Offline mode
-- [ ] 🔔 Push notifications
-- [ ] 🚀 Mobile app release
 
 ### v2.2 (Q2 2025) 🔮
 
@@ -851,6 +854,6 @@ Copyright © 2025 ГБПОУ ВО "Лискинский Промышленно-�
 [![Made with Love](https://img.shields.io/badge/Made_with-💙-blue?style=for-the-badge)](https://lptt.obrvrn.ru)
 [![Student Project](https://img.shields.io/badge/Student-Project-green?style=for-the-badge)](https://lptt.obrvrn.ru)
 
-_Последнее обновление: 17.10.2025 — v2.5.1 (Repository Audit & Reorganization)_
+_Последнее обновление: 15.01.2025 — v2.6.0 (AI Continuous Mode v2 - Complete Overhaul)_
 
 </div>

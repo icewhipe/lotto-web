@@ -5,7 +5,7 @@
 /* Глобальные стили */
 @layer base {
   body {
-    @apply bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white;
+    @apply bg-gradient-to-br from-gray-50 via-blue-50/30 to-cyan-50/30 dark:bg-gradient-to-br dark:from-slate-950 dark:via-blue-950/20 dark:to-slate-900 text-gray-900 dark:text-slate-100;
     @apply antialiased;
     /* ЕДИНЫЙ ФОН - НЕ ПЕРЕЛИВАЕТСЯ ПРИ СКРОЛЛЕ */
     @apply min-h-screen;
@@ -13,6 +13,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Smooth theme transitions */
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   html {
@@ -35,10 +37,12 @@
 @layer components {
   /* Glass Effect - унифицированный для всех карточек */
   .glass-effect {
-    @apply bg-white/70 dark:bg-gray-900/70;
-    @apply backdrop-blur-md;
-    @apply border border-gray-200/50 dark:border-gray-700/50;
-    @apply shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50;
+    @apply bg-white/80 dark:bg-slate-900/80;
+    @apply backdrop-blur-xl;
+    @apply border border-gray-200/60 dark:border-slate-700/60;
+    @apply shadow-xl shadow-gray-200/40 dark:shadow-slate-900/60;
+    /* Enhanced dark mode styling */
+    @apply dark:shadow-blue-500/10;
   }
 
   /* Container с отступами */
@@ -55,6 +59,31 @@
   .card-hover {
     @apply transition-all duration-300;
     @apply hover:scale-[1.02] hover:shadow-xl;
+    @apply hover:-translate-y-1;
+    @apply hover:shadow-blue-500/20 dark:hover:shadow-blue-400/20;
+  }
+
+  /* Улучшенные карточки с градиентными границами */
+  .card-gradient-border {
+    @apply relative overflow-hidden;
+    @apply before:absolute before:inset-0 before:p-[2px] before:rounded-xl;
+    @apply before:bg-gradient-to-r before:from-blue-500 before:via-cyan-500 before:to-blue-500;
+    @apply before:opacity-0 before:transition-opacity before:duration-300;
+    @apply hover:before:opacity-100;
+  }
+
+  .card-gradient-border > * {
+    @apply relative bg-white dark:bg-slate-800 rounded-xl;
+  }
+
+  /* Микровзаимодействия */
+  .micro-interaction {
+    @apply transition-all duration-200;
+    @apply active:scale-95;
+  }
+
+  .micro-interaction:hover {
+    @apply transform-gpu;
   }
 
   /* Кнопки с градиентом по ролям */
@@ -113,15 +142,42 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-900;
+    @apply bg-gray-100 dark:bg-slate-900;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+    @apply bg-gray-300 dark:bg-slate-700 rounded-full;
+    @apply hover:bg-gray-400 dark:hover:bg-slate-600;
+    @apply transition-colors duration-200;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-gray-600;
+    @apply bg-gray-400 dark:bg-slate-600;
+  }
+
+  /* Улучшенная темная тема */
+  .dark {
+    color-scheme: dark;
+  }
+
+  .dark .glass-effect {
+    @apply bg-slate-900/90;
+    @apply backdrop-blur-xl;
+    @apply border-slate-700/60;
+    @apply shadow-xl shadow-slate-900/60;
+  }
+
+  /* Улучшенные контрасты для темной темы */
+  .dark .text-primary {
+    @apply text-slate-100;
+  }
+
+  .dark .text-secondary {
+    @apply text-slate-300;
+  }
+
+  .dark .text-muted {
+    @apply text-slate-400;
   }
 
   /* Hide scrollbar utility */
@@ -164,6 +220,48 @@
     animation: wave 1s ease-in-out infinite;
     transform-origin: 70% 70%;
     display: inline-block;
+  }
+
+  /* Улучшенные анимации */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
   }
 
   /* Gradient borders */
